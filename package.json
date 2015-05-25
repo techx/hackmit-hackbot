@@ -14,7 +14,8 @@
     "hubot-redis-brain": "0.0.2",
     "hubot-scripts": "^2.5.16",
     "hubot-seen": "^0.2.2",
-    "hubot-slack": "^3.3.0"
+    "hubot-slack": "^3.3.0",
+    "hubot-wolfram": "~1.0.7"
   },
   "engines": {
     "node": "0.10.x"
