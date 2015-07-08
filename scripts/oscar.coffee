@@ -6,7 +6,7 @@
 #
 # Commands:
 #   status - display statuses of all services
-#   status <name> - display statsues of services matching name
+#   status <name> - display statsues of services matching name (regex)
 #
 # Author:
 #   anishathalye
@@ -96,4 +96,7 @@ module.exports = (robot) ->
       else
         filtered = filter statuses, (status) ->
           status.name.match search
-        res.send formatStatuses(filtered)
+        if filtered.length > 0
+          res.send formatStatuses(filtered)
+        else
+          res.send "Sorry, there were no results matching `#{search}`. Perhaps tweak your regex?"
