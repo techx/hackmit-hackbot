@@ -29,7 +29,7 @@ getStatuses = (callback) ->
     callback(null, err)
 
 formatStatus = (status) ->
-  mark = if status.status == 'failure' then "\u2715" else "\u2713"
+  mark = if status.status == 'failure' then ":broken_heart:" else ":green_heart:"
   msg = "#{mark} *#{status.name}* | _#{status.status}_"
   if status.summary.length > 0
     msg += " (#{status.summary})"
