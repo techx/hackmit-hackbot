@@ -12,7 +12,6 @@
 #   None
 #
 # Commands:
-#   hackbot die - Kill the hackbot process (and restart it, if running in a managed environment)
 #   hackbot update - Performs a git pull and npm update.
 #
 # Author:
@@ -21,13 +20,13 @@
 child_process = require 'child_process'
 downloaded_updates = false
 
-module.exports = (robot) ->
+restartHackbot = (msg) ->
+    msg.send "Restarting hackbot..."
+    setTimeout () ->
+        process.exit()
+    , 500 # Give process some time to send message
 
-    robot.respond /die$/i, (msg) ->
-        msg.send "Restarting hackbot..."
-        setTimeout () ->
-            process.exit()
-        , 1000 # Give process some time to send message
+module.exports = (robot) ->
 
     robot.respond /update( yourself)?$/i, (msg) ->
         changes = false
@@ -35,11 +34,11 @@ module.exports = (robot) ->
             msg.send "git pull..."
             child_process.exec 'git pull', (error, stdout, stderr) ->
                 if error
-                    msg.send "git pull failed: " + stderr
+                    msg.send "git pull failed: ```" + stderr + "```"
                 else
                     output = stdout+''
                     if not /Already up\-to\-date/.test output
-                        msg.send "my source code changed:\n" + output
+                        msg.send "my source code changed:\n```" + output + "```"
                         changes = true
                     else
                         msg.send "my source code is up-to-date"
@@ -47,20 +46,20 @@ module.exports = (robot) ->
                     msg.send "npm update..."
                     child_process.exec 'npm update', (error, stdout, stderr) ->
                         if error
-                            msg.send "npm update failed: " + stderr
+                            msg.send "npm update failed: ```" + stderr + "```"
                         else
                             output = stdout+''
                             if /node_modules/.test output
-                                msg.send "some dependencies updated:\n" + output
+                                msg.send "some dependencies updated:\n```" + output + "```"
                                 changes = true
                             else
                                 msg.send "all dependencies are up-to-date"
                         if changes
                             downloaded_updates = true
-                            msg.send "I downloaded some updates, KILL ME PLEASE! (hint: hackbot die)"
+                            restartHackbot msg
                         else
                             if downloaded_updates
-                                msg.send "I have some pending updates, KILL ME PLEASE! (hint: hackbot die)"
+                                restartHackbot msg
                             else
                                 msg.send "I'm up-to-date!"
                 catch error
