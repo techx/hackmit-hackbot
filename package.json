@@ -16,6 +16,7 @@
     "hubot-redis-brain": "0.0.2",
     "hubot-seen": "^0.2.2",
     "hubot-slack": "^3.3.0",
+    "hubot-voting": "Detry322/hubot-voting",
     "hubot-wolfram": "~1.0.7",
     "hubot-xkcd": "0.0.3"
   },
