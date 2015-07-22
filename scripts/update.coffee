@@ -12,7 +12,7 @@
 #   None
 #
 # Commands:
-#   hackbot update - Performs a git pull and npm update.
+#   hubot update - Performs a git pull and npm update.
 #
 # Author:
 #   benjamine, Jack Serrino (Detry322)
@@ -20,8 +20,8 @@
 child_process = require 'child_process'
 downloaded_updates = false
 
-restartHackbot = (msg) ->
-    msg.send "Restarting hackbot..."
+restart = (msg) ->
+    msg.send "Restarting..."
     setTimeout () ->
         process.exit()
     , 500 # Give process some time to send message
@@ -56,10 +56,10 @@ module.exports = (robot) ->
                                 msg.send "all dependencies are up-to-date"
                         if changes
                             downloaded_updates = true
-                            restartHackbot msg
+                            restart msg
                         else
                             if downloaded_updates
-                                restartHackbot msg
+                                restart msg
                             else
                                 msg.send "I'm up-to-date!"
                 catch error

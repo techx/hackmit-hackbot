@@ -5,8 +5,8 @@
 #   HUBOT_OSCAR_STATUS_URL
 #
 # Commands:
-#   hackbot status - display statuses of all services
-#   hackbot status <name> - display statsues of services matching name (regex)
+#   hubot status - display statuses of all services
+#   hubot status <name> - display statsues of services matching name (regex)
 #
 # Author:
 #   anishathalye
