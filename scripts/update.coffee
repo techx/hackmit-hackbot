@@ -12,8 +12,8 @@
 #   None
 #
 # Commands:
-#   hackbot die
-#   hackbot update - Performs a git pull and npm udate.
+#   hackbot die - Kill the hackbot process (and restart it, if running in a managed environment)
+#   hackbot update - Performs a git pull and npm update.
 #   hackbot pending update - Informs if there are pending updates (hubot needs a restart)
 #
 # Author:
@@ -25,6 +25,7 @@ downloaded_updates = false
 module.exports = (robot) ->
 
     robot.respond /die$/i, (msg) ->
+        msg.send "Restarting hackbot..."
         process.exit()
 
     robot.respond /pending updates?\??$/i, (msg) ->
