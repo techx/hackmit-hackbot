@@ -5,6 +5,8 @@
   "author": "Anish Athalye <me@anishathalye.com>",
   "description": "HackMIT's robot slave",
   "scripts": {
+    "start-redis": "redis-server > /dev/null & echo $! > redis.pid",
+    "stop-redis": "kill -TERM $(cat redis.pid) && rm redis.pid",
     "start": "env $(cat .env 3>/dev/null) bin/hubot -a slack"
   },
   "dependencies": {
