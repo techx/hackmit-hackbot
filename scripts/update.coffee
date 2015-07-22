@@ -25,7 +25,9 @@ module.exports = (robot) ->
 
     robot.respond /die$/i, (msg) ->
         msg.send "Restarting hackbot..."
-        process.exit()
+        setTimeout () ->
+            process.exit()
+        , 1000 # Give process some time to send message
 
     robot.respond /update( yourself)?$/i, (msg) ->
         changes = false
