@@ -8,7 +8,7 @@
 #   None
 #
 # Commands:
-#   hackbot question <question> - asks WolframAlpha
+#   hubot question <question> - asks WolframAlpha
 #   go/<link> - anything of this form will be expanded.
 #
 # Author:
