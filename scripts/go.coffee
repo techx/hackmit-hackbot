@@ -1,9 +1,6 @@
 # Description:
 #   Go link expander
 #
-# Commands:
-#   None, auto expands go links of the form go/whatever
-#
 # Author:
 #   Jack Serrino (Detry322)
 
