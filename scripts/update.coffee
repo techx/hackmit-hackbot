@@ -14,7 +14,6 @@
 # Commands:
 #   hackbot die - Kill the hackbot process (and restart it, if running in a managed environment)
 #   hackbot update - Performs a git pull and npm update.
-#   hackbot pending update - Informs if there are pending updates (hubot needs a restart)
 #
 # Author:
 #   benjamine, Jack Serrino (Detry322)
@@ -27,12 +26,6 @@ module.exports = (robot) ->
     robot.respond /die$/i, (msg) ->
         msg.send "Restarting hackbot..."
         process.exit()
-
-    robot.respond /pending updates?\??$/i, (msg) ->
-        if downloaded_updates
-            msg.send "I have some pending updates, KILL ME PLEASE! (hint: hubot die)"
-        else
-            msg.send "I'm up-to-date!"
 
     robot.respond /update( yourself)?$/i, (msg) ->
         changes = false
@@ -62,10 +55,10 @@ module.exports = (robot) ->
                                 msg.send "all dependencies are up-to-date"
                         if changes
                             downloaded_updates = true
-                            msg.send "I downloaded some updates, KILL ME PLEASE! (hint: hubot die)"
+                            msg.send "I downloaded some updates, KILL ME PLEASE! (hint: hackbot die)"
                         else
                             if downloaded_updates
-                                msg.send "I have some pending updates, KILL ME PLEASE! (hint: hubot die)"
+                                msg.send "I have some pending updates, KILL ME PLEASE! (hint: hackbot die)"
                             else
                                 msg.send "I'm up-to-date!"
                 catch error
