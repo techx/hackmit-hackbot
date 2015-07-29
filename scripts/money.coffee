@@ -41,7 +41,7 @@ creds =
   private_key: googlePrivKey
   client_email: googleClientEmail
   client_id: googleClientId
-  type: "serviceAccount"
+  type: "service_account"
 
 sheet = new Spreadsheet(spreadsheetUrl);
 
