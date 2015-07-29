@@ -31,17 +31,8 @@ getOrDie = (variable) ->
     res
 
 spreadsheetUrl = getOrDie("MONEY_SPREADSHEET_URL")
-googlePrivKeyId = getOrDie("GOOGLE_PRIV_KEY_ID")
-googlePrivKey = getOrDie("GOOGLE_PRIV_KEY")
-googleClientEmail = getOrDie("GOOGLE_CLIENT_EMAIL")
-googleClientId = getOrDie("GOOGLE_CLIENT_ID")
 
-creds =
-  private_key_id: googlePrivKeyId
-  private_key: googlePrivKey
-  client_email: googleClientEmail
-  client_id: googleClientId
-  type: "service_account"
+creds = require('../hackmit-money-2015-credentials.json')
 
 sheet = new Spreadsheet(spreadsheetUrl);
 
