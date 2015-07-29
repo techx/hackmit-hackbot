@@ -2,12 +2,7 @@
 #   HackMIT sponsorship money
 #
 # Configuration:
-#   HUBOT_HACKMIT_GOOGLE_APIS_TOKEN
 #   MONEY_SPREADSHEET_URL
-#   GOOGLE_PRIV_KEY_ID
-#   GOOGLE_PRIV_KEY
-#   GOOGLE_CLIENT_EMAIL
-#   GOOGLE_CLIENT_ID
 #
 # Commands:
 #   hubot money / hubot $ - get how much money we have collected
