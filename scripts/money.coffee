@@ -44,12 +44,12 @@ module.exports = (robot) ->
             paymentStatusSheet = info.worksheets[1]
             options = 
               range: "R#{MONEY_ROW}C#{RECEIVED_COL}:R#{MONEY_ROW}C#{OUTSTANDING_COL+1}"
-            console.log paymentStatusSheet
-            console.log options
             paymentStatusSheet.getCells options, (err, cells) ->
               if err
                 res.send "Error occurred"
               else
-                res.send "*Received:* $#{cells[0].value}\n*Outstanding:* $#{cells[1].value}"
+                received = parseInt(cells[0].value)
+                outstanding = parseInt(cells[1].value)
+                res.send "*Received:* $#{received}\n*Outstanding:* $#{outstanding}\n*Total:* $#{received+outstanding}"
 
   
