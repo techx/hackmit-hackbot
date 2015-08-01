@@ -13,6 +13,8 @@
 
 http = require('http')
 
+ERR_MSG = "Sorry, there was an error completing your request."
+
 getHttp = (url, callback) ->
   try
     http.get url, (res) ->
@@ -78,18 +80,29 @@ filter = (arr, func) ->
       filtered.push item
   filtered
 
+formatMeta = (callback) ->
+  getMeta (meta, err) ->
+    if err
+      callback ERR_MSG
+    else
+      uptimeMs = parseInt(meta.uptime) * 1000
+      msg = ':clock12: ' + relative_time(new Date(new Date() - uptimeMs))
+      callback msg
+
 module.exports = (robot) ->
+
+  robot.respond /oscar\s*$/i, (res) ->
+    formatMeta (msg) ->
+      res.send msg
 
   robot.respond /status\s*$/i, (res) ->
     getStatuses (statuses, err) ->
       if err
-        res.send "Sorry, there was an error completing your request."
+        res.send ERR_MSG
       else
         res.send formatStatuses(statuses)
-        getMeta (meta, err) ->
-          if not err
-            uptimeMs = parseInt(meta.uptime) * 1000
-            res.send ':clock12: ' + relative_time(new Date(new Date() - uptimeMs))
+        formatMeta (msg) ->
+          res.send msg
 
   robot.respond /status (.*)/i, (res) ->
     search = res.match[1]
