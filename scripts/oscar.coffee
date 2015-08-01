@@ -13,9 +13,8 @@
 
 http = require('http')
 
-getStatuses = (callback) ->
+getHttp = (url, callback) ->
   try
-    url = process.env.HUBOT_OSCAR_STATUS_URL
     http.get url, (res) ->
       body = ''
       res.on 'data', (chunk) ->
@@ -27,6 +26,14 @@ getStatuses = (callback) ->
         callback(null, err)
   catch err
     callback(null, err)
+
+getStatuses = (callback) ->
+  url = process.env.HUBOT_OSCAR_BASE_URL + '/status'
+  getHttp url, callback
+
+getMeta = (callback) ->
+  url = process.env.HUBOT_OSCAR_BASE_URL
+  getHttp url, callback
 
 formatStatus = (status) ->
   mark = if status.status == 'failure' then ":broken_heart:" else ":green_heart:"
@@ -45,14 +52,6 @@ formatStatuses = (statuses) ->
     else
       ok.push item
   cmp = (a, b) ->
-    ###
-    if a.status == 'failure' or b.status == 'failure'
-      if a.status != b.status
-        if a.status == 'failure'
-          return -1
-        else
-          return 1
-    ###
     if a.name > b.name
       return 1
     else if a.name == b.name
@@ -87,6 +86,9 @@ module.exports = (robot) ->
         res.send "Sorry, there was an error completing your request."
       else
         res.send formatStatuses(statuses)
+        getMeta (meta, err) ->
+          if not err
+            res.send 'Uptime: ' + meta.uptime
 
   robot.respond /status (.*)/i, (res) ->
     search = res.match[1]
