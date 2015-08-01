@@ -88,7 +88,8 @@ module.exports = (robot) ->
         res.send formatStatuses(statuses)
         getMeta (meta, err) ->
           if not err
-            res.send ':clock12: ' + relative_time(new Date(new Date() - parseInt(meta.uptime)))
+            uptimeMs = parseInt(meta.uptime) * 1000
+            res.send ':clock12: ' + relative_time(new Date(new Date() - uptimeMs))
 
   robot.respond /status (.*)/i, (res) ->
     search = res.match[1]
