@@ -10,7 +10,7 @@
 #   hubot money / hubot $ - get how much money we have collected
 #
 # Author:
-#   Kate Yu (katexyu)
+#   katexyu
 
 util = require('util')
 Spreadsheet = require("google-spreadsheet");
@@ -43,7 +43,7 @@ module.exports = (robot) ->
             res.send "Error occurred while getting sheet info: #{err}"
           else
             paymentStatusSheet = info.worksheets[1]
-            options = 
+            options =
               range: "R#{MONEY_ROW}C#{RECEIVED_COL}:R#{MONEY_ROW}C#{OUTSTANDING_COL+1}"
             paymentStatusSheet.getCells options, (err, cells) ->
               if err
@@ -52,5 +52,3 @@ module.exports = (robot) ->
                 received = parseInt(cells[0].value)
                 outstanding = parseInt(cells[1].value)
                 res.send "*Received:* $#{received}\n*Outstanding:* $#{outstanding}\n*Total:* $#{received+outstanding}"
-
-  
