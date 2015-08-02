@@ -1,6 +1,9 @@
 # Description
 #   Ping all the members of a committee by ping that committee
 #
+# Commands:
+#   hubot ping @<committee> - Pings everyone on the committee
+#
 # Author:
 #   mysticuno
 
@@ -26,6 +29,6 @@ ping = (com, res) ->
 
 module.exports = (robot) ->
 
-	robot.respond /ping (@)?(.*)/i, (res) ->
-		com = res.match[1]
+	robot.respond /ping @(.*)/i, (res) ->
+		com = res.match[1].replace("@","")
 		ping com, res
