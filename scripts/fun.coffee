@@ -13,6 +13,10 @@ module.exports = (robot) ->
     'On the BART',
     'In Kimberli\'s supervisor\'s office',
     'Only Google knows...',
+    'In Tel Aviv',
+    'Ishaan has it',
+    'I think Kimberli spilled it on her laptop',
+    'Here: go/fireball'
   ]
 
   robot.hear /where.*fireball/i, (res) ->

@@ -6,3 +6,4 @@ node_modules
 *.pid
 *.log
 hackmit-money-2015-credentials.json
+*.*~
