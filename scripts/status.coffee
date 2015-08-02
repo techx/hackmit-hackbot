@@ -8,7 +8,7 @@
 #   None
 #
 # Author:
-#   Jack Serrino (Detry322)
+#   Detry322
 
 module.exports = (robot) ->
   robot.router.get '/status/ping', (req, res) ->

@@ -15,7 +15,7 @@
 #   hubot update - Performs a git pull and npm update.
 #
 # Author:
-#   benjamine, Jack Serrino (Detry322)
+#   benjamine, Detry322
 
 child_process = require 'child_process'
 downloaded_updates = false

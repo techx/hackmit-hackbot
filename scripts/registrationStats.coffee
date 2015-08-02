@@ -8,7 +8,7 @@
 #   hubot reg stats - get HackMIT registration statistics
 #
 # Author:
-#   Jack Serrino (Detry322)
+#   Detry322
 
 util = require('util')
 

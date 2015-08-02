@@ -2,7 +2,7 @@
 #   Fun responses
 #
 # Author:
-#   Anish Athalye (anishathalye)
+#   anishathalye
 
 module.exports = (robot) ->
 

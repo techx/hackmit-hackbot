@@ -8,10 +8,10 @@
 #   None
 #
 # Commands:
-#   hubot question <question> - asks WolframAlpha
 #   go/<link> - anything of this form will be expanded.
+#   hubot question <question> - asks WolframAlpha
 #
 # Author:
-#   Jack Serrino
+#   Detry322
 
-module.exports = (robot) -> 
+module.exports = (robot) ->

@@ -3,8 +3,10 @@
 #
 # Configuration:
 #   HUBOT_OSCAR_STATUS_URL
+#   HUBOT_OSCAR_BASE_URL
 #
 # Commands:
+#   hubot oscar - display oscar uptime.
 #   hubot status - display statuses of all services
 #   hubot status <name> - display statsues of services matching name (regex)
 #

@@ -2,7 +2,7 @@
 #   Go link expander
 #
 # Author:
-#   Jack Serrino (Detry322)
+#   Detry322
 
 module.exports = (robot) ->
 
