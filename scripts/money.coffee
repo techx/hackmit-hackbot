@@ -23,8 +23,8 @@ getOrDie = (variable) ->
     res
 # These are public but whatever
 MONEY_ROW = 2
-RECEIVED_COL = getOrDie("MONEY_RECEIVED_COL")
-OUTSTANDING_COL = getOrDie("MONEY_OUTSTANDING_COL")
+RECEIVED_COL = parseInt getOrDie("MONEY_RECEIVED_COL")
+OUTSTANDING_COL = parseInt getOrDie("MONEY_OUTSTANDING_COL")
 
 spreadsheetUrl = getOrDie("MONEY_SPREADSHEET_URL")
 
@@ -47,7 +47,7 @@ module.exports = (robot) ->
               range: "R#{MONEY_ROW}C#{RECEIVED_COL}:R#{MONEY_ROW}C#{OUTSTANDING_COL+1}"
             paymentStatusSheet.getCells options, (err, cells) ->
               if err
-                res.send "Error occurred while getting cells: #{err} with options: #{options}"
+                res.send "Error occurred while getting cells: #{err} with range: #{options.range}"
               else
                 received = parseInt(cells[0].value)
                 outstanding = parseInt(cells[1].value)
