@@ -36,18 +36,18 @@ module.exports = (robot) ->
   robot.respond /(\$|money)$/i, (res) ->
     sheet.useServiceAccountAuth creds, (err) ->
       if err
-        res.send "Error occurred"
+        res.send "Error occurred: #{err}"
       else
         sheet.getInfo (err, info) ->
           if err
-            res.send "Error occurred"
+            res.send "Error occurred: #{err}"
           else
             paymentStatusSheet = info.worksheets[1]
             options = 
               range: "R#{MONEY_ROW}C#{RECEIVED_COL}:R#{MONEY_ROW}C#{OUTSTANDING_COL+1}"
             paymentStatusSheet.getCells options, (err, cells) ->
               if err
-                res.send "Error occurred"
+                res.send "Error occurred: #{err}"
               else
                 received = parseInt(cells[0].value)
                 outstanding = parseInt(cells[1].value)
