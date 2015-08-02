@@ -82,6 +82,27 @@ filter = (arr, func) ->
       filtered.push item
   filtered
 
+relative_time = (date) ->
+  relative_to = if arguments.length > 1 then arguments[1] else new Date()
+  delta = parseInt ((relative_to.getTime() - date) / 1000)
+  delta = if delta < 2 then 2 else delta
+  r = ''
+  if delta < 60
+    r = delta + ' seconds'
+  else if delta < 120
+    r = 'a minute';
+  else if delta < 45 * 60
+    r = parseInt(delta / 60, 10).toString() + ' minutes'
+  else if delta <  2*60*60
+    r = 'an hour'
+  else if delta < 24*60*60
+    r = parseInt(delta / 3600, 10).toString() + ' hours'
+  else if delta < 48*60*60
+    r = 'a day'
+  else
+    r = parseInt(delta / 86400, 10).toString() + ' days'
+  return 'about ' + r
+
 formatMeta = (callback) ->
   getMeta (meta, err) ->
     if err
@@ -118,28 +139,3 @@ module.exports = (robot) ->
           res.send formatStatuses(filtered)
         else
           res.send "Sorry, there were no results matching `#{search}`. Perhaps tweak your regex?"
-
-`
-function relative_time(date) {
-  var relative_to = (arguments.length > 1) ? arguments[1] : new Date(); //defines relative to what ..default is now
-  var delta = parseInt((relative_to.getTime()-date)/1000);
-  delta=(delta<2)?2:delta;
-  var r = '';
-  if (delta < 60) {
-    r = delta + ' seconds';
-  } else if(delta < 120) {
-    r = 'a minute';
-  } else if(delta < (45*60)) {
-    r = (parseInt(delta / 60, 10)).toString() + ' minutes';
-  } else if(delta < (2*60*60)) {
-    r = 'an hour';
-  } else if(delta < (24*60*60)) {
-    r = '' + (parseInt(delta / 3600, 10)).toString() + ' hours';
-  } else if(delta < (48*60*60)) {
-    r = 'a day';
-  } else {
-    r = (parseInt(delta / 86400, 10)).toString() + ' days';
-  }
-  return 'about ' + r;
-}
-`

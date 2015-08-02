@@ -13,7 +13,7 @@
 #   katexyu
 
 util = require('util')
-Spreadsheet = require("google-spreadsheet");
+Spreadsheet = require("google-spreadsheet")
 
 getOrDie = (variable) ->
   res = process.env[variable]
@@ -30,7 +30,7 @@ spreadsheetUrl = getOrDie("MONEY_SPREADSHEET_URL")
 
 creds = require('../hackmit-money-2015-credentials.json')
 
-sheet = new Spreadsheet(spreadsheetUrl);
+sheet = new Spreadsheet(spreadsheetUrl)
 
 module.exports = (robot) ->
   robot.respond /(\$|money)$/i, (res) ->
