@@ -13,15 +13,19 @@ dev = ['anish', 'ehzhang', 'trujano', 'larryzhang', 'kate', 'jack.serrino', 'jjz
 
 committees = {'logs': logs, 'logistics': logs, 'dev': dev, 'marketing', marketing, 'mkt': marketing, 'cr':cr, 'fin':finance, 'finance':finance}
 
+# Ping everyone on the committee
+ping = (com, res) ->
+	if not committees[com]
+		res.send "Sorry, I'm afraid we dont have a #{com} committee"
+	else
+		members = committees[com]
+		msg = "Ping"
+		for mem in members
+			msg += " @#{mem}"
+		res.send msg
+
 module.exports = (robot) ->
 
 	robot.respond /ping (@)?(.*)/i, (res) ->
 		com = res.match[1]
-		if com not in committees
-			res.send "Sorry, I'm afraid we dont have a #{com} committee"
-		else
-			members = committees[com]
-			msg = "Ping"
-			for mem in members
-				msg += " <@#{mem}|#{mem}>"
-			res.send msg
+		ping com, res
