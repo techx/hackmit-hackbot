@@ -13,8 +13,9 @@ finance = ['carlosh', 'afmartin', 'jasonma', 'jennyu', 'jjz', 'kimberli', 'sabri
 marketing = ['vervious', 'atguo', 'chialiu', 'jmfessy', 'larryzhang', 'ehzhang', 'jjz', 'kimberli']
 cr = ['carlosh', 'jasonma', 'jjz', 'kimberli', 'ehzhang', 'pan18m', 'rotemh', 'sabrina', 'zareenc', 'zhangbanger', 'vonolden']
 dev = ['anish', 'ehzhang', 'trujano', 'larryzhang', 'kate', 'jackserrino', 'jjz', 'kimberli']
+test = ['carlosh', 'hackbot', 'slackbot']
 
-committees = {'logs': logs, 'logistics': logs, 'dev': dev, 'marketing', marketing, 'mkt': marketing, 'cr':cr, 'fin':finance, 'finance':finance}
+committees = {'logs': logs, 'logistics': logs, 'dev': dev, 'marketing', marketing, 'mkt': marketing, 'cr':cr, 'fin':finance, 'finance':finance, 'test': test}
 
 # Ping everyone on the committee
 ping = (com, res) ->
