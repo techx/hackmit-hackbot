@@ -34,8 +34,8 @@ DATE_COL = "dateoflastcontact"
 LEVEL_COL = "level_2"
 POINT_COL = "pointperson"
 
-STATUSES = ["Talking", "Pinged", "Emailed", "Invoiced", "Paid", "Rejected"];
-LEVELS = ["0Other", "1Platinum", "2Gold", "3Silver", "4Bronze", "5Startup", "9NotSponsoring"];
+STATUSES = ["Talking", "Pinged", "Emailed", "Invoiced", "Paid", "Rejected"]
+LEVELS = ["0Other", "1Platinum", "2Gold", "3Silver", "4Bronze", "5Startup", "9NotSponsoring"]
 
 spreadsheetUrl = getOrDie("MONEY_SPREADSHEET_URL")
 
@@ -45,50 +45,50 @@ sheet = new Spreadsheet(spreadsheetUrl)
 
 module.exports = (robot) ->
   robot.respond /(sponsor) (status|level|info) (.*) (.*)/i, (res) ->
-  sheet.useServiceAccountAuth creds, (err) ->
-    if err
-      res.send "Error occurred while authenticating: #{err}"
-    else
-      sheet.getInfo (err, info) ->
-        if err
-          res.send "Error occurred while getting sheet info: #{err}"
-        else
-          companyStatusSheet = info.worksheets[0]
-          companyStatusSheet.getRows (err, rows) ->
-            if err
-              res.send "Error occurred while getting rows: #{err}"
-            else
-              action = res.match[1]
-              companyName = res.match[2]
-              update = res.match[3]
-              cRow = findMatchingRow(rows, companyName)
-              if !cRow
-                res.send "Didn't find matching company"
+    sheet.useServiceAccountAuth creds, (err) ->
+      if err
+        res.send "Error occurred while authenticating: #{err}"
+      else
+        sheet.getInfo (err, info) ->
+          if err
+            res.send "Error occurred while getting sheet info: #{err}"
+          else
+            companyStatusSheet = info.worksheets[0]
+            companyStatusSheet.getRows (err, rows) ->
+              if err
+                res.send "Error occurred while getting rows: #{err}"
               else
-                switch action
-                  when "status" then
-                    if update not in STATUSES
-                      res.send "Please provide a valid status: #{STATUSES}"
+                action = res.match[1]
+                companyName = res.match[2]
+                update = res.match[3]
+                cRow = findMatchingRow(rows, companyName)
+                if !cRow
+                  res.send "Didn't find matching company"
+                else
+                  switch action
+                    when "status" then
+                      if update not in STATUSES
+                        res.send "Please provide a valid status: #{STATUSES}"
+                      else
+                        cRow[STATUS_COL] = update
+                        cRow.save (err) ->
+                          if err
+                            res.send "Error while updating cell value: #{err}"
+                          else
+                            res.send "Successfully updated #{companyName}"
+                    when "level" then
+                      if update not in LEVELS
+                        res.send "Please provide a valid level: #{LEVELS}"
+                      else
+                        cRow[LEVEL_COL] = update
+                        cRow.save (err) ->
+                          if err
+                            res.send "Error while updating cell value: #{err}"
+                          else
+                            res.send "Successfully updated #{companyName}"
+                    when "info" then
+                      res.send "*#{cRow[SPONSOR_NAME_COL]}*\n*Status:* #{cRow[STATUS_COL]}\n
+                                *Level:* #{cRow[LEVEL_COL]}\n*Point Person:* #{cRow[POINT_COL]}"
                     else
-                      cRow[STATUS_COL] = update
-                      cRow.save (err) ->
-                        if err
-                          res.send "Error while updating cell value: #{err}"
-                        else
-                          res.send "Successfully updated #{companyName}"
-                  when "level" then
-                    if update not in LEVELS
-                      res.send "Please provide a valid level: #{LEVELS}"
-                    else
-                      cRow[LEVEL_COL] = update
-                      cRow.save (err) ->
-                        if err
-                          res.send "Error while updating cell value: #{err}"
-                        else
-                          res.send "Successfully updated #{companyName}"
-                  when "info" then
-                    res.send "*#{cRow[SPONSOR_NAME_COL]}*\n*Status:* #{cRow[STATUS_COL]}\n
-                              *Level:* #{cRow[LEVEL_COL]}\n*Point Person:* #{cRow[POINT_COL]}"
-                  else
-                    res.send "Not a valid action"
+                      res.send "Not a valid action"
 
