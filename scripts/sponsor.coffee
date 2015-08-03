@@ -44,7 +44,7 @@ creds = require('../hackmit-money-2015-credentials.json')
 sheet = new Spreadsheet(spreadsheetUrl)
 
 module.exports = (robot) ->
-  robot.respond /(sponsor) (status|level|info) (.*) (.*)/i, (res) ->
+  robot.respond /(sponsor) (status|level|info) (.*) ([A-Za-z0-9]+)?/i, (res) ->
     sheet.useServiceAccountAuth creds, (err) ->
       if err
         res.send "Error occurred while authenticating: #{err}"
@@ -58,9 +58,9 @@ module.exports = (robot) ->
               if err
                 res.send "Error occurred while getting rows: #{err}"
               else
-                action = res.match[1]
-                companyName = res.match[2]
-                update = res.match[3]
+                action = match[2]
+                companyName = match[3]
+                update = match[4]
                 cRow = findMatchingRow(rows, companyName)
                 if !cRow
                   res.send "Didn't find matching company"
