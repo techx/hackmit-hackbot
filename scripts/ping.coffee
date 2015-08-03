@@ -20,7 +20,7 @@ committees = {'logs': logs, 'logistics': logs, 'dev': dev, 'marketing', marketin
 # Ping everyone on the committee
 ping = (com, res) ->
 	if not committees[com]
-		res.send "Sorry, I'm afraid we dont have a #{com} committee"
+		res.send "Sorry, I'm afraid we don't have a `#{com}` committee."
 	else
 		members = committees[com]
 		msg = "Ping"
