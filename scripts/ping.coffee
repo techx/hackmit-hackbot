@@ -24,11 +24,11 @@ ping = (com, res) ->
 		members = committees[com]
 		msg = "Ping"
 		for mem in members
-			msg += " @#{mem}"
+			msg += " <@#{mem}|#{mem}>"
 		res.send msg
 
 module.exports = (robot) ->
 
-	robot.respond /ping @(.*)/i, (res) ->
+	robot.respond /ping @?(.*)$/i, (res) ->
 		com = res.match[1].replace("@","")
 		ping com, res
