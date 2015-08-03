@@ -66,7 +66,7 @@ module.exports = (robot) ->
                   res.send "Didn't find matching company"
                 else
                   switch action
-                    when "status" then
+                    when "status"
                       if update not in STATUSES
                         res.send "Please provide a valid status: #{STATUSES}"
                       else
@@ -76,7 +76,7 @@ module.exports = (robot) ->
                             res.send "Error while updating cell value: #{err}"
                           else
                             res.send "Successfully updated #{companyName}"
-                    when "level" then
+                    when "level"
                       if update not in LEVELS
                         res.send "Please provide a valid level: #{LEVELS}"
                       else
@@ -86,7 +86,7 @@ module.exports = (robot) ->
                             res.send "Error while updating cell value: #{err}"
                           else
                             res.send "Successfully updated #{companyName}"
-                    when "info" then
+                    when "info"
                       res.send "*#{cRow[SPONSOR_NAME_COL]}*\n*Status:* #{cRow[STATUS_COL]}\n
                                 *Level:* #{cRow[LEVEL_COL]}\n*Point Person:* #{cRow[POINT_COL]}"
                     else
