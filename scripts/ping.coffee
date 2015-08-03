@@ -11,8 +11,8 @@
 logs = ['carlosh', 'jasonma', 'jjz', 'kimberli', 'lisa', 'rotemh', 'sabrina', 'zareenc', 'zhangbanger']
 finance = ['carlosh', 'afmartin', 'jasonma', 'jennyu', 'jjz', 'kimberli', 'sabrina']
 marketing = ['vervious', 'atguo', 'chialiu', 'jmfessy', 'larryzhang', 'ehzhang', 'jjz', 'kimberli']
-cr = ['carlosh', 'jasonma', 'jjz', 'kimberli', 'ehzhang', 'jack.serrino', 'pan18m', 'rotemh', 'sabrina', 'zareenc', 'zhangbanger', 'vonolden']
-dev = ['anish', 'ehzhang', 'trujano', 'larryzhang', 'kate', 'jack.serrino', 'jjz', 'kimberli']
+cr = ['carlosh', 'jasonma', 'jjz', 'kimberli', 'ehzhang', 'pan18m', 'rotemh', 'sabrina', 'zareenc', 'zhangbanger', 'vonolden']
+dev = ['anish', 'ehzhang', 'trujano', 'larryzhang', 'kate', 'jackserrino', 'jjz', 'kimberli']
 
 committees = {'logs': logs, 'logistics': logs, 'dev': dev, 'marketing', marketing, 'mkt': marketing, 'cr':cr, 'fin':finance, 'finance':finance}
 
