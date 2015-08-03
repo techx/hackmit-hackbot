@@ -33,7 +33,3 @@ module.exports = (robot) ->
 	robot.respond /ping @?(.*)$/i, (res) ->
 		com = res.match[1].replace("@","")
 		ping com, res
-
-	robot.hear /^ping @?(.*)$/i, (res) ->
-		com = res.match[1].replace("@","")
-		ping com, res
