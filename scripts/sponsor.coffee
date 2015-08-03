@@ -58,9 +58,9 @@ module.exports = (robot) ->
               if err
                 res.send "Error occurred while getting rows: #{err}"
               else
-                action = match[2]
-                companyName = match[3]
-                update = match[4]
+                action = res.match[2]
+                companyName = res.match[3]
+                update = res.match[4]
                 cRow = findMatchingRow(rows, companyName)
                 if !cRow
                   res.send "Didn't find matching company"
