@@ -71,7 +71,7 @@ getCompanyRow = (res, callback) ->
 module.exports = (robot) ->
   # Get a link to the spreadsheet
   robot.respond /sponsor spreadsheet/i, (res) ->
-    res.send "<Here|https://docs.google.com/spreadsheets/d/#{spreadsheetUrl}> you go!"
+    res.send "<https://docs.google.com/spreadsheets/d/#{spreadsheetUrl}|Here> you go!"
 
   # Returns a list of companies with the given status
   robot.respond /sponsor (talking|pinged|emailed|invoiced|paid|rejected)$/i, (res) ->
