@@ -79,7 +79,7 @@ module.exports = (robot) ->
         for row in rows
           if status.toLowerCase() == row[STATUS_COL].toLowerCase()
             companies.push(row[SPONSOR_NAME_COL])
-        res.send "*Total:* #{companies.length}\ncompanies.join('\n')"
+        res.send "*Total:* #{companies.length}\n#{companies.join('\n')}"
 
   # Returns a list of companies with the given tier
   robot.respond /sponsor (platinum|gold|silver|bronze|startup|not sponsoring|other)$/i, (res) ->
@@ -92,7 +92,7 @@ module.exports = (robot) ->
         for row in rows
           if level.toLowerCase() == row[LEVEL_COL].toLowerCase().substring(1)
             companies.push(row[SPONSOR_NAME_COL])
-        res.send "*Total:* #{companies.length}\ncompanies.join('\n')"
+        res.send "*Total:* #{companies.length}\n#{companies.join('\n')}"
 
   # Update sponsor tier
   robot.respond /sponsor level (.*) ([A-Za-z0-9]+)/i, (res) ->
