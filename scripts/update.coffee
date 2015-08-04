@@ -31,12 +31,11 @@ module.exports = (robot) ->
   robot.respond /update( yourself)?$/i, (msg) ->
     try
       msg.send "fetching latest source code..."
-      child_process.exec 'git fetch --all && git reset --hard @{u}', (error, stdout, stderr) ->
+      child_process.exec 'git fetch --all >/dev/null 2>&1 && git log --oneline --graph HEAD..@{u} && git diff --stat @{u} && git reset --hard @{u}', (error, stdout, stderr) ->
         if error
           msg.send "git fetch/reset failed: ```" + stderr + "```"
         else
-          output = stdout+''
-          msg.send "checked out latest commit"
+          msg.send "```#{stdout}```"
         try
           msg.send "npm update..."
           child_process.exec 'npm update', (error, stdout, stderr) ->
