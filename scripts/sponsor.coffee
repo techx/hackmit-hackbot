@@ -109,5 +109,4 @@ module.exports = (robot) ->
         if !cRow
           res.send "Didn't find matching company"
         else
-          res.send "*#{cRow[SPONSOR_NAME_COL]}*\n*Status:* #{cRow[STATUS_COL]}\n\
-                    *Level:* #{cRow[LEVEL_COL]}\n*Point Person:* #{cRow[POINT_COL]}"
+          res.send "*#{cRow[SPONSOR_NAME_COL]}*\n*Status:* #{cRow[STATUS_COL]}\n*Level:* #{cRow[LEVEL_COL]}\n*Point Person:* #{cRow[POINT_COL]}"
