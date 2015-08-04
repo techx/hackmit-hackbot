@@ -29,19 +29,14 @@ restart = (msg) ->
 module.exports = (robot) ->
 
   robot.respond /update( yourself)?$/i, (msg) ->
-    changes = false
     try
-      msg.send "git pull..."
-      child_process.exec 'git fetch && git reset --hard origin/master', (error, stdout, stderr) ->
+      msg.send "fetching latest source code..."
+      child_process.exec 'git fetch --all && git reset --hard @{u}', (error, stdout, stderr) ->
         if error
-          msg.send "git pull failed: ```" + stderr + "```"
+          msg.send "git fetch/reset failed: ```" + stderr + "```"
         else
           output = stdout+''
-          if not /Already up\-to\-date/.test output
-            msg.send "my source code changed:\n```" + output + "```"
-            changes = true
-          else
-            msg.send "my source code is up-to-date"
+          msg.send "checked out latest commit"
         try
           msg.send "npm update..."
           child_process.exec 'npm update', (error, stdout, stderr) ->
@@ -51,17 +46,9 @@ module.exports = (robot) ->
               output = stdout+''
               if /node_modules/.test output
                 msg.send "some dependencies updated:\n```" + output + "```"
-                changes = true
               else
                 msg.send "all dependencies are up-to-date"
-            if changes
-              downloaded_updates = true
-              restart msg
-            else
-              if downloaded_updates
-                restart msg
-              else
-                msg.send "I'm up-to-date!"
+            restart msg
         catch error
           msg.send "npm update failed: " + error
     catch error
