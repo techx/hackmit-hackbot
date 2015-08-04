@@ -43,7 +43,7 @@ creds = require('../hackmit-money-2015-credentials.json')
 
 sheet = new Spreadsheet(spreadsheetUrl)
 
-getCompanyRows = (creds, callback) ->
+getCompanyRow = (creds, callback) ->
   sheet.useServiceAccountAuth creds, (err) ->
     if err
       callback err
@@ -53,60 +53,55 @@ getCompanyRows = (creds, callback) ->
           callback err
         else
           companyStatusSheet = info.worksheets[0]
-          companyStatusSheet.getRows callback
+          companyStatusSheet.getRows (err, rows) ->
+            if err
+              callback(err)
+            else
+              companyName = res.match[1]
+              update = res.match[2]
+              row = findMatchingRow(rows, companyName)
+              callback(null, row, companyName, update)
 
 module.exports = (robot) ->
   robot.respond /sponsor level (.*) ([A-Za-z0-9]+)/i, (res) ->
-    getCompanyRows creds, (err, rows) ->
+    getCompanyRow creds, (err, row, company, update) ->
       if err
-        res.send "Error occurred while getting rows: #{err}"
+        res.send "Error while getting company row: #{err}"
+      else if !row
+        res.send "Didn't find matching company"
       else
-        companyName = res.match[1]
-        update = res.match[2]
-        cRow = findMatchingRow(rows, companyName)
-        if !cRow
-          res.send "Didn't find matching company"
+        if update not in LEVELS
+          res.send "Please provide a valid level: #{LEVELS}"
         else
-          if update not in LEVELS
-            res.send "Please provide a valid level: #{LEVELS}"
-          else
-            cRow[LEVEL_COL] = update
-            cRow.save (err) ->
-              if err
-                res.send "Error while updating cell value: #{err}"
-              else
-                res.send "Successfully updated #{companyName}"
+          row[LEVEL_COL] = update
+          row.save (err) ->
+            if err
+              res.send "Error while updating cell value: #{err}"
+            else
+              res.send "Successfully updated #{company}"
 
   robot.respond /sponsor status (.*) ([A-Za-z0-9]+)/i, (res) ->
-    getCompanyRows creds, (err, rows) ->
+    getCompanyRow creds, (err, row, company, update) ->
       if err
-        res.send "Error occurred while getting rows: #{err}"
+        res.send "Error while getting company row: #{err}"
+      else if !row
+        res.send "Didn't find matching company"
       else
-        companyName = res.match[1]
-        update = res.match[2]
-        cRow = findMatchingRow(rows, companyName)
-        if !cRow
-          res.send "Didn't find matching company"
+        if update not in STATUSES
+          res.send "Please provide a valid status: #{STATUSES}"
         else
-          if update not in STATUSES
-            res.send "Please provide a valid status: #{STATUSES}"
-          else
-            cRow[STATUS_COL] = update
-            cRow.save (err) ->
-              if err
-                res.send "Error while updating cell value: #{err}"
-              else
-                res.send "Successfully updated #{companyName}"
+          row[STATUS_COL] = update
+          row.save (err) ->
+            if err
+              res.send "Error while updating cell value: #{err}"
+            else
+              res.send "Successfully updated #{company}"
 
   robot.respond /sponsor info (.*)/i, (res) ->
-    getCompanyRows creds, (err, rows) ->
+    getCompanyRow creds, (err, row, company, update) ->
       if err
-        res.send "Error occurred while getting rows: #{err}"
+        res.send "Error while getting company row: #{err}"
+      else if !row
+        res.send "Didn't find matching company"
       else
-        companyName = res.match[1]
-        update = res.match[2]
-        cRow = findMatchingRow(rows, companyName)
-        if !cRow
-          res.send "Didn't find matching company"
-        else
-          res.send "*#{cRow[SPONSOR_NAME_COL]}*\n*Status:* #{cRow[STATUS_COL]}\n*Level:* #{cRow[LEVEL_COL]}\n*Point Person:* #{cRow[POINT_COL]}"
+        res.send "*#{row[SPONSOR_NAME_COL]}*\n*Status:* #{row[STATUS_COL]}\n*Level:* #{row[LEVEL_COL]}\n*Point Person:* #{row[POINT_COL]}\n*Last Contacted:* #{row[DATE_COL]}"
