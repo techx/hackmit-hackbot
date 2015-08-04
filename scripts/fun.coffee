@@ -51,3 +51,6 @@ module.exports = (robot) ->
         res.send lennySnakeParts[i]
         setTimeout sendFrom, lennySnakeTick, i + 1
     sendFrom 0
+
+  robot.hear /jason/i, (res) ->
+    res.send "but he's not course 6"
