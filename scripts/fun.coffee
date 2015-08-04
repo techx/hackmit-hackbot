@@ -43,14 +43,14 @@ module.exports = (robot) ->
     "……….*"
   ]
 
- lennySnakeTick = 300 # milliseconds
+  lennySnakeTick = 300 # milliseconds
 
- robot.hear /lennysnake/i, (res) ->
-   sendFrom = (i) ->
-     if i < lennySnakeParts.length
-       res.send lennySnakeParts[i]
-       setTimeout sendFrom, lennySnakeTick, i + 1
-   sendFrom 0
+  robot.hear /lennysnake/i, (res) ->
+    sendFrom = (i) ->
+      if i < lennySnakeParts.length
+        res.send lennySnakeParts[i]
+        setTimeout sendFrom, lennySnakeTick, i + 1
+    sendFrom 0
 
   robot.hear /jason/i, (res) ->
     res.send "but he's not course 6"
