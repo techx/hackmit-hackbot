@@ -56,7 +56,7 @@ getCompanyRows = (creds, callback) ->
           companyStatusSheet.getRows callback
 
 module.exports = (robot) ->
-  robot.respond /sponsor level (.*) ([A-Za-z0-9]+)/i, res ->
+  robot.respond /sponsor level (.*) ([A-Za-z0-9]+)/i, (res) ->
     getCompanyRows creds, (err, rows) ->
       if err
         res.send "Error occurred while getting rows: #{err}"
@@ -77,7 +77,7 @@ module.exports = (robot) ->
               else
                 res.send "Successfully updated #{companyName}"
 
-  robot.respond /sponsor status (.*) ([A-Za-z0-9]+)/i, res ->
+  robot.respond /sponsor status (.*) ([A-Za-z0-9]+)/i, (res) ->
     getCompanyRows creds, (err, rows) ->
       if err
         res.send "Error occurred while getting rows: #{err}"
