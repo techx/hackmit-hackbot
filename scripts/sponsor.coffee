@@ -31,7 +31,7 @@ findMatchingRow = (rows, companyName) ->
 SPONSOR_NAME_COL = "company"
 STATUS_COL = "status"
 DATE_COL = "dateoflastcontact"
-LEVEL_COL = "level_2"
+LEVEL_COL = "level"
 POINT_COL = "pointperson"
 
 STATUSES = ["Talking", "Pinged", "Emailed", "Invoiced", "Paid", "Rejected"]
@@ -43,52 +43,71 @@ creds = require('../hackmit-money-2015-credentials.json')
 
 sheet = new Spreadsheet(spreadsheetUrl)
 
-module.exports = (robot) ->
-  robot.respond /(sponsor) (status|level|info) (.*) ([A-Za-z0-9]+)?/i, (res) ->
-    sheet.useServiceAccountAuth creds, (err) ->
-      if err
-        res.send "Error occurred while authenticating: #{err}"
-      else
-        sheet.getInfo (err, info) ->
-          if err
-            res.send "Error occurred while getting sheet info: #{err}"
-          else
-            companyStatusSheet = info.worksheets[0]
-            companyStatusSheet.getRows (err, rows) ->
-              if err
-                res.send "Error occurred while getting rows: #{err}"
-              else
-                action = res.match[2]
-                companyName = res.match[3]
-                update = res.match[4]
-                cRow = findMatchingRow(rows, companyName)
-                if !cRow
-                  res.send "Didn't find matching company"
-                else
-                  switch action
-                    when "status"
-                      if update not in STATUSES
-                        res.send "Please provide a valid status: #{STATUSES}"
-                      else
-                        cRow[STATUS_COL] = update
-                        cRow.save (err) ->
-                          if err
-                            res.send "Error while updating cell value: #{err}"
-                          else
-                            res.send "Successfully updated #{companyName}"
-                    when "level"
-                      if update not in LEVELS
-                        res.send "Please provide a valid level: #{LEVELS}"
-                      else
-                        cRow[LEVEL_COL] = update
-                        cRow.save (err) ->
-                          if err
-                            res.send "Error while updating cell value: #{err}"
-                          else
-                            res.send "Successfully updated #{companyName}"
-                    when "info"
-                      res.send "*#{cRow[SPONSOR_NAME_COL]}*\n*Status:* #{cRow[STATUS_COL]}\n
-                                *Level:* #{cRow[LEVEL_COL]}\n*Point Person:* #{cRow[POINT_COL]}"
-                    else
-                      res.send "Not a valid action"
+getCompanyRows = (creds, callback) ->
+  sheet.useServiceAccountAuth creds, (err) ->
+    if err
+      callback err
+    else
+      sheet.getInfo (err, info) ->
+        if err
+          callback err
+        else
+          companyStatusSheet = info.worksheets[0]
+          companyStatusSheet.getRows callback
 
+module.exports = (robot) ->
+  robot.respond /sponsor level (.*) ([A-Za-z0-9]+)/i, res ->
+    getCompanyRows creds, (err, rows) ->
+      if err
+        res.send "Error occurred while getting rows: #{err}"
+      else
+        companyName = res.match[1]
+        update = res.match[2]
+        cRow = findMatchingRow(rows, companyName)
+        if !cRow
+          res.send "Didn't find matching company"
+        else
+          if update not in LEVELS
+            res.send "Please provide a valid level: #{LEVELS}"
+          else
+            cRow[LEVEL_COL] = update
+            cRow.save (err) ->
+              if err
+                res.send "Error while updating cell value: #{err}"
+              else
+                res.send "Successfully updated #{companyName}"
+
+  robot.respond /sponsor status (.*) ([A-Za-z0-9]+)/i, res ->
+    getCompanyRows creds, (err, rows) ->
+      if err
+        res.send "Error occurred while getting rows: #{err}"
+      else
+        companyName = res.match[1]
+        update = res.match[2]
+        cRow = findMatchingRow(rows, companyName)
+        if !cRow
+          res.send "Didn't find matching company"
+        else
+          if update not in STATUSES
+            res.send "Please provide a valid status: #{STATUSES}"
+          else
+            cRow[STATUS_COL] = update
+            cRow.save (err) ->
+              if err
+                res.send "Error while updating cell value: #{err}"
+              else
+                res.send "Successfully updated #{companyName}"
+
+  robot.respond /sponsor info (.*)/i, (res) ->
+    getCompanyRows creds, (err, rows) ->
+      if err
+        res.send "Error occurred while getting rows: #{err}"
+      else
+        companyName = res.match[1]
+        update = res.match[2]
+        cRow = findMatchingRow(rows, companyName)
+        if !cRow
+          res.send "Didn't find matching company"
+        else
+          res.send "*#{cRow[SPONSOR_NAME_COL]}*\n*Status:* #{cRow[STATUS_COL]}\n\
+                    *Level:* #{cRow[LEVEL_COL]}\n*Point Person:* #{cRow[POINT_COL]}"
