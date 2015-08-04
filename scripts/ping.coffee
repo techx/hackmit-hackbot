@@ -25,7 +25,7 @@ ping = (com, res) ->
 		members = committees[com]
 		msg = "Ping"
 		for mem in members
-			msg += " <@#{mem}|#{mem}>"
+			msg += " <@#{mem}>"
 		res.send msg
 
 module.exports = (robot) ->
