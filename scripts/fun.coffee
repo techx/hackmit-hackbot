@@ -50,3 +50,4 @@ module.exports = (robot) ->
       if i < lennySnakeParts.length
         res.send lennySnakeParts[i]
         setTimeout sendFrom, lennySnakeTick, i + 1
+    sendFrom 0
