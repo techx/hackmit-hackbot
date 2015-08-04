@@ -22,5 +22,31 @@ module.exports = (robot) ->
   robot.hear /where.*fireball/i, (res) ->
     res.send res.random fireballResponses
 
+  lennySnakeParts = [
+    "╚═( ͡° ͜ʖ ͡°)═╝",
+    "╚═(███)═╝",
+    "╚═(███)═╝",
+    ".╚═(███)═╝",
+    "..╚═(███)═╝",
+    "…╚═(███)═╝",
+    "…╚═(███)═╝",
+    "..╚═(███)═╝",
+    ".╚═(███)═╝",
+    "╚═(███)═╝",
+    ".╚═(███)═╝",
+    "..╚═(███)═╝",
+    "…╚═(███)═╝",
+    "…╚═(███)═╝",
+    "…..╚(███)╝",
+    "……╚(██)╝",
+    "………(█)",
+    "……….*"
+  ]
+
+  lennySnakeTick = 300 # milliseconds
+
   robot.hear /lennysnake/i, (res) ->
-    res.send "╚═( ͡° ͜ʖ ͡°)═╝\n╚═(███)═╝\n╚═(███)═╝\n.╚═(███)═╝\n..╚═(███)═╝\n…╚═(███)═╝\n…╚═(███)═╝\n..╚═(███)═╝\n.╚═(███)═╝\n╚═(███)═╝\n.╚═(███)═╝\n..╚═(███)═╝\n…╚═(███)═╝\n…╚═(███)═╝\n…..╚(███)╝\n……╚(██)╝\n………(█)\n……….*"
+    sendFrom = (i) ->
+      if i < lennySnakeParts.length
+        res.send lennySnakeParts[i]
+        setTimeout sendFrom, lennySnakeTick, i + 1
