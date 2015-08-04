@@ -43,7 +43,7 @@ creds = require('../hackmit-money-2015-credentials.json')
 
 sheet = new Spreadsheet(spreadsheetUrl)
 
-getCompanyRow = (creds, callback) ->
+getCompanyRow = (creds, res, callback) ->
   sheet.useServiceAccountAuth creds, (err) ->
     if err
       callback err
@@ -64,7 +64,7 @@ getCompanyRow = (creds, callback) ->
 
 module.exports = (robot) ->
   robot.respond /sponsor level (.*) ([A-Za-z0-9]+)/i, (res) ->
-    getCompanyRow creds, (err, row, company, update) ->
+    getCompanyRow creds, res, (err, row, company, update) ->
       if err
         res.send "Error while getting company row: #{err}"
       else if !row
@@ -81,7 +81,7 @@ module.exports = (robot) ->
               res.send "Successfully updated #{company}"
 
   robot.respond /sponsor status (.*) ([A-Za-z0-9]+)/i, (res) ->
-    getCompanyRow creds, (err, row, company, update) ->
+    getCompanyRow creds, res, (err, row, company, update) ->
       if err
         res.send "Error while getting company row: #{err}"
       else if !row
@@ -98,7 +98,7 @@ module.exports = (robot) ->
               res.send "Successfully updated #{company}"
 
   robot.respond /sponsor info (.*)/i, (res) ->
-    getCompanyRow creds, (err, row, company, update) ->
+    getCompanyRow creds, res, (err, row, company, update) ->
       if err
         res.send "Error while getting company row: #{err}"
       else if !row
