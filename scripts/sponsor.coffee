@@ -35,6 +35,7 @@ STATUS_COL = "status"
 DATE_COL = "dateoflastcontact"
 LEVEL_COL = "level"
 POINT_COL = "pointperson"
+CONTACT_COL = "companycontact"
 
 STATUSES = ["Talking", "Pinged", "Emailed", "Invoiced", "Paid", "Rejected"]
 LEVELS = ["0Other", "1Platinum", "2Gold", "3Silver", "4Bronze", "5Startup", "9NotSponsoring"]
@@ -82,7 +83,7 @@ module.exports = (robot) ->
         res.send "*Total:* #{companies.length}\n#{companies.join('\n')}"
 
   # Returns a list of companies with the given tier
-  robot.respond /sponsor (platinum|gold|silver|bronze|startup|not sponsoring|other)$/i, (res) ->
+  robot.respond /sponsor (platinum|gold|silver|bronze|startup|notsponsoring|other)$/i, (res) ->
     getCompanyRows (err, rows) ->
       if err
         res.send "Error while getting company rows: #{err}"
@@ -138,4 +139,4 @@ module.exports = (robot) ->
       else if !row
         res.send "Didn't find matching company"
       else
-        res.send "*#{row[SPONSOR_NAME_COL]}*\n*Status:* #{row[STATUS_COL]}\n*Level:* #{row[LEVEL_COL]}\n*Point Person:* #{row[POINT_COL]}\n*Last Contacted:* #{row[DATE_COL]}"
+        res.send "*#{row[SPONSOR_NAME_COL]}*\n*Status:* #{row[STATUS_COL]}\n*Level:* #{row[LEVEL_COL]}\n*Point Person:* #{row[POINT_COL]}\n*Company Contact:* #{row[CONTACT_COL]}\n*Last Contacted:* #{row[DATE_COL]}"
