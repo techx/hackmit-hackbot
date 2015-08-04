@@ -21,3 +21,6 @@ module.exports = (robot) ->
 
   robot.hear /where.*fireball/i, (res) ->
     res.send res.random fireballResponses
+
+  robot.hear /lennysnake/i, (res) ->
+    res.send "╚═( ͡° ͜ʖ ͡°)═╝\n╚═(███)═╝\n╚═(███)═╝\n.╚═(███)═╝\n..╚═(███)═╝\n…╚═(███)═╝\n…╚═(███)═╝\n..╚═(███)═╝\n.╚═(███)═╝\n╚═(███)═╝\n.╚═(███)═╝\n..╚═(███)═╝\n…╚═(███)═╝\n…╚═(███)═╝\n…..╚(███)╝\n……╚(██)╝\n………(█)\n……….*"
