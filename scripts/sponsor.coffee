@@ -8,6 +8,7 @@
 #   hubot sponsor info <company> - get current sponsor status
 #   hubot sponsor status <company> <status> - update status of company
 #   hubot sponsor level <company> <level> - update sponsorship level of company
+#   hubot sponsor date <company> <date> - update company date of last contact
 #   hubot sponsor <level> - get list of companies sponsoring at the given level
 #   hubot sponsor <status> - get a list of companies sponsoring with the given status
 #
@@ -129,11 +130,27 @@ module.exports = (robot) ->
           res.send "Please provide a valid status: #{STATUSES.join("\n")}"
         else
           row[STATUS_COL] = update
+          today = new Date()
+          row[DATE_COL] = (today.getMonth() + 1) + "/" + today.getDate() + "/" +  String(today.getFullYear()).substring(2)
           row.save (err) ->
             if err
               res.send "Error while updating cell value: #{err}"
             else
               res.send "Successfully updated #{company}\n*#{row[SPONSOR_NAME_COL]}*\n*Status:* #{row[STATUS_COL]}\n*Level:* #{row[LEVEL_COL]}\n*Point Person:* #{row[POINT_COL]}\n*Company Contact:* #{row[CONTACT_COL]}\n*Last Contacted:* #{row[DATE_COL]}"
+
+  robot.respond /sponsor date (.*) ([A-Za-z0-9\/]+)/ (res) ->
+    getCompanyRow res, (err, row, company, update) ->
+      if err
+        res.send "Error while getting company row: #{err}"
+      else if !row
+        res.send "Didn't find matching company"
+      else
+        row[DATE_COL] = update
+        row.save (err) ->
+          if err
+            res.send "Error while updating cell value: #{err}"
+          else
+            res.send "Successfully updated #{company}\n*#{row[SPONSOR_NAME_COL]}*\n*Status:* #{row[STATUS_COL]}\n*Level:* #{row[LEVEL_COL]}\n*Point Person:* #{row[POINT_COL]}\n*Company Contact:* #{row[CONTACT_COL]}\n*Last Contacted:* #{row[DATE_COL]}"
 
   # Get sponsor info
   robot.respond /sponsor info (.*)/i, (res) ->
