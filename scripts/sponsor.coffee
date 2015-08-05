@@ -131,7 +131,7 @@ module.exports = (robot) ->
         else
           row[STATUS_COL] = update
           today = new Date()
-          row[DATE_COL] = (today.getMonth() + 1) + "/" + today.getDate() + "/" +  String(today.getFullYear()).substring(2)
+          row[DATE_COL] = (today.getMonth() + 1) + "/" + today.getDate() + "/" + today.getFullYear()
           row.save (err) ->
             if err
               res.send "Error while updating cell value: #{err}"
