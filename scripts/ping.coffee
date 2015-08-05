@@ -7,7 +7,13 @@
 # Author:
 #   mysticuno
 
+Array::unique = ->
+  output = {}
+  output[@[key]] = @[key] for key in [0...@length]
+  value for key, value of output
+
 # Attempt to define committees
+heads = ['kimberli', 'jjz']
 logs = ['carlosh', 'jasonma', 'jjz', 'kimberli', 'lisa', 'rotemh', 'sabrina', 'zareenc', 'zhangbanger']
 finance = ['carlosh', 'afmartin', 'jasonma', 'jennyu', 'jjz', 'kimberli', 'sabrina']
 marketing = ['vervious', 'atguo', 'chialiu', 'jmfessy', 'larryzhang', 'ehzhang', 'jjz', 'kimberli']
@@ -15,7 +21,19 @@ cr = ['carlosh', 'jasonma', 'jjz', 'kimberli', 'ehzhang', 'pan18m', 'rotemh', 's
 dev = ['anish', 'ehzhang', 'trujano', 'larryzhang', 'kate', 'jackserrino', 'jjz', 'kimberli']
 test = ['hackbot', 'slackbot']
 
-committees = {'logs': logs, 'logistics': logs, 'dev': dev, 'marketing', marketing, 'mkt': marketing, 'cr':cr, 'fin':finance, 'finance':finance, 'test': test}
+committees = {
+	'heads': heads,
+	'logs': logs,
+	'logistics': logs,
+	'dev': dev,
+	'marketing', marketing,
+	'mkt': marketing,
+	'cr':cr,
+	'fin':finance,
+	'finance':finance,
+	'test': test,
+	'all': [heads..., logs..., finance..., marketing..., cr..., dev...].unique()
+}
 
 # Ping everyone on the committee
 ping = (com, res) ->
