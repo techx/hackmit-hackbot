@@ -13,6 +13,7 @@
     "google-spreadsheet": "^1.0.1",
     "hubot": "^2.12.0",
     "hubot-diagnostics": "0.0.1",
+    "hubot-group": "~1.0.0",
     "hubot-help": "^0.1.1",
     "hubot-redis-brain": "0.0.2",
     "hubot-seen": "^0.2.2",
