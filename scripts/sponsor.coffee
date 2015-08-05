@@ -138,7 +138,7 @@ module.exports = (robot) ->
             else
               res.send "Successfully updated #{company}\n*#{row[SPONSOR_NAME_COL]}*\n*Status:* #{row[STATUS_COL]}\n*Level:* #{row[LEVEL_COL]}\n*Point Person:* #{row[POINT_COL]}\n*Company Contact:* #{row[CONTACT_COL]}\n*Last Contacted:* #{row[DATE_COL]}"
 
-  robot.respond /sponsor date (.*) ([A-Za-z0-9\/]+)/ (res) ->
+  robot.respond /sponsor date (.*) ([A-Za-z0-9\/]+)/i, (res) ->
     getCompanyRow res, (err, row, company, update) ->
       if err
         res.send "Error while getting company row: #{err}"
