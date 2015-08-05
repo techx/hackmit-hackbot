@@ -36,6 +36,8 @@ module.exports = (robot) ->
           admitted = data.admitted
           confirmed = data.confirmed
           declined = data.declined
+          total = data.reimbursementTotal
+          needed = data.reimbursementMissing
           none = data.shirtSizes.None
           xsmall = data.shirtSizes.XS
           small = data.shirtSizes.S
@@ -43,7 +45,7 @@ module.exports = (robot) ->
           large = data.shirtSizes.L
           xlarge = data.shirtSizes.XL
           xxlarge = data.shirtSizes.XXL
-          message = util.format("*Status*\nSubmitted: %d\nAdmitted: %d\nConfirmed: %d\nDeclined: %d\n===============================\n*Reimbursements*\nTotal: %d\nMissing: %d\n===============================\n*Shirts*\nNone: %d\nX Small: %d\nSmall: %d\nMedium: %d\nLarge: %d\nX Large: %d\nXX Large: %d", submitted, admitted, confirmed, declined, none, xsmall, small, medium, large, xlarge, xxlarge)
+          message = util.format("*Status*\nSubmitted: %d\nAdmitted: %d\nConfirmed: %d\nDeclined: %d\n===============================\n*Reimbursements*\nTotal: %d\nMissing: %d\n===============================\n*Shirts*\nNone: %d\nX Small: %d\nSmall: %d\nMedium: %d\nLarge: %d\nX Large: %d\nXX Large: %d", submitted, admitted, confirmed, declined, total, needed, none, xsmall, small, medium, large, xlarge, xxlarge)
           res.send message
         catch error
           res.send "Could not fetch stats (error parsing JSON) :("
