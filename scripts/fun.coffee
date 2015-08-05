@@ -53,4 +53,6 @@ module.exports = (robot) ->
     sendFrom 0
 
   robot.hear /jason/i, (res) ->
-    res.send "but he's not course 6"
+    # make this less spammy
+    if Math.random() < 0.2
+      res.send "but he's not course 6"
