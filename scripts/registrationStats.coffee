@@ -31,17 +31,19 @@ module.exports = (robot) ->
           res.send "Could not fetch stats (status wasn't 200) :("
           return
         try
-          p = (n, d) -> (n/d*100).toFixed(2) + "%"
           data = JSON.parse body
-          total = data.total
-          verified = data.verified
           submitted = data.submitted
-          male = data.demo.gender.M
-          female = data.demo.gender.F
-          other = data.demo.gender.O
-          nr = data.demo.gender.N
-          schools = data.demo.schools.sort((a,b) -> b.count - a.count)
-          message = util.format("Total Users: %d\nVerified Users: %d (%s)\nSubmitted Users: %d (%s)\n===============================\nMale: %d (%s)\nFemale: %d (%s)\nOther: %d (%s)\nNo Response: %d (%s)\n===============================\nTop 5 schools:\n1. %s (%d)\n2. %s (%d)\n3. %s (%d)\n4. %s (%d)\n5. %s (%d)",total, verified, p(verified, total), submitted, p(submitted, total), male, p(male, total), female, p(female, total), other, p(other, total), nr, p(nr, total), schools[0].email, schools[0].count, schools[1].email, schools[1].count, schools[2].email, schools[2].count, schools[3].email, schools[3].count, schools[4].email, schools[4].count)
+          admitted = data.admitted
+          confirmed = data.confirmed
+          declined = data.declined
+          none = data.shirtSizes.None
+          xsmall = data.shirtSizes.XS
+          small = data.shirtSizes.S
+          medium = data.shirtSizes.M
+          large = data.shirtSizes.L
+          xlarge = data.shirtSizes.XL
+          xxlarge = data.shirtSizes.XXL
+          message = util.format("*Status*\nSubmitted: %d\nAdmitted: %d\nConfirmed: %d\nDeclined: %d\n===============================\n*Reimbursements*\nTotal: %d\nMissing: %d\n===============================\n*Shirts*\nNone: %d\nX Small: %d\nSmall: %d\nMedium: %d\nLarge: %d\nX Large: %d\nXX Large: %d", submitted, admitted, confirmed, declined, none, xsmall, small, medium, large, xlarge, xxlarge)
           res.send message
         catch error
           res.send "Could not fetch stats (error parsing JSON) :("
