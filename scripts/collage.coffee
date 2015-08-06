@@ -25,7 +25,7 @@ module.exports = (robot) ->
 
   config = require('hubot-conf')('collage', robot)
 
-  sendStatus = (url, res) ->
+  sendStatus = (msg) ->
     username = config 'username'
     password = config 'password'
     auth = 'Basic ' + new Buffer(username + ':' + password).toString('base64')
@@ -41,11 +41,11 @@ module.exports = (robot) ->
           body += chunk
         res.on 'end', () ->
           arr = JSON.parse body
-          res.send "#{arr.unique().length} unique submissions"
+          msg.send "#{arr.unique().length} unique submissions"
         res.on 'error', (er) ->
-          res.send ERR_MSG
+          msg.send ERR_MSG
     catch err
-      res.send ERR_MSG
+      msg.send ERR_MSG
 
   robot.respond /collage\s*$/i, (res) ->
     sendStatus res
