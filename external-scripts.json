@@ -1,4 +1,5 @@
 [
+  "hubot-conf",
   "hubot-diagnostics",
   "hubot-group",
   "hubot-help",
