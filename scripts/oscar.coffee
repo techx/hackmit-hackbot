@@ -18,7 +18,7 @@ ERR_MSG = "Sorry, there was an error completing your request."
 
 module.exports = (robot) ->
 
-  config = require('hubot-config')('oscar', robot)
+  config = require('hubot-conf')('oscar', robot)
 
   getHttp = (url, callback) ->
     try
