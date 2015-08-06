@@ -50,25 +50,3 @@ module.exports = (robot) ->
   robot.respond /collage\s*$/i, (res) ->
     formatMeta (msg) ->
       res.send msg
-
-  robot.respond /status\s*$/i, (res) ->
-    getStatuses (statuses, err) ->
-      if err
-        res.send ERR_MSG
-      else
-        res.send formatStatuses(statuses)
-        formatMeta (msg) ->
-          res.send msg
-
-  robot.respond /status (.*)/i, (res) ->
-    search = res.match[1]
-    getStatuses (statuses, err) ->
-      if err
-        res.send "Sorry, there was an error completing your request."
-      else
-        filtered = filter statuses, (status) ->
-          status.name.match search
-        if filtered.length > 0
-          res.send formatStatuses(filtered)
-        else
-          res.send "Sorry, there were no results matching `#{search}`. Perhaps tweak your regex?"
