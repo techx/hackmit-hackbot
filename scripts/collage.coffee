@@ -48,5 +48,4 @@ module.exports = (robot) ->
       res.send ERR_MSG
 
   robot.respond /collage\s*$/i, (res) ->
-    formatMeta (msg) ->
-      res.send msg
+    sendStatus res
