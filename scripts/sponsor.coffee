@@ -59,8 +59,8 @@ getCompanyRow = (res, callback) ->
       callback(null, row, companyName, update)
 
 module.exports = (robot) ->
-  config = require('hubot-conf')('sponsor', robot)
-  spreadsheetUrl = config 'money.spreadsheet'
+  config = require('hubot-conf')('money', robot)
+  spreadsheetUrl = config 'spreadsheet.url'
   sheet = new Spreadsheet(spreadsheetUrl)
 
   # Get a link to the spreadsheet

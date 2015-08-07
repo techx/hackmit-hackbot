@@ -15,10 +15,10 @@ creds = require('../hackmit-money-2015-credentials.json')
 module.exports = (robot) ->
   config = require('hubot-conf')('money', robot)
 
-  moneyRow = config 'money.row'
-  receivedCol = config 'money.received'
-  outstandingCol = config 'money.outstanding'
-  spreadsheetUrl = config 'money.spreadsheet'
+  moneyRow = config 'row'
+  receivedCol = config 'received.col'
+  outstandingCol = config 'outstanding.col'
+  spreadsheetUrl = config 'spreadsheet.url'
 
   sheet = new Spreadsheet(spreadsheetUrl)
 
