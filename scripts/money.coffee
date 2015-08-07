@@ -15,14 +15,14 @@ creds = require('../hackmit-money-2015-credentials.json')
 module.exports = (robot) ->
   config = require('hubot-conf')('money', robot)
 
-  moneyRow = config 'row'
-  receivedCol = config 'received.col'
-  outstandingCol = config 'outstanding.col'
-  spreadsheetUrl = config 'spreadsheet.url'
-
-  sheet = new Spreadsheet(spreadsheetUrl)
-
   robot.respond /(\$|money)$/i, (res) ->
+    moneyRow = parseInt(config 'row')
+    receivedCol = parseInt(config 'received.col')
+    outstandingCol = parseInt(config 'outstanding.col')
+    spreadsheetUrl = config 'spreadsheet.url'
+
+    sheet = new Spreadsheet(spreadsheetUrl)
+
     sheet.useServiceAccountAuth creds, (err) ->
       if err
         res.send "Error occurred while authenticating: #{err}"
