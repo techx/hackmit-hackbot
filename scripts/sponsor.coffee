@@ -18,13 +18,6 @@
 util = require('util')
 Spreadsheet = require("google-spreadsheet")
 
-getOrDie = (variable) ->
-  res = process.env[variable]
-  if not res?
-    throw new Error("Failed to get environment variable '#{variable}'")
-  else
-    res
-
 findMatchingRow = (rows, companyName) ->
   for row in rows
     if companyName.toLowerCase() == row[SPONSOR_NAME_COL].toLowerCase()
@@ -40,8 +33,6 @@ CONTACT_COL = "companycontact"
 
 STATUSES = ["Talking", "Pinged", "Emailed", "Invoiced", "Paid", "Rejected"]
 LEVELS = ["0Other", "1Platinum", "2Gold", "3Silver", "4Bronze", "5Startup", "9NotSponsoring"]
-
-spreadsheetUrl = getOrDie("MONEY_SPREADSHEET_URL")
 
 creds = require('../hackmit-money-2015-credentials.json')
 
@@ -70,6 +61,8 @@ getCompanyRow = (res, callback) ->
       callback(null, row, companyName, update)
 
 module.exports = (robot) ->
+  config = require('hubot-conf')('sponsor', robot)
+  spreadsheetUrl = config 'money.spreadsheet'
   # Get a link to the spreadsheet
   robot.respond /sponsor spreadsheet/i, (res) ->
     res.send "https://go.hackmit.org/sponsor"
