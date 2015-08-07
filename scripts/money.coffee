@@ -12,8 +12,6 @@ Spreadsheet = require("google-spreadsheet")
 
 creds = require('../hackmit-money-2015-credentials.json')
 
-sheet = new Spreadsheet(spreadsheetUrl)
-
 module.exports = (robot) ->
   config = require('hubot-conf')('money', robot)
 
@@ -21,6 +19,8 @@ module.exports = (robot) ->
   receivedCol = config 'money.received'
   outstandingCol = config 'money.outstanding'
   spreadsheetUrl = config 'money.spreadsheet'
+
+  sheet = new Spreadsheet(spreadsheetUrl)
 
   robot.respond /(\$|money)$/i, (res) ->
     sheet.useServiceAccountAuth creds, (err) ->

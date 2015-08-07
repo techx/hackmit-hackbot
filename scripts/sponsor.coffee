@@ -36,8 +36,6 @@ LEVELS = ["0Other", "1Platinum", "2Gold", "3Silver", "4Bronze", "5Startup", "9No
 
 creds = require('../hackmit-money-2015-credentials.json')
 
-sheet = new Spreadsheet(spreadsheetUrl)
-
 getCompanyRows = (callback) ->
   sheet.useServiceAccountAuth creds, (err) ->
     if err
@@ -63,6 +61,8 @@ getCompanyRow = (res, callback) ->
 module.exports = (robot) ->
   config = require('hubot-conf')('sponsor', robot)
   spreadsheetUrl = config 'money.spreadsheet'
+  sheet = new Spreadsheet(spreadsheetUrl)
+
   # Get a link to the spreadsheet
   robot.respond /sponsor spreadsheet/i, (res) ->
     res.send "https://go.hackmit.org/sponsor"
