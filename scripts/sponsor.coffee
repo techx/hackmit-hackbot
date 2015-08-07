@@ -36,7 +36,7 @@ LEVELS = ["0Other", "1Platinum", "2Gold", "3Silver", "4Bronze", "5Startup", "9No
 
 creds = require('../hackmit-money-2015-credentials.json')
 
-getCompanyRows = (callback) ->
+getCompanyRows = (sheet, callback) ->
   sheet.useServiceAccountAuth creds, (err) ->
     if err
       callback err
@@ -48,8 +48,8 @@ getCompanyRows = (callback) ->
           companyStatusSheet = info.worksheets[0]
           companyStatusSheet.getRows callback
 
-getCompanyRow = (res, callback) ->
-  getCompanyRows (err, rows) ->
+getCompanyRow = (sheet, res, callback) ->
+  getCompanyRows sheet, (err, rows) ->
     if err
       callback(err)
     else
@@ -69,7 +69,7 @@ module.exports = (robot) ->
 
   # Returns a list of companies with the given status
   robot.respond /sponsor (talking|pinged|emailed|invoiced|paid|rejected)$/i, (res) ->
-    getCompanyRows (err, rows) ->
+    getCompanyRows sheet, (err, rows) ->
       if err
         res.send "Error while getting company rows: #{err}"
       else
@@ -82,7 +82,7 @@ module.exports = (robot) ->
 
   # Returns a list of companies with the given tier
   robot.respond /sponsor (platinum|gold|silver|bronze|startup|notsponsoring|other)$/i, (res) ->
-    getCompanyRows (err, rows) ->
+    getCompanyRows sheet, (err, rows) ->
       if err
         res.send "Error while getting company rows: #{err}"
       else
@@ -95,7 +95,7 @@ module.exports = (robot) ->
 
   # Update sponsor tier
   robot.respond /sponsor level (.*) ([A-Za-z0-9]+)/i, (res) ->
-    getCompanyRow res, (err, row, company, update) ->
+    getCompanyRow sheet, res, (err, row, company, update) ->
       if err
         res.send "Error while getting company row: #{err}"
       else if !row
@@ -113,7 +113,7 @@ module.exports = (robot) ->
 
   # Update sponsor status
   robot.respond /sponsor status (.*) ([A-Za-z0-9]+)/i, (res) ->
-    getCompanyRow res, (err, row, company, update) ->
+    getCompanyRow sheet, res, (err, row, company, update) ->
       if err
         res.send "Error while getting company row: #{err}"
       else if !row
@@ -132,7 +132,7 @@ module.exports = (robot) ->
               res.send "Successfully updated #{company}\n*#{row[SPONSOR_NAME_COL]}*\n*Status:* #{row[STATUS_COL]}\n*Level:* #{row[LEVEL_COL]}\n*Point Person:* #{row[POINT_COL]}\n*Company Contact:* #{row[CONTACT_COL]}\n*Last Contacted:* #{row[DATE_COL]}"
 
   robot.respond /sponsor date (.*) ([A-Za-z0-9\/]+)/i, (res) ->
-    getCompanyRow res, (err, row, company, update) ->
+    getCompanyRow sheet, res, (err, row, company, update) ->
       if err
         res.send "Error while getting company row: #{err}"
       else if !row
@@ -147,7 +147,7 @@ module.exports = (robot) ->
 
   # Get sponsor info
   robot.respond /sponsor info (.*)/i, (res) ->
-    getCompanyRow res, (err, row, company, update) ->
+    getCompanyRow sheet, res, (err, row, company, update) ->
       if err
         res.send "Error while getting company row: #{err}"
       else if !row
