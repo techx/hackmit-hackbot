@@ -12,17 +12,14 @@
 
 util = require('util')
 
-token = process.env.HUBOT_HACKMIT_AUTH_TOKEN
-unless token?
-  console.log "Missing HUBOT_HACKMIT_AUTH_TOKEN, please set and try again"
-  process.exit(1)
-
 module.exports = (robot) ->
+
+  config = require('hubot-conf')('hackmit', robot)
 
   robot.respond /reg(istration)? stat(istic)?s$/i, (res) ->
     res.http("https://my.hackmit.org/api/users/stats")
       .header('Accept', 'application/json')
-      .header('x-access-token', token)
+      .header('x-access-token', config("auth.token"))
       .get() (err, httpResponse, body) ->
         if err
           res.send "Could not fetch stats (error in http) :("
@@ -32,20 +29,26 @@ module.exports = (robot) ->
           return
         try
           data = JSON.parse body
-          submitted = data.submitted
-          admitted = data.admitted
-          confirmed = data.confirmed
-          declined = data.declined
-          total = data.reimbursementTotal
-          needed = data.reimbursementMissing
-          none = data.shirtSizes.None
-          xsmall = data.shirtSizes.XS
-          small = data.shirtSizes.S
-          medium = data.shirtSizes.M
-          large = data.shirtSizes.L
-          xlarge = data.shirtSizes.XL
-          xxlarge = data.shirtSizes.XXL
-          message = util.format("*Status*\nSubmitted: %d\nAdmitted: %d\nConfirmed: %d\nDeclined: %d\n===============================\n*Reimbursements*\nTotal: %d\nMissing: %d\n===============================\n*Shirts*\nNone: %d\nX Small: %d\nSmall: %d\nMedium: %d\nLarge: %d\nX Large: %d\nXX Large: %d", submitted, admitted, confirmed, declined, total, needed, none, xsmall, small, medium, large, xlarge, xxlarge)
+          sb = data.submitted
+          a = data.admitted
+          c = data.confirmed
+          d = data.declined
+          shirts = data.shirtSizes
+          xs = shirts.XS
+          s = shirts.S
+          m = shirts.M
+          l = shirts.L
+          xl = shirts.XL
+          xxl = shirts.XXL
+          wxs = shirts.WXS
+          ws = shirts.WS
+          wm = shirts.WM
+          wl = shirts.WL
+          wxl = shirts.WXL
+          wxxl = shirts.WXXL
+          t = data.reimbursementTotal
+          h = data.wantsHardware
+          message = util.format("_*Status*_\n*Submitted:* %d\n*Admitted:* %d\n*Confirmed:* %d\n*Declined:* %d\n=============================\n_*Shirts*_\n*Men:*\n*XS:* %d | *S:* %d | *M:* %d | *L:* %d | *XL:* %d | *XXL:* %d\n*Women*\n*XS:* %d | *S:* %d | *M:* %d | *L:* %d | *XL:* %d | *XXL:* %d\n=============================\n_*Other*_\n*Needs reimbursement:* %d\n*Reimbursement cost:* $%d (Assuming $200 per person)\n*Wants hardware:* %d", sb, a, c, d, xs, s, m, l, xl, xxl, wxs, ws, wm, wl, wxl, wxxl, t, t*200, h)
           res.send message
         catch error
           res.send "Could not fetch stats (error parsing JSON) :("
