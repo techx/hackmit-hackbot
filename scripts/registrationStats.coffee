@@ -48,7 +48,7 @@ module.exports = (robot) ->
           wxxl = shirts.WXXL
           t = data.reimbursementTotal
           h = data.wantsHardware
-          message = util.format("_*Status*_\n*Submitted:* %d\n*Admitted:* %d\n*Confirmed:* %d\n*Declined:* %d\n=============================\n_*Shirts*_\n*Men:*\n*XS:* %d | *S:* %d | *M:* %d | *L:* %d | *XL:* %d | *XXL:* %d\n*Women*\n*XS:* %d | *S:* %d | *M:* %d | *L:* %d | *XL:* %d | *XXL:* %d\n=============================\n_*Other*_\n*Needs reimbursement:* %d\n*Reimbursement cost:* $%d (Assuming $200 per person)\n*Wants hardware:* %d", sb, a, c, d, xs, s, m, l, xl, xxl, wxs, ws, wm, wl, wxl, wxxl, t, t*200, h)
+          message = util.format("*Status*\n_Submitted:_ %d\n_Admitted:_ %d\n_Confirmed:_ %d\n_Declined:_ %d\n=============================\n*Men's Shirts:*\n_XS:_ %d | _S:_ %d | _M:_ %d | _L:_ %d | _XL:_ %d | _XXL:_ %d\n*Women's Shirts*\n_XS:_ %d | _S:_ %d | _M:_ %d | _L:_ %d | _XL:_ %d | _XXL:_ %d\n=============================\n*Other*\n_Needs reimbursement:_ %d\n_Reimbursement cost:_ $%d (Assuming $200 per person)\n_Wants hardware:_ %d", sb, a, c, d, xs, s, m, l, xl, xxl, wxs, ws, wm, wl, wxl, wxxl, t, t*200, h)
           res.send message
         catch error
           res.send "Could not fetch stats (error parsing JSON) :("
