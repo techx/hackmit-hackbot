@@ -20,7 +20,8 @@
     "hubot-seen": "^0.2.2",
     "hubot-shortcut": "^1.0.0",
     "hubot-slack": "^3.3.0",
-    "hubot-wolfram": "~1.0.7"
+    "hubot-wolfram": "~1.0.7",
+    "timeago": "^0.2.0"
   },
   "engines": {
     "node": "0.10.x"

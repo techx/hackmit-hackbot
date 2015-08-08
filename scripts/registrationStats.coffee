@@ -11,6 +11,7 @@
 #   Detry322
 
 util = require('util')
+timeago = require('timeago')
 
 formatStats = (data) ->
   sb = data.submitted
@@ -64,9 +65,8 @@ module.exports = (robot) ->
       getStats(callback, res)
 
   printStats = (res) ->
-    minutes = Math.round((new Date - stats.time)/60000)
-    minutes = if minutes == 1 then "1 minute" else minutes + " minutes"
-    message = "_Up to date as of " + minutes + " ago._\n"
+    delta = timeago stats.time
+    message = "_Up to date as of " + delta + "._\n"
     message += formatStats(stats.data)
     res.send message
 
