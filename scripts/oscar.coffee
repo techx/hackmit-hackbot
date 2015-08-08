@@ -44,7 +44,7 @@ module.exports = (robot) ->
 
   formatStatus = (status) ->
     mark = if status.status == 'failure' then ":broken_heart:" else ":green_heart:"
-    msg = "#{mark} *#{status.name}* | _#{status.status}_"
+    msg = "#{mark} #{status.name} | _#{status.status}_"
     if status.summary.length > 0
       msg += " (#{status.summary})"
     msg
