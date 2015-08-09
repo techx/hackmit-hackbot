@@ -21,3 +21,6 @@ module.exports = (robot) ->
         res.message.text = "!#{matches[1]}#{args}"
         robot.receive res.message
         res.message.text = original
+
+  robot.respond /clear$/, (res) ->
+    res.send ("." for n in [1..60]).join "\n"
