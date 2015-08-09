@@ -14,9 +14,10 @@ module.exports = (robot) ->
     prefix = config('shortcut.prefix')
     if prefix?
       text = res.match[1]
-      matches = text.match(///^\s*#{prefix}([a-z]+)///)
+      matches = text.match(///^\s*#{prefix}([a-z]+)(\s+.*)?///)
       if matches?
         original = res.message.text
-        res.message.text = "!#{matches[1]}"
+        args = matches[2] ? ''
+        res.message.text = "!#{matches[1]}#{args}"
         robot.receive res.message
         res.message.text = original
