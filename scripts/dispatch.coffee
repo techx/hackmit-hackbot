@@ -6,7 +6,8 @@
 #
 # Commands:
 #   hubot dispatch <N> from <channels> for <description> - create a task
-#   hubot dispatch status - dispatch status
+#   hubot dispatch status - get the status of open tasks
+#   hubot dispatch close task <task id> - close a task
 #
 # Author:
 #   anishathalye
