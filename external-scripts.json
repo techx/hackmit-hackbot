@@ -6,6 +6,5 @@
   "hubot-redis-brain",
   "hubot-seen",
   "hubot-shortcut",
-  "hubot-wolfram",
-  "hubot-xkcd"
+  "hubot-wolfram"
 ]
