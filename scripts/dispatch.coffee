@@ -51,3 +51,18 @@ module.exports = (robot) ->
             res.send "Created task #{body.code} for #{ch.join ', '}"
           else
             res.send "Didn't match any channels!"
+
+  robot.respond /dispatch\s+close\s+task\s+(\d+)/i, (res) ->
+    code = res.match[1] # string
+    robot.http(config('url')).header('Content-Type', 'application/json')
+      .post(JSON.stringify({"call": "close", "arguments": {
+        "code": code
+      }})) (err, httpRes, body) ->
+        if err
+          res.send ERR_MSG
+        else
+          body = JSON.parse(body)
+          if body.success
+            res.send "Closed task #{code}"
+          else
+            res.send "Invalid task ID or already closed!"
