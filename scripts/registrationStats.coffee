@@ -42,7 +42,7 @@ formatFood = (foodArr) ->
 formatSchools = (schoolArr) ->
   message = "*===SCHOOL DATA===*\n"
   for school in schoolArr
-    message += "*#{school.email}:* _S:_ #{school.stats.submitted} | _A:_ #{school.stats.admitted} | _C:_ #{school.stats.confirmed} | _D:_ #{school.stats.declined}\n"
+    message += "#{school.email} -- _S:_ #{school.stats.submitted} | _A:_ #{school.stats.admitted} | _C:_ #{school.stats.confirmed} | _D:_ #{school.stats.declined}\n"
   message
 
 module.exports = (robot) ->
