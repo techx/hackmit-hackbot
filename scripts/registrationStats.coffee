@@ -17,6 +17,7 @@ formatStats = (data) ->
   sb = data.submitted
   a = data.admitted
   c = data.confirmed
+  cm = data.confirmedMit
   d = data.declined
   shirts = data.shirtSizes
   xs = shirts.XS
@@ -33,7 +34,7 @@ formatStats = (data) ->
   wxxl = shirts.WXXL
   t = data.reimbursementTotal
   h = data.wantsHardware
-  util.format("*Status*\n_Submitted:_ %d\n_Admitted:_ %d\n_Confirmed:_ %d\n_Declined:_ %d\n=============================\n*Men's Shirts:*\n_XS:_ %d | _S:_ %d | _M:_ %d | _L:_ %d | _XL:_ %d | _XXL:_ %d\n*Women's Shirts*\n_XS:_ %d | _S:_ %d | _M:_ %d | _L:_ %d | _XL:_ %d | _XXL:_ %d\n=============================\n*Other*\n_Needs reimbursement:_ %d\n_Reimbursement cost:_ $%d (Assuming $200 per person)\n_Wants hardware:_ %d", sb, a, c, d, xs, s, m, l, xl, xxl, wxs, ws, wm, wl, wxl, wxxl, t, t*200, h)
+  util.format("*Status*\n_Submitted:_ %d\n_Admitted:_ %d\n_Confirmed:_ %d (%d MIT)\n_Declined:_ %d\n=============================\n*Men's Shirts*\n_XS:_ %d | _S:_ %d | _M:_ %d | _L:_ %d | _XL:_ %d | _XXL:_ %d\n*Women's Shirts*\n_XS:_ %d | _S:_ %d | _M:_ %d | _L:_ %d | _XL:_ %d | _XXL:_ %d\n=============================\n*Other*\n_Needs reimbursement:_ %d\n_Reimbursement cost:_ $%d (Assuming $200 per person)\n_Wants hardware:_ %d", sb, a, c, cm, d, xs, s, m, l, xl, xxl, wxs, ws, wm, wl, wxl, wxxl, t, t*200, h)
 
 module.exports = (robot) ->
 
