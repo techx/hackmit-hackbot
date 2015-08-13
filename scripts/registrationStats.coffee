@@ -41,19 +41,19 @@ formatFood = (foodArr) ->
 
 formatSchools = (schoolArr) ->
   message = "*===SCHOOL DATA===*\n"
+  submitted = 0
+  admitted = 0
+  confirmed = 0
+  declined = 0
   for school in schoolArr
+    submitted += school.stats.submitted
+    admitted += school.stats.admitted
+    confirmed += school.stats.confirmed
+    declined += school.stats.declined
     message += "#{school.email} -- _S:_ #{school.stats.submitted} | _A:_ #{school.stats.admitted} | _C:_ #{school.stats.confirmed} | _D:_ #{school.stats.declined}\n"
+  message += "Total: -- _S:_ #{submitted} | _A:_ #{admitted} | _C:_ #{confirmed} | _D:_ #{declined}\n"
   message
 
-flattenSchoolData = (schoolArr) ->
-  flattened = schoolArr.reduce (prev, current) ->
-    current.stats.submitted += prev.stats.submitted
-    current.stats.admitted += prev.stats.admitted
-    current.stats.confirmed += prev.stats.confirmed
-    current.stats.rejected += prev.stats.rejected
-    return current
-  flattened.email = "Composite"
-  flattened
 
 module.exports = (robot) ->
 
@@ -102,12 +102,6 @@ module.exports = (robot) ->
       schools = schools.slice(0,max)
       print(res, formatSchools(schools))
 
-  printAggregateSchoolData = (search) ->
-    return (res) ->
-      schools = filter stats.data.demo.schools, (school) ->
-        school.stats.submitted > 0 and school.email.match search
-      print(res, formatSchools(flattenSchoolData(schools)))
-
   printFood = (res) ->
     print(res, formatFood(stats.data.dietaryRestrictions))
 
@@ -127,10 +121,6 @@ module.exports = (robot) ->
   robot.respond /reg schools? (.*)/i, (res) ->
     search = res.match[1]
     getStatsOrCache(res, printSchoolData(search, Infinity))
-
-  robot.respond /reg agg schools? (.*)/i, (res) ->
-    search = res.match[1]
-    getStatsOrCache(res, printAggregateSchoolData(search))
 
   robot.respond /reg food$/i, (res) ->
     getStatsOrCache(res, printFood)
