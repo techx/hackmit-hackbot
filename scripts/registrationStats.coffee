@@ -46,13 +46,14 @@ formatSchools = (schoolArr) ->
   message
 
 flattenSchoolData = (schoolArr) ->
-  schoolArr.reduce (prev, current) ->
+  flattened = schoolArr.reduce (prev, current) ->
     current.stats.submitted += prev.stats.submitted
     current.stats.admitted += prev.stats.admitted
     current.stats.confirmed += prev.stats.confirmed
     current.stats.rejected += prev.stats.rejected
-  schoolArr[schoolArr.length - 1].email = "Composite"
-  schoolArr.slice -1
+    return current
+  flattened.email = "Composite"
+  flattened
 
 module.exports = (robot) ->
 
