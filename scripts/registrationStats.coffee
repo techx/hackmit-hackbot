@@ -45,6 +45,15 @@ formatSchools = (schoolArr) ->
     message += "#{school.email} -- _S:_ #{school.stats.submitted} | _A:_ #{school.stats.admitted} | _C:_ #{school.stats.confirmed} | _D:_ #{school.stats.declined}\n"
   message
 
+flattenSchoolData = (schoolArr) ->
+  schoolArr.reduce (prev, current) ->
+    current.stats.submitted += prev.stats.submitted
+    current.stats.admitted += prev.stats.admitted
+    current.stats.confirmed += prev.stats.confirmed
+    current.stats.rejected += prev.stats.rejected
+  schoolArr[schoolArr.length - 1].email = "Composite"
+  schoolArr.slice -1
+
 module.exports = (robot) ->
 
   config = require('hubot-conf')('hackmit', robot)
@@ -89,8 +98,14 @@ module.exports = (robot) ->
         school.stats.submitted > 0 and school.email.match search
       schools.sort (a,b) ->
         b.count - a.count
-      schools = schools.slice(0,max);
+      schools = schools.slice(0,max)
       print(res, formatSchools(schools))
+
+  printAggregateSchoolData = (search) ->
+    return (res) ->
+      schools = filter stats.data.demo.schools, (school) ->
+        school.stats.submitted > 0 and school.email.match search
+      print(res, formatSchools(flattenSchoolData(schools)))
 
   printFood = (res) ->
     print(res, formatFood(stats.data.dietaryRestrictions))
@@ -111,6 +126,10 @@ module.exports = (robot) ->
   robot.respond /reg schools? (.*)/i, (res) ->
     search = res.match[1]
     getStatsOrCache(res, printSchoolData(search, Infinity))
+
+  robot.respond /reg agg schools? (.*)/i, (res) ->
+    search = res.match[1]
+    getStatsOrCache(res, printAggregateSchoolData(search))
 
   robot.respond /reg food$/i, (res) ->
     getStatsOrCache(res, printFood)
