@@ -4,6 +4,12 @@
 # Author:
 #   anishathalye
 
+shallowClone = (obj) ->
+  copy = {}
+  for own key, value of obj
+    copy[key] = value
+  copy.__proto__ = obj.__proto__ # not standard in ECMAScript, but it works
+  return copy
 
 module.exports = (robot) ->
 
@@ -16,11 +22,10 @@ module.exports = (robot) ->
       text = res.match[1]
       matches = text.match(///^\s*#{prefix}([a-z]+)(\s+.*)?///)
       if matches?
-        original = res.message.text
         args = matches[2] ? ''
-        res.message.text = "!#{matches[1]}#{args}"
-        robot.receive res.message
-        res.message.text = original
+        msg = shallowClone(res.message)
+        msg.text = "!#{matches[1]}#{args}"
+        robot.receive msg
 
   robot.respond /clear$/, (res) ->
     res.send ("." for n in [1..60]).join "\n"
