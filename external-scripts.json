@@ -4,6 +4,7 @@
   "hubot-group",
   "hubot-help",
   "hubot-redis-brain",
+  "hubot-redisred",
   "hubot-seen",
   "hubot-shortcut",
   "hubot-wolfram"
