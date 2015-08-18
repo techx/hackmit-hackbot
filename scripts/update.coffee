@@ -27,7 +27,7 @@ restart = (res) ->
   , 500 # Give process some time to send message
 
 send = (res, should_send, message) ->
-  if should_send?
+  if should_send
     res.send message
 
 update = (res, send_std, send_err) ->
