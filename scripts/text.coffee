@@ -22,7 +22,7 @@ module.exports = (robot) ->
   config = require('hubot-conf')('text', robot)
 
   robot.router.post '/text/receive', (req, res) ->
-    res.header('Content-Type','text/xml').send "<Response><Response>"
+    res.header('Content-Type','text/xml').send "<Response></Response>"
     number = req.body.From
     message = req.body.Body
     if req.body.AccountSid == config('account')
