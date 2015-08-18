@@ -23,7 +23,8 @@ module.exports = (robot) ->
 
   robot.router.post '/text/receive', (req, res) ->
     res.header('Content-Type','text/xml').send "<Response><Response>"
-    number = res.body.From.substr(7)
-    message = res.body.Body
-    if res.body.AccountSid == config('account')
+    number = req.body.From.substr(7)
+    message = req.body.Body
+    robot.message
+    if req.body.AccountSid == config('account')
       robot.messageRoom config('channel'), "Text from #{number}: #{message}"
