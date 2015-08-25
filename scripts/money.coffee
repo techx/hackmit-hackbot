@@ -69,8 +69,8 @@ module.exports = (robot) ->
     robot.brain.set('money.currentMoney', money)
 
   setTopic = (money) ->
-    robot.messageRoom '#botspam', "Money object: #{money}"
-    robot.messageRoom '#botspam', "Current Money object: #{getCurrentMoney()}"
+    robot.messageRoom '#botspam', "Money object: #{JSON.stringify(money)}"
+    robot.messageRoom '#botspam', "Current Money object: #{JSON.stringify(getCurrentMoney())}"
     if money != getCurrentMoney()
       setCurrentMoney(money)
       robot.adapter.topic { room: config('channel') }, formatTopic(money)
