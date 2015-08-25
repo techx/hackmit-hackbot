@@ -62,11 +62,15 @@ module.exports = (robot) ->
                 outstanding = parseInt(cells[1].value)
                 callback(null, makeMoney(received, outstanding))
 
-  currentMoney = makeMoney(0, 0)
+  getCurrentMoney = () ->
+    robot.brain.get('money.currentMoney') or makeMoney(0, 0)
+
+  setCurrentMoney = (money) ->
+    robot.brain.set('money.currentMoney', money)
 
   setTopic = (money) ->
-    if currentMoney != money
-      currentMoney = money
+    if getCurrentMoney() != money
+      setCurrentMoney(money)
       robot.adapter.topic { room: config('channel') }, formatTopic(money)
 
   updateTopic = () ->
