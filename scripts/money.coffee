@@ -69,7 +69,9 @@ module.exports = (robot) ->
     robot.brain.set('money.currentMoney', money)
 
   setTopic = (money) ->
-    if getCurrentMoney() != money
+    robot.messageRoom '#botspam', "Money object: #{money}"
+    robot.messageRoom '#botspam', "Current Money object: #{getCurrentMoney()}"
+    if money != getCurrentMoney()
       setCurrentMoney(money)
       robot.adapter.topic { room: config('channel') }, formatTopic(money)
 
@@ -78,7 +80,7 @@ module.exports = (robot) ->
       if not err
         setTopic(money)
 
-  setInterval(setTopic, 10*60*1000)
+  setInterval(updateTopic, 10*60*1000)
 
   robot.respond /(\$|money)$/i, (res) ->
     getMoney (err, money) ->
