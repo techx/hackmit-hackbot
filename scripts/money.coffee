@@ -64,11 +64,15 @@ module.exports = (robot) ->
 
   currentMoney = makeMoney(0, 0)
 
-  setTopic = () ->
+  setTopic = (money) ->
+    if currentMoney != money
+      currentMoney = money
+      robot.adapter.topic { room: config('channel') }, formatTopic(money)
+
+  updateTopic = () ->
     getMoney (err, money) ->
-      if not err and currentMoney != money
-        currentMoney = money
-        robot.adapter.topic { room: config('channel') }, formatTopic(money)
+      if not err
+        setTopic(money)
 
   setInterval(setTopic, 10*60*1000)
 
@@ -77,4 +81,5 @@ module.exports = (robot) ->
       if err
         res.send "#{err.message}: #{err.err}"
       else
+        setTopic(money)
         res.send formatMessage(money)
