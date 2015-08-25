@@ -19,7 +19,7 @@ formatMessage = (money) ->
   "*Received:* $#{received}\n*Outstanding:* $#{outstanding}\n*Total:* $#{total}"
 
 formatTopic = (money) ->
-  formatMessage(money).replace('\n',' ')
+  formatMessage(money).replace(/\n/g,' ')
 
 makeMoney = (received, outstanding) -> #AYY MAKE MONEY
   {
