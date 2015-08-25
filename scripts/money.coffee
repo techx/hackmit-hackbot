@@ -72,7 +72,7 @@ module.exports = (robot) ->
     return a.total == b.total and a.received == b.received
 
   setTopic = (money) ->
-    if moneyEquals(money, getCurrentMoney())
+    if not moneyEquals(money, getCurrentMoney())
       setCurrentMoney(money)
       robot.adapter.topic { room: config('channel') }, formatTopic(money)
 
