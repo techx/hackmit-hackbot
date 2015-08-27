@@ -27,9 +27,12 @@ formatSummary = (data) ->
   shirts = data.shirtSizes
   """*===SUMMARY===*
   *Confirmation:* _S:_ #{data.submitted} | _A:_ #{data.admitted} | _C:_ #{data.confirmed} | _D:_ #{data.declined}
+  *Confirmation by Gender:* _F:_ #{data.confirmedFemale} | _M:_ #{data.confirmedMale} | _O:_ #{data.confirmedOther} | _N:_ #{data.confirmedNone}
   *Men:* _XS:_ #{shirts.XS} | _S:_ #{shirts.S} | _M:_ #{shirts.M} | _L:_ #{shirts.L} | _XL:_ #{shirts.XL} | _XXL:_ #{shirts.XXL}
   *Women:* _XS:_ #{shirts.WXS} | _S:_ #{shirts.WS} | _M:_ #{shirts.WM} | _L:_ #{shirts.WL} | _XL:_ #{shirts.WXL} | _XXL:_ #{shirts.WXXL}
-  *Hosting:* _Friday:_ #{data.hostNeededFri} | _Saturday:_ #{data.hostNeededSat}
+  *Hosting:* _Friday:_ #{data.hostNeededFri} | _Saturday:_ #{data.hostNeededSat} | _Total Unique:_ #{data.hostNeededUnique}
+  *Hosting by Gender:* _F:_ #{data.hostNeededFemale} | _M:_ #{data.hostNeededMale} | _O:_ #{data.hostNeededOther} | _N:_ #{data.hostNeededNone}
+
   *Reimbursement:* #{data.reimbursementTotal} ($#{data.reimbursementTotal*200})
   *Hardware:* #{data.wantsHardware}"""
 
