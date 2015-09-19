@@ -61,21 +61,24 @@ module.exports = (robot) ->
   stats = { data: null, time: null }
 
   getStats = (res, callback) ->
+    console.log 'downloading'
     robot.http("https://my.hackmit.org/api/users/stats")
         .header('Accept', 'application/json')
         .header('x-access-token', config("auth.token"))
         .get() (err, httpResponse, body) ->
+          console.log 'hi', httpResponse.statusCode
           if not err and httpResponse.statusCode is 200
             try
               data = JSON.parse body
-              if stats.data.checkedIn != data.checkedIn
-                robot.adapter.topic { room: '#botspam' }, "Checked in: #{stats.data.checkedIn}"
+              if stats.data == null or stats.data.checkedIn != data.checkedIn
+                robot.adapter.topic { room: '#botspam' }, "Checked in: #{data.checkedIn}"
               stats.data = data
               stats.time = new Date(data.lastUpdated)
               if callback? and res?
                 callback(res)
             catch error
               # cry
+              console.log error
 
   setInterval(getStats, 3*60*1000)
 
