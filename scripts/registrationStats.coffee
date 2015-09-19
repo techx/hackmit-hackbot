@@ -68,8 +68,8 @@ module.exports = (robot) ->
           if not err and httpResponse.statusCode is 200
             try
               data = JSON.parse body
-              if stats.data.checkedIn != data.checkedIn:
-                robot.adapter.topic { room: '#botspam') }, "Checked in: #{stats.data.checkedIn}"
+              if stats.data.checkedIn != data.checkedIn
+                robot.adapter.topic { room: '#botspam' }, "Checked in: #{stats.data.checkedIn}"
               stats.data = data
               stats.time = new Date(data.lastUpdated)
               if callback? and res?
