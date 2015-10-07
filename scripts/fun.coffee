@@ -84,3 +84,21 @@ thank mr skeltal
 
   robot.hear /ay+ l[mfao]+/i, (res) ->
     res.send ':alien: ayy lmao :alien:'
+
+
+  troll = [
+    "*Stef*: im in that class too",
+    "*Stef*: mg me too",
+    "*Stef*: ????? :chicken: :chicken: :chicken:",
+    "*Stef*: I failed",
+    "*Stef*: :pineapple: :pineapple: :pineapple:",
+    "*Stef*: o rite jk I have to do 7.012 pset",
+    "*Stef*: totally agree!!",
+    "*Stef*: it's cuz I just add dropped",
+    "*Stef*: I can prove it rigorously",
+    "*Stef*: wtf I'm in this group",
+    "*Stef*: I luv genetics"
+  ]
+
+  robot.hear /stef.*troll/, (res) ->
+    res.send res.random troll
