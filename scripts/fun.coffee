@@ -97,7 +97,8 @@ thank mr skeltal
     "*Stef*: it's cuz I just add dropped",
     "*Stef*: I can prove it rigorously",
     "*Stef*: wtf I'm in this group",
-    "*Stef*: I luv genetics"
+    "*Stef*: I luv genetics",
+    "*Stef*: wtf that's what I was gonna say"
   ]
 
   robot.hear /stef.*troll/, (res) ->
