@@ -88,7 +88,7 @@ thank mr skeltal
 
   troll = [
     "*Stef*: im in that class too",
-    "*Stef*: mg me too",
+    "*Stef*: omg me too",
     "*Stef*: ????? :chicken: :chicken: :chicken:",
     "*Stef*: I failed",
     "*Stef*: :pineapple: :pineapple: :pineapple:",
