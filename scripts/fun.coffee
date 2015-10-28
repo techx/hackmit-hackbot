@@ -83,11 +83,8 @@ thank mr skeltal
 ░░░░░█░░░░░░░░░░▐▌
 ```"""
   robot.hear /pusheen/i, (res) -> 
-    sendFrom = (i) ->
-      if i < pusheen.length
-        res.send pusheen[i]
-        setTimeout sendFrom, lennySnakeTick/2, i + 1
-    sendFrom 0
+    msg = pusheen.join("\n")
+    res.send msg
 
   robot.hear /(dootdootdoot|[0-9]spooky)/i, (res) ->
     res.send dootDoot
