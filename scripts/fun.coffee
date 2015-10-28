@@ -86,7 +86,7 @@ thank mr skeltal
     sendFrom = (i) ->
       if i < pusheen.length
         res.send pusheen[i]
-        setTimeout sendFrom, lennySnakeTick, i + 1
+        setTimeout sendFrom, lennySnakeTick/2, i + 1
     sendFrom 0
 
   robot.hear /(dootdootdoot|[0-9]spooky)/i, (res) ->
