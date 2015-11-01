@@ -113,4 +113,4 @@ thank mr skeltal
 
   masturbationDelay = 4000
   robot.respond /masturbate/i, (res) ->
-    setTimeout (-> res.send '<@jizz>') masturbationDelay
+    setTimeout (-> res.send '<@jizz>'), masturbationDelay
