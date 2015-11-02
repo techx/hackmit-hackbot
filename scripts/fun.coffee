@@ -110,10 +110,3 @@ thank mr skeltal
 
   robot.hear /stef.*troll/, (res) ->
     res.send res.random troll
-
-  masturbationDelay = 4000
-  robot.respond /masturbate/i, (res) ->
-    res.send 'fap'
-    setTimeout (-> res.send 'fap'), 1*masturbationDelay/3
-    setTimeout (-> res.send 'fap'), 2*masturbationDelay/3
-    setTimeout (-> res.send '<@jjz>'), masturbationDelay
