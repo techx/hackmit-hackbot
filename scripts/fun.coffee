@@ -110,3 +110,7 @@ thank mr skeltal
 
   robot.hear /stef.*troll/, (res) ->
     res.send res.random troll
+
+  robot.hear /stef/i, (res) ->
+    if Math.random() < 0.01
+      res.send res.random troll
