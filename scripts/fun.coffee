@@ -43,8 +43,6 @@ module.exports = (robot) ->
     "……….*"
   ]
 
-  pusheen =
-
   lennySnakeTick = 300 # milliseconds
 
   robot.hear /lennysnake/i, (res) ->
@@ -60,7 +58,7 @@ module.exports = (robot) ->
       res.send "but he's not course 6"
 
   pusheen = ["──▐▀▄──────▄▀▌───▄▄▄▄▄▄▄─────────────","───▌▒▒▀▄▄▄▄▀▒▒▐▄▀▀▒██▒██▒▀▀▄──────────","──▐▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▀▄────────","──▌▒▒▒▒▒▒▒▒▒▒▒▒▒▄▒▒▒▒▒▒▒▒▒▒▒▒▒▀▄──────","▀█▒▒█▌▒▒█▒▒▐█▒▒▀▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▌─────","▀▌▒▒▒▒▒▀▒▀▒▒▒▒▒▀▀▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▐───▄▄","▐▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▌▄█▒█","▐▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▐▒█▀─","▐▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▐▀───","▐▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▌────","─▌▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▐─────","─▐▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▌─────","──▌▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▐──────","──▐▄▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▄▌──────","────▀▄▄▀▀▀▀▄▄▀▀▀▀▀▀▄▄▀▀▀▀▀▀▄▄▀────────"]
-
+  rms = ["     \      ,    I'M RICHARD STALLMAN AND I DON'T WEAR SHOES IN PUBLIC","     l\   ,/     BECAUSE NO ONE TAUGHT ME HOW TO BEHAVE               ","._   `|] /j                                                           "," `\\, \|f7 _,/'                                                       ","   '`=,k/,x-'                                                         ","    ,z/fY-=-                                                          ","  -'' .y \                                                            ","      '   \itz   OR WASH FOR THAT MATTER                              "]
   dootDoot = """```
 thank mr skeltal
 
@@ -84,6 +82,14 @@ thank mr skeltal
 ```"""
   robot.hear /pusheen/i, (res) ->
     msg = pusheen.join("\n")
+    res.send msg
+    
+  robot.hear /rms/i, (res) ->
+    msg = rms.join("\n")
+    res.send msg
+    
+  robot.hear /stallman/i, (res) ->
+    msg = rms.join("\n")
     res.send msg
 
   robot.hear /(dootdootdoot|[0-9]spooky)/i, (res) ->
