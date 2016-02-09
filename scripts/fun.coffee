@@ -85,11 +85,11 @@ thank mr skeltal
     msg = pusheen.join("\n")
     res.send msg
 
-  robot.hear /\s+rms/i, (res) ->
+  robot.hear /(^|[^a-zA-Z])rms/i, (res) ->
     msg = "```" + rms.join("\n") + "```"
     res.send msg
 
-  robot.hear /\s+stallman /i, (res) ->
+  robot.hear /stallman/i, (res) ->
     msg = "```" + rms.join("\n") + "```"
     res.send msg
 
