@@ -84,13 +84,13 @@ thank mr skeltal
   robot.hear /pusheen/i, (res) ->
     msg = pusheen.join("\n")
     res.send msg
-    
-  robot.hear /rms/i, (res) ->
-    msg = rms.join("\n")
+
+  robot.hear /\s+rms/i, (res) ->
+    msg = "```" + rms.join("\n") + "```"
     res.send msg
-    
-  robot.hear /stallman/i, (res) ->
-    msg = rms.join("\n")
+
+  robot.hear /\s+stallman /i, (res) ->
+    msg = "```" + rms.join("\n") + "```"
     res.send msg
 
   robot.hear /(dootdootdoot|[0-9]spooky)/i, (res) ->
@@ -117,8 +117,8 @@ thank mr skeltal
 
   robot.hear /stef.*troll/, (res) ->
     res.send res.random troll
-    
-  robot.hear /kim.*mom/i, (res) -> 
+
+  robot.hear /kim.*mom/i, (res) ->
     res.send 'https://answers.yahoo.com/question/index?qid=20100404125550AARFOJe'
 
   robot.hear /stef/i, (res) ->
