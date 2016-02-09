@@ -117,6 +117,9 @@ thank mr skeltal
 
   robot.hear /stef.*troll/, (res) ->
     res.send res.random troll
+    
+  robot.hear /kim.*mom/i, (res) -> 
+    res.send 'https://answers.yahoo.com/question/index?qid=20100404125550AARFOJe'
 
   robot.hear /stef/i, (res) ->
     if Math.random() < 0.01
