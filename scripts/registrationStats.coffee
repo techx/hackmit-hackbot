@@ -25,12 +25,9 @@ filter = (arr, func) ->
 
 formatSummary = (data) ->
   shirts = data.shirtSizes
-  """*===SUMMARY===*
-  *Hosting:* _Friday:_ #{data.hostNeededFri} | _Saturday:_ #{data.hostNeededSat} | _Total Unique:_ #{data.hostNeededUnique}
-  *Hosting by Gender:* _F:_ #{data.hostNeededFemale} | _M:_ #{data.hostNeededMale} | _O:_ #{data.hostNeededOther} | _N:_ #{data.hostNeededNone}
-  *Reimbursement:* #{data.reimbursementTotal} ($#{data.reimbursementTotal*200})
-  *Hardware:* #{data.wantsHardware}
-  *Checked in:* #{data.checkedIn}"""
+  """*=== Registration Stats ===*
+  *Confirmed (learnathon):* #{data.confirmedDayOne} (out of #{data.admittedDayOne} admitted)
+  *Confirmed (hackathon):* #{data.confirmedDayTwo} (out of #{data.admittedDayTwo} admitted)"""
 
 formatFood = (foodArr) ->
   message = "*===FOOD RESTRICTIONS===*\n"
@@ -61,12 +58,10 @@ module.exports = (robot) ->
   stats = { data: null, time: null }
 
   getStats = (res, callback) ->
-    console.log 'downloading'
-    robot.http("https://my.hackmit.org/api/users/stats")
+    robot.http("https://blueprint-reg.hackmit.org/api/users/stats")
         .header('Accept', 'application/json')
         .header('x-access-token', config("auth.token"))
         .get() (err, httpResponse, body) ->
-          console.log 'hi', httpResponse.statusCode
           if not err and httpResponse.statusCode is 200
             try
               data = JSON.parse body
