@@ -127,3 +127,6 @@ thank mr skeltal
 
   robot.hear /weiwei/i, (res) ->
     res.send ':smirk:'
+
+  robot.hear /:smirk:/i, (res) ->
+    res.send ':chia: :weiwei:'
