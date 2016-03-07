@@ -18,4 +18,3 @@ module.exports = (robot) ->
 		text = "[Confession] #{msg.match[1]}"
 		room = config('room')
 		robot.send {room: room}, text
-		msg.send "Posted in #{room}!"
