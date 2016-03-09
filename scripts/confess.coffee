@@ -15,7 +15,7 @@ module.exports = (robot) ->
   config = require('hubot-conf')('confess', robot)
 
   robot.respond /confess (.+)$/i, (msg) ->
-    user = res.message.user
+    user = msg.message.user
     ONE_HOUR = 1000*60*60
     if not user.confess_id? or (new Date() - user.confess_id_creation) > ONE_HOUR
       user.confess_id = Math.floor(Math.random()*100000000)
