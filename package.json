@@ -10,6 +10,7 @@
     "start": "env $(cat .env 3>/dev/null) bin/hubot -a slack"
   },
   "dependencies": {
+    "github": "^0.2.4",
     "google-spreadsheet": "^1.0.1",
     "hubot": "^2.12.0",
     "hubot-conf": "^1.0.0",
