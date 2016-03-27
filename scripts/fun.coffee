@@ -125,8 +125,3 @@ thank mr skeltal
     if Math.random() < 0.01
       res.send res.random troll
 
-  robot.hear /weiwei/i, (res) ->
-    res.send ':smirk:'
-
-  robot.hear /:smirk:/i, (res) ->
-    res.send ':chia: :weiwei:'
