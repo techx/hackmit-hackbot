@@ -125,3 +125,6 @@ thank mr skeltal
     if Math.random() < 0.01
       res.send res.random troll
 
+  robot.hear /retreat/i, (res) ->
+    if Math.random() < 0.3
+      res.send 'Did you mean: *kickoff*?'
