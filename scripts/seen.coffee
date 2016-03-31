@@ -20,8 +20,8 @@ clean = (thing) ->
 is_pm = (msg) ->
   try
     pm = msg.message.user.pm
-    if msg.message.user.room == 'hackbot'
-      false
+    if msg.message.user.room == msg.message.user.name
+      true
     else
       pm
   catch error
