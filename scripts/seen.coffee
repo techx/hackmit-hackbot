@@ -19,7 +19,11 @@ clean = (thing) ->
 
 is_pm = (msg) ->
   try
-    msg.message.user.pm
+    pm = msg.message.user.pm
+    if msg.message.user.room == 'hackbot':
+      false
+    else:
+      pm
   catch error
     false
 
@@ -49,9 +53,11 @@ class Seen
     else
       @robot.brain.data.seen = @cache
 
-  add: (user) ->
-    @robot.logger.debug "seen.add #{clean user}"
-    @cache[clean user].date = new Date() - 0
+  add: (user, channel) ->
+    @robot.logger.debug "seen.add #{clean user} on #{channel}"
+    @cache[clean user] =
+      chan:channel
+      date: new Date() - 0
 
   last: (user) ->
     @cache[clean user] ? {}
@@ -65,8 +71,10 @@ class Seen
 module.exports = (robot) ->
   seen = new Seen robot
 
-  robot.enter (msg) ->
-      seen.add (ircname msg)
+  # Keep track of last msg heard
+  robot.hear /.*/, (msg) ->
+    unless is_pm msg
+      seen.add (ircname msg), (ircchan msg)
 
   robot.respond /seen @?([-\w.\\^|{}`\[\]]+):? ?(.*)/, (msg) ->
     if msg.match[1] == "in" and msg.match[2] == "last 24h"
@@ -83,7 +91,7 @@ module.exports = (robot) ->
         else
           "at #{new Date(last.date)}"
 
-        msg.send "#{nick} was last seen #{date_string}"
+        msg.send "#{nick} was last seen in #{last.chan} #{date_string}"
 
       else
         msg.send "I haven't seen #{nick} around lately"
