@@ -19,7 +19,6 @@
     "hubot-help": "^0.1.1",
     "hubot-redis-brain": "0.0.2",
     "hubot-redisred": "^1.1.1",
-    "hubot-seen": "^0.2.2",
     "hubot-shortcut": "^1.0.0",
     "hubot-slack": "^3.4.0",
     "hubot-wolfram": "1.0.7",
