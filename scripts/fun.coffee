@@ -126,5 +126,4 @@ thank mr skeltal
       res.send res.random troll
 
   robot.hear /retreat/i, (res) ->
-    if Math.random() < 0.3
-      res.send 'Did you mean: *kickoff*?'
+    res.send 'Did you mean: *kickoff*?'
