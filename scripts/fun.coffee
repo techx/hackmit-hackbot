@@ -125,5 +125,9 @@ thank mr skeltal
     if Math.random() < 0.01
       res.send res.random troll
 
+  robot.hear /\btfti\b/, (res) ->
+    if Math.random() < 0.2
+      res.send 'tfti'
+
   # robot.hear /retreat/i, (res) ->
   #   res.send 'Did you mean: *kickoff*?'
