@@ -120,5 +120,9 @@ thank mr skeltal
     if Math.random() < 0.2
       res.send 'tfti'
 
+  robot.respond /correct (.*)/, (res) ->
+    msg = res.match[1]
+    res.send msg.replace(/[aeiou]/ig,'')
+
   # robot.hear /retreat/i, (res) ->
   #   res.send 'Did you mean: *kickoff*?'
