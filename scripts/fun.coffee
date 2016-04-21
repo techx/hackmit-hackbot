@@ -138,5 +138,8 @@ thank mr skeltal
     if annoyEnabled and res.message.user.name == "anish"
       res.send 'lolol'
 
+  robot.respond /selfdestruct/i, (res) ->
+    res.send ':boom:'
+
   # robot.hear /retreat/i, (res) ->
   #   res.send 'Did you mean: *kickoff*?'
