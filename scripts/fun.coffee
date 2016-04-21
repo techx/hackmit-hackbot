@@ -124,5 +124,19 @@ thank mr skeltal
     msg = res.match[1]
     res.send msg.replace(/[aeiou]/ig,'')
 
+  annoyEnabled = false
+
+  robot.respond /annoy on/i, (res) ->
+    annoyEnabled = true
+    res.send 'annoy enabled'
+
+  robot.respond /annoy off/i, (res) ->
+    annoyEnabled = false
+    res.send 'annoy disabled'
+
+  robot.hear /.*/, (res) ->
+    if annoyEnabled
+      res.send 'lolol'
+
   # robot.hear /retreat/i, (res) ->
   #   res.send 'Did you mean: *kickoff*?'
