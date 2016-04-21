@@ -135,7 +135,7 @@ thank mr skeltal
     res.send 'annoy disabled'
 
   robot.hear /.*/, (res) ->
-    if annoyEnabled
+    if annoyEnabled and res.message.user.name == "anish"
       res.send 'lolol'
 
   # robot.hear /retreat/i, (res) ->
