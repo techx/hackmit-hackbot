@@ -140,27 +140,20 @@ thank mr skeltal
 
   selfDestructSequence = [
     "Initiating HackMIT self-destruct sequence...",
-    "Leaking sponsorship info...",
-    "Insulting all previous company contacts...",
-    "Transferring funds to FCF...",
-    "...",
-    "10",
-    "9",
-    "8",
+    "10: Leaking sponsorship info...",
+    "9: Insulting all previous company contacts...",
+    "8: Transferring funds to FCF...",
     "7",
-    "6",
-    "5",
-    "Destroying all AWS instances...",
-    "4",
-    "Petting Oscar...",
+    "6: Destroying all AWS instances...",
+    "5: ",
+    "4: Petting Oscar...",
     "3",
     "2",
-    "1",
-    "You've met with a terrible fate, haven't you?",
+    "1: You've met with a terrible fate, haven't you?",
     "http://rs651.pbsrc.com/albums/uu236/416o/explosion.gif~c200"
   ]
 
-  selfDestructTick = 500 #milliseconds
+  selfDestructTick = 1000 #milliseconds
 
   robot.respond /selfdestruct/i, (res) ->
     sendFrom = (i) ->
