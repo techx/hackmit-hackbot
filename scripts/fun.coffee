@@ -138,8 +138,36 @@ thank mr skeltal
     if annoyEnabled and res.message.user.name == "anish"
       res.send 'lolol'
 
+  selfDestructSequence = [
+    "Initiating HackMIT self-destruct sequence...",
+    "Leaking sponsorship info...",
+    "Insulting all previous company contacts...",
+    "Transferring funds to FCF...",
+    "...",
+    "10",
+    "9",
+    "8",
+    "7",
+    "6",
+    "5",
+    "Destroying all AWS instances...",
+    "4",
+    "Petting Oscar...",
+    "3",
+    "2",
+    "1",
+    "You've met with a terrible fate, haven't you?",
+    "http://rs651.pbsrc.com/albums/uu236/416o/explosion.gif~c200"
+  ]
+
+  selfDestructTick = 500 #milliseconds
+
   robot.respond /selfdestruct/i, (res) ->
-    res.send ':boom:'
+    sendFrom = (i) ->
+      if i < selfDestructParts.length
+        res.send selfDestructParts[i]
+        setTimeout sendFrom, selfDestructTick, i + 1
+    sendFrom 0
 
   # robot.hear /retreat/i, (res) ->
   #   res.send 'Did you mean: *kickoff*?'
