@@ -164,8 +164,8 @@ thank mr skeltal
 
   robot.respond /selfdestruct/i, (res) ->
     sendFrom = (i) ->
-      if i < selfDestructParts.length
-        res.send selfDestructParts[i]
+      if i < selfDestructSequence.length
+        res.send selfDestructSequence[i]
         setTimeout sendFrom, selfDestructTick, i + 1
     sendFrom 0
 
