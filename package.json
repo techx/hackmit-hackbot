@@ -17,7 +17,7 @@
     "hubot-diagnostics": "0.0.1",
     "hubot-group": "^1.0.0",
     "hubot-help": "^0.1.1",
-    "hubot-offix": "^0.0.5",
+    "hubot-offix": "^0.0.6",
     "hubot-redis-brain": "0.0.2",
     "hubot-redisred": "^1.1.1",
     "hubot-shortcut": "^1.0.0",
