@@ -13,17 +13,17 @@
 
 module.exports = (robot) ->
 
-	config = require('hubot-conf')('confess', robot)
+  config = require('hubot-conf')('confess', robot)
 
-	robot.respond /confess (.+)$/i, (msg) ->
-		text = "[Confession] #{msg.match[1]}"
-		room = config('room')
-		robot.send {room: room}, text
+  robot.respond /confess (.+)$/i, (msg) ->
+    text = "[Confession] #{msg.match[1]}"
+    room = config('room')
+    robot.send {room: room}, text
 
   robot.respond /c0nf3ss (.+)$/i, (msg) ->
-		text = "[Confession] #{msg.match[1]}"
-		room = config('room')
-		robot.send {room: room}, translate(text)
+    text = "[Confession] #{msg.match[1]}"
+    room = config('room')
+    robot.send {room: room}, translate(text)
 
 translate = (text) ->
   `var firstCharacter`
