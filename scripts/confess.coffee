@@ -10,7 +10,7 @@
 # Author:
 #   anishathalye
 
-translate = require('./translate')
+translate = require('../utils/translate')
 
 module.exports = (robot) ->
 
