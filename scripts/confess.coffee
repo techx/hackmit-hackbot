@@ -10,6 +10,8 @@
 # Author:
 #   anishathalye
 
+translate = require('./translate')
+
 module.exports = (robot) ->
 
 	config = require('hubot-conf')('confess', robot)
@@ -18,3 +20,8 @@ module.exports = (robot) ->
 		text = "[Confession] #{msg.match[1]}"
 		room = config('room')
 		robot.send {room: room}, text
+
+  robot.respond /obfuscate confess (.+)$/i, (msg) ->
+		text = "[Confession] #{msg.match[1]}"
+		room = config('room')
+		robot.send {room: room}, translate(text)
