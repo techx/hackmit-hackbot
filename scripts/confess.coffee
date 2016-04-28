@@ -6,6 +6,7 @@
 #
 # Commands:
 #   hubot confess <confession> - submit anonymous confession (can be sent in a private message)
+#   hubot c0nf3ss <confession> - submit super anonymous confession (can be sent in a private message)
 #
 # Author:
 #   anishathalye
@@ -19,7 +20,7 @@ module.exports = (robot) ->
 		room = config('room')
 		robot.send {room: room}, text
 
-  robot.respond /obfuscate confess (.+)$/i, (msg) ->
+  robot.respond /c0nf3ss (.+)$/i, (msg) ->
 		text = "[Confession] #{msg.match[1]}"
 		room = config('room')
 		robot.send {room: room}, translate(text)
