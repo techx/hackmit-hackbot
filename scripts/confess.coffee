@@ -31,7 +31,7 @@ translate = (text) ->
   `var k`
   # stolen from http://www.punkwalrus.com/cybertusk/text2aol.html
   # change it all to uppercase
-  text = text.toUpperCase()
+  text = text.toLowerCase()
   # split the string into an array
   textArray = text.split(' ')
   # create output and length variables
