@@ -124,20 +124,6 @@ thank mr skeltal
     msg = res.match[1]
     res.send msg.replace(/[aeiou]/ig,'')
 
-  annoyEnabled = false
-
-  robot.respond /annoy on/i, (res) ->
-    annoyEnabled = true
-    res.send 'annoy enabled'
-
-  robot.respond /annoy off/i, (res) ->
-    annoyEnabled = false
-    res.send 'annoy disabled'
-
-  robot.hear /.*/, (res) ->
-    if annoyEnabled and res.message.user.name == "anish"
-      res.send 'lolol'
-
   selfDestructSequence = [
     "Initiating HackMIT self-destruct sequence...",
     "10: Leaking sponsorship info...",
