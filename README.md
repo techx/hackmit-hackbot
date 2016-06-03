@@ -1,9 +1,3 @@
 # hackbot
 
-## environment variables
-
-* `HUBOT_SLACK_TOKEN`
-* `HUBOT_WOLFRAM_APPID`
-* `HUBOT_OSCAR_BASE_URL`
-* `HUBOT_HACKMIT_AUTH_TOKEN`
-* `MONEY_SPREADSHEET_URL`
+See `.env.sample` for a list of environment variables that should be set.
