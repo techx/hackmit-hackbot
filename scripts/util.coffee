@@ -24,3 +24,6 @@ module.exports = (robot) ->
         process.exit(0)
     else
       robot.logger.info "Adapter is not slack, will not terminate on client close"
+
+  robot.respond /echo2 (.*\s*)$/i, (res) ->
+    res.send res.match[1]
