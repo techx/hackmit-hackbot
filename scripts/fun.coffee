@@ -87,10 +87,6 @@ thank mr skeltal
   robot.hear /(dootdootdoot|[0-9]spooky)/i, (res) ->
     res.send dootDoot
 
-  robot.hear /ay+ l[mfao]+/i, (res) ->
-    res.send ':alien: ayy lmao :alien:'
-
-
   troll = [
     "*Stef*: im in that class too",
     "*Stef*: omg me too",
