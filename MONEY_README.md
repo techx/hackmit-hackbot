@@ -6,6 +6,7 @@ A hackbot script to help us check how much money we need.
 If the json file on the EC2 instance becomes out of date, follow these steps to get a new one.
 * Go to console.developers.google.com and create a project if you do not have one already for hackbot.
 * Create a service account
+* Enable the Google Drive API
 * Download credentials as json.
 * Get it onto the EC2 instance using scp or something.
 * Invite the service account to the spreadsheet using the @developers.gserviceaccounts.com email
