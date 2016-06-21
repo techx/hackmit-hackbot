@@ -104,6 +104,32 @@ thank mr skeltal
   robot.hear /stef.*troll/, (res) ->
     res.send res.random troll
 
+  pusheens = [
+    "http://i.imgur.com/ozA8GSu.png",
+    "http://i.imgur.com/ZKQc2Zr.png",
+    "http://i.imgur.com/4kYoLqW.png",
+    "http://i.imgur.com/RrLH94y.png",
+    "http://i.imgur.com/frlzb8j.png",
+    "http://i.imgur.com/CrlTN9g.png",
+    "http://i.imgur.com/T3aU0jE.png",
+    "http://i.imgur.com/WVNB0AI.png",
+    "http://i.imgur.com/MgURast.png",
+    "http://i.imgur.com/h0WeeGt.png",
+    "http://i.imgur.com/5Gaquu2.png",
+    "http://i.imgur.com/KBRkat2.png",
+    "http://i.imgur.com/2DA3pUj.png",
+    "http://i.imgur.com/zbkwKyo.png",
+    "http://i.imgur.com/ZjxGDGu.png",
+    "http://i.imgur.com/2fM3Llu.png",
+    "http://i.imgur.com/vmBTVZT.png",
+    "http://i.imgur.com/LM4RhiD.png",
+    "http://i.imgur.com/GsA3vF8.png",
+    "http://i.imgur.com/SRlVsQl.png",
+  ]
+
+  robot.hear /pusheen/i, (res) ->
+    res.send res.random pusheens
+
   robot.hear /kim.*mom/i, (res) ->
     res.send 'https://answers.yahoo.com/question/index?qid=20100404125550AARFOJe'
 
