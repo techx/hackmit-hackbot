@@ -22,8 +22,8 @@ filter = (arr, func) ->
 
 formatSummary = (data) ->
   """*=== Registration Stats ===*
-  *Verfied:* #{data.verified}
-  *Submitted:* #{data.submitted}"""
+  *Verfied:* #{data.verified} 
+  *Submitted:* #{data.submitted} (_M: #{data.demo.gender.M} F: #{data.demo.gender.F} O: #{data.demo.gender.O} N: #{data.demo.gender.N}_)"""
 
 module.exports = (robot) ->
 
