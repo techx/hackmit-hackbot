@@ -40,7 +40,7 @@ module.exports = (robot) ->
             try
               data = JSON.parse body
               if stats.data == null or stats.data.submitted != data.submitted
-                robot.adapter.topic { room: '#botspam' }, "Submitted: #{data.submitted}"
+                robot.adapter.topic { room: config('stats.room', '#botspam') }, "Submitted: #{data.submitted}"
               stats.data = data
               stats.time = new Date(data.lastUpdated)
               if callback? and res?
