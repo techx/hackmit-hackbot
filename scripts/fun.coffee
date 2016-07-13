@@ -45,7 +45,7 @@ module.exports = (robot) ->
 
   lennySnakeTick = 300 # milliseconds
 
-  robot.hear /lennysnake/i, (res) ->
+  robot.hear /lenny(snake|pede)/i, (res) ->
     sendFrom = (i) ->
       if i < lennySnakeParts.length
         res.send lennySnakeParts[i]
