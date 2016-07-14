@@ -141,6 +141,10 @@ thank mr skeltal
     if Math.random() < 0.2
       res.send 'tfti'
 
+  robot.hear /^same$/, (res) ->
+    if Math.random() < 0.2
+      res.send 'same'
+
   robot.respond /correct (.*)/, (res) ->
     msg = res.match[1]
     res.send msg.replace(/[aeiou]/ig,'')
