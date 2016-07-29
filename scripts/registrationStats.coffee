@@ -22,8 +22,9 @@ filter = (arr, func) ->
 
 formatSummary = (data) ->
   """*=== Registration Stats ===*
-  *Verfied:* #{data.verified}
-  *Submitted:* #{data.submitted} (_M: #{data.demo.gender.M} F: #{data.demo.gender.F} O: #{data.demo.gender.O} N: #{data.submitted-(data.demo.gender.M+data.demo.gender.F+data.demo.gender.O)}_)"""
+  *Verified:* #{data.verified}
+  *Submitted:* #{data.submitted} (_M: #{data.demo.gender.M} F: #{data.demo.gender.F} O: #{data.demo.gender.O} N: #{data.submitted - (data.demo.gender.M + data.demo.gender.F + data.demo.gender.O)}_)
+  _#{Math.round(100 * (data.demo.gender.F + data.demo.gender.O) / data.submitted)}-#{Math.round(100 * (data.demo.gender.F + data.demo.gender.O) / (data.demo.gender.F + data.demo.gender.O + data.demo.gender.M))}%  non-male_"""
 
 module.exports = (robot) ->
 
@@ -39,7 +40,7 @@ module.exports = (robot) ->
           if not err and httpResponse.statusCode is 200
             try
               data = JSON.parse body
-              if stats.data == null or stats.data.submitted != data.submitted
+              if stats.data == null
                 robot.adapter.topic { room: config('stats.room', '#botspam') }, "Submitted: #{data.submitted}"
               stats.data = data
               stats.time = new Date(data.lastUpdated)
