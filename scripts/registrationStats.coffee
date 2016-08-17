@@ -24,7 +24,9 @@ formatSummary = (data) ->
   """*=== Registration Stats ===*
   *Verified:* #{data.verified}
   *Submitted:* #{data.submitted} (_M: #{data.demo.gender.M} F: #{data.demo.gender.F} O: #{data.demo.gender.O} N: #{data.submitted - (data.demo.gender.M + data.demo.gender.F + data.demo.gender.O)}_)
-  _#{Math.round(100 * (data.demo.gender.F + data.demo.gender.O) / data.submitted)}-#{Math.round(100 * (data.demo.gender.F + data.demo.gender.O) / (data.demo.gender.F + data.demo.gender.O + data.demo.gender.M))}%  non-male_"""
+  _#{Math.round(100 * (data.demo.gender.F + data.demo.gender.O) / data.submitted)}-#{Math.round(100 * (data.demo.gender.F + data.demo.gender.O) / (data.demo.gender.F + data.demo.gender.O + data.demo.gender.M))}%  non-male_
+  *Confirmed:* #{data.confirmed} (_M: #{data.confirmedMale} F: #{data.confirmedFemale} O: #{data.confirmedOther} N: #{data.confirmedNone}_) (_MIT: #{data.confirmedMit} non-MIT: #{data.confirmed - data.confirmedMit} declined: #{data.declined}_)
+  _F / (M + F) = #{Math.round(100 * data.confirmedFemale / (data.confirmedFemale + data.confirmedMale))}%_"""
 
 module.exports = (robot) ->
 
@@ -41,7 +43,11 @@ module.exports = (robot) ->
             try
               data = JSON.parse body
               if stats.data == null
-                robot.adapter.topic { room: config('stats.room', '#botspam') }, "Submitted: #{data.submitted}"
+                try
+                  robot.adapter.topic { room: config('stats.room', '#botspam') }, "Submitted: #{data.submitted}"
+                catch err
+                  # if room is set to some nonexistent room (to disable it)
+                  console.error err
               stats.data = data
               stats.time = new Date(data.lastUpdated)
               if callback? and res?
