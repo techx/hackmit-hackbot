@@ -23,6 +23,7 @@
     "hubot-shortcut": "^1.0.0",
     "hubot-slack": "^3.4.0",
     "hubot-wolfram": "1.0.7",
+    "node-google-translate-skidz": "^0.1.1",
     "timeago": "^0.2.0"
   },
   "engines": {

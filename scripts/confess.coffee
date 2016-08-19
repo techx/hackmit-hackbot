@@ -7,9 +7,12 @@
 # Commands:
 #   hubot confess <confession> - submit anonymous confession (can be sent in a private message)
 #   hubot c0nf3ss <confession> - submit super anonymous confession (can be sent in a private message)
+#   hubot anonymous <confession> - submit confession that will be automatically anonymized (can be sent in a private message)
 #
 # Author:
 #   anishathalye
+
+gtranslate = require 'node-google-translate-skidz'
 
 module.exports = (robot) ->
 
@@ -30,6 +33,21 @@ module.exports = (robot) ->
     text = "[Confession] #{res.match[1]}"
     room = config('room')
     robot.send {room: room}, translate(text)
+
+  robot.respond /anonymous (.+)$/i, (res) ->
+    text = res.match[1]
+    language = 'en'
+    intermediates = ['es', 'de', 'hi', 'fr', 'af', 'en']
+    chain = (lang, int) -> (text) ->
+      if int.length > 0
+        next = int.shift()
+        gtranslate {text: text, source: lang, target: next}, chain(next, int)
+      else
+        message = "[Anonymous] #{text}"
+        room = config 'room'
+        robot.send {room: room}, message
+    chain(language, intermediates)(text)
+
 
 translate = (text) ->
   `var firstCharacter`
