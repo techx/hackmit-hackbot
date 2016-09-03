@@ -101,7 +101,7 @@ thank mr skeltal
     "*Stef*: wtf that's what I was gonna say"
   ]
 
-  robot.hear /stef.*troll/, (res) ->
+  robot.hear /stef.*troll/i, (res) ->
     res.send res.random troll
 
   pusheens = [
