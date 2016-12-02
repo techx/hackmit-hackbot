@@ -16,7 +16,7 @@ formatMessage = (money) ->
   received = money.received
   outstanding = money.outstanding
   total = money.total
-  "*Received:* $#{received}\n*Outstanding:* $#{outstanding}\n*Total:* $#{total}"
+  "*Received:* $#{received}K\n*Outstanding:* $#{outstanding}K\n*Total:* $#{total}K"
 
 formatTopic = (money) ->
   formatMessage(money).replace(/\n/g,' ')
