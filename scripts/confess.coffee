@@ -19,17 +19,11 @@ module.exports = (robot) ->
   config = require('hubot-conf')('confess', robot)
 
   robot.respond /confess (.+)$/i, (res) ->
-    if res.message.user.name is 'anish'
-      res.send 'sorry, you are not allowed to use this feature'
-      return
     text = "[Confession] #{res.match[1]}"
     room = config('room')
     robot.send {room: room}, text
 
   robot.respond /c0nf3ss (.+)$/i, (res) ->
-    if res.message.user.name is 'anish'
-      res.send 'sorry, you are not allowed to use this feature'
-      return
     text = "[Confession] #{res.match[1]}"
     room = config('room')
     robot.send {room: room}, translate(text)
