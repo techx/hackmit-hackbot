@@ -6,6 +6,5 @@
   "hubot-offix",
   "hubot-redis-brain",
   "hubot-redisred",
-  "hubot-shortcut",
-  "hubot-wolfram"
+  "hubot-shortcut"
 ]

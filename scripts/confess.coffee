@@ -33,6 +33,10 @@ module.exports = (robot) ->
     language = 'en'
     intermediates = ['es', 'de', 'hi', 'fr', 'af', 'en']
     chain = (lang, int) -> (text) ->
+      # we get a Translation object in the callback from gtranslate, and we
+      # need to extract .translation
+      if typeof(text) != 'string'
+        text = text.translation
       if int.length > 0
         next = int.shift()
         gtranslate {text: text, source: lang, target: next}, chain(next, int)
