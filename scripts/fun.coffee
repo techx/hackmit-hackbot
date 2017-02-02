@@ -104,6 +104,20 @@ thank mr skeltal
   robot.hear /stef.*troll/i, (res) ->
     res.send res.random troll
 
+  more_troll = [
+    "*Logan*: allllllllll right",
+    "*Logan*: look who decided to show up",
+    "*Logan*: big bois",
+    "*Logan*: that's bananas",
+    "*Logan*: it's lit",
+    "*Logan*: not like this",
+    "*Logan*: that's fucked",
+    "*Logan*: eecs eecs eecs eecs",
+  ]
+
+  robot.hear /logan.*troll/i, (res) ->
+    res.send res.random more_troll
+
   pusheens = [
     "http://i.imgur.com/ozA8GSu.png",
     "http://i.imgur.com/ZKQc2Zr.png",
