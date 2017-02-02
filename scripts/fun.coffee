@@ -151,6 +151,10 @@ thank mr skeltal
     if Math.random() < 0.01
       res.send res.random troll
 
+  robot.hear /logan/i, (res) ->
+    if Math.random() < 0.01
+      res.send res.random more_troll
+
   robot.hear /\btfti\b/, (res) ->
     if Math.random() < 0.2
       res.send 'tfti'
