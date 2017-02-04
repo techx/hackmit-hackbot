@@ -160,7 +160,7 @@ thank mr skeltal
       res.send 'tfti'
 
   robot.hear /^same$/, (res) ->
-    if Math.random() < 0.2
+    if Math.random() < 0.4
       res.send 'same'
 
   robot.respond /correct (.*)/, (res) ->
