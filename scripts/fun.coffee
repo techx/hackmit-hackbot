@@ -114,6 +114,7 @@ thank mr skeltal
     "*Logan*: that's fucked",
     "*Logan*: eecs eecs eecs eecs",
     "*Logan*: you dog",
+    "*Logan*: that's pretty soft",
   ]
 
   robot.hear /logan.*troll/i, (res) ->
