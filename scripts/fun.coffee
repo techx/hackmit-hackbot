@@ -6,6 +6,9 @@
 
 module.exports = (robot) ->
 
+  robot.hear /\s?#dev\b/, (res) ->
+    res.send 'Did you mean #anish-talks-into-void?'
+
   fireballResponses = [
     'Under your couch',
     'In the middle of the Pacific ocean',
