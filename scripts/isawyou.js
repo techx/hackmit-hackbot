@@ -5,6 +5,7 @@
 //
 // Commands:
 //   hubot isawyou <user> - msgs the number of isawyou points they have
+//   hubot isawyou set <user> <number> - sets user's points to number
 //
 // Configuration:
 //   hubot config isawyou.room is the "#i-saw-you" channel name
@@ -32,6 +33,7 @@ class ISawYou {
     this.robot = robot;
     this.cache = {};
     this.load = bind(this.load, this);
+    this.SUBTYPE = 'file_share';
     this.robot.brain.on('loaded', this.load);
     if (this.robot.brain.data.users.length > 0) {
       this.load();
@@ -50,7 +52,7 @@ class ISawYou {
   // adds this message to the msg's user's count if its a pic
   add(msg) {
     var username = msg.message.user.name;
-    if (isPictureMessage(msg)) {
+    if (this.isPictureMessage(msg)) {
       this.robot.logger.debug('isawyou.add #{username}');
       if (this.cache.hasOwnProperty(username)) {
         this.cache[username] += 1;
@@ -58,6 +60,11 @@ class ISawYou {
         this.cache[username] = 1;
       }
     }
+  }
+
+  // sets username's points to newPoints
+  set(username, newPoints) {
+    this.cache[username] = newPoints;
   }
 
   // returns the specific user's count
@@ -70,9 +77,9 @@ class ISawYou {
     }
   }
 
-  // TODO: returns true iff the message is a picture message
+  // returns true iff the message is a picture message
   isPictureMessage(msg) {
-    return true;
+    return msg.message.rawMessage.subtype === this.SUBTYPE;
   }
 }
 
@@ -95,11 +102,26 @@ module.exports = function(robot) {
 
   // respond to i-saw-you queries
   robot.respond(
-    /isawyou @?([-\w.\\^|{}`\[\]]+)/,
+    /isawyou @?([-\w.\\^|{}`\[\]]+)$/,
     function(msg) {
       var username = msg.match[1];
       var count = iSawYou.getCount(username);
-      msg.send('*' + username + '* has ' + count + ' #i-saw-you points.');
+      msg.send('*' + username + '* has ' + count + ' i-saw-you points.');
+    }
+  );
+
+  // respond to point set requests
+  robot.respond(
+    /isawyou set @?([-\w.\\^|{}`\[\]]+) (\d+)/,
+    function(msg) {
+      if (msg.match.length < 3) {
+        msg.send('Usage: hackbot isawyou set <user> <number>');
+      } else {
+        var username = msg.match[1];
+        var newPoints = parseInt(msg.match[2]);
+        iSawYou.set(username, newPoints);
+        msg.send('*' + username + '* now has ' + newPoints + ' i-saw-you points.');
+      }
     }
   );
 };
