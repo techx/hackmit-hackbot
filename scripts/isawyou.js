@@ -60,6 +60,9 @@ class ISawYou {
       } else {
         this.cache[username] = 1;
       }
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -114,11 +117,20 @@ module.exports = function(robot) {
   // working variables
   var iSawYou = new ISawYou(robot);
 
+  function reportCount(msg, username) {
+    var count = iSawYou.getCount(username);
+    msg.send('*' + username + '* has ' + count + ' i-saw-you points.');
+  }
+
   // update i-saw-you counts
   robot.hear(/.*/, function(msg) {
     // only listen to messages in the #i-saw-you channel
     if (config('room') === msg.message.room) {
-      iSawYou.add(msg);
+      var added = iSawYou.add(msg);
+      if (added) {
+        var username = msg.message.user.name;
+        reportCount(msg, username);
+      }
     }
   });
 
@@ -143,8 +155,7 @@ module.exports = function(robot) {
     /isawyou get @?([-\w.\\^|{}`\[\]]+)$/,
     function(msg) {
       var username = msg.match[1];
-      var count = iSawYou.getCount(username);
-      msg.send('*' + username + '* has ' + count + ' i-saw-you points.');
+      reportCount(msg, username);
     }
   );
 
