@@ -4,11 +4,12 @@
 //   (or equivalent, depending on the configuration).
 //
 // Commands:
-//   hubot isawyou <user> - msgs the number of isawyou points they have
+//   hubot isawyou leaderboard - shows the top 5 scorers
+//   hubot isawyou get <user> - get the number of isawyou points the user has
 //   hubot isawyou set <user> <number> - sets user's points to number
 //
 // Configuration:
-//   hubot config isawyou.room is the "#i-saw-you" channel name
+//   hubot config isawyou.room is the '#i-saw-you' channel name
 //
 // Author:
 //   Anthony Liu, wiredfool, patcon@gittip
@@ -77,6 +78,27 @@ class ISawYou {
     }
   }
 
+  // return the top k-scoring users
+  // format: [{user: , points: }, ...]
+  getTopK(k) {
+    // yes there are more efficient ways to do this but
+    // practically it really isn't going to make a differnce
+    var self = this;
+    return Object.keys(this.cache)
+      .map(function(username) {
+        return {
+          username: username,
+          points: self.cache[username]
+        };
+      }).sort(function(a, b) {
+        if (a.points === b.points) {
+          return a.username > b.username ? 1 : -1;
+        } else {
+          return b.points - a.points;  
+        }
+      }).slice(0, k);
+  }
+
   // returns true iff the message is a picture message
   isPictureMessage(msg) {
     return msg.message.rawMessage.subtype === this.SUBTYPE;
@@ -100,9 +122,25 @@ module.exports = function(robot) {
     }
   });
 
-  // respond to i-saw-you queries
+  // respond to i-saw-you leaderboard requests
   robot.respond(
-    /isawyou @?([-\w.\\^|{}`\[\]]+)$/,
+    /isawyou leaderboard/,
+    function(msg) {
+      var k = parseInt(config('k'));
+      var users = iSawYou.getTopK(k);
+      var prefix = '~ i-saw-you leaderboard ~\n';
+      var message = prefix + users
+        .reduce(function(a, user) {
+          return a + '*' + user.username + '*: ' +
+            user.points + ' points\n';
+        }, '');
+      msg.send(message);
+    }
+  );
+
+  // respond to i-saw-you get requests
+  robot.respond(
+    /isawyou get @?([-\w.\\^|{}`\[\]]+)$/,
     function(msg) {
       var username = msg.match[1];
       var count = iSawYou.getCount(username);
