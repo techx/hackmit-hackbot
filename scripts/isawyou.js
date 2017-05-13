@@ -66,6 +66,27 @@ class ISawYou {
     }
   }
 
+  // increments username's points
+  increment(username) {
+    if (this.cache.hasOwnProperty(username)) {
+      this.cache[username] += 1;
+    } else {
+      this.cache[username] = 1;
+    }
+  }
+
+  // decrements username's points
+  decrement(username) {
+    if (this.cache.hasOwnProperty(username)) {
+      this.cache[username] -= 1;
+      if (this.cache[username] < 0) {
+        this.cache[username] = 0;
+      }
+    } else {
+      this.cache[username] = 0;
+    }
+  }
+
   // sets username's points to newPoints
   set(username, newPoints) {
     this.cache[username] = newPoints;
@@ -126,13 +147,37 @@ module.exports = function(robot) {
   robot.hear(/.*/, function(msg) {
     // only listen to messages in the #i-saw-you channel
     if (config('room') === msg.message.room) {
-      var added = iSawYou.add(msg);
-      if (added) {
-        var username = msg.message.user.name;
-        reportCount(msg, username);
+      var username = msg.message.user.name;
+      var matchesInc = msg.message.text.match(
+        /^@([-\w.\\^|{}`\[\]]+)\+\+$/
+      );
+      var matchesDec = msg.message.text.match(
+        /^@([-\w.\\^|{}`\[\]]+)--$/
+      );
+      if (matchesInc && matchesInc.length === 2) {
+        iSawYou.increment(matchesInc[1]);
+        reportCount(msg, matchesInc[1]);
+      } else if (matchesDec && matchesDec.length === 2) {
+        iSawYou.decrement(matchesDec[1]);
+        reportCount(msg, matchesDec[1]);
+      } else {
+        var added = iSawYou.add(msg);
+        if (added) {
+          reportCount(msg, username);
+        }
       }
     }
   });
+
+  // respond to i-saw-you increments
+  robot.respond(
+    /isawyou @?([-\w.\\^|{}`\[\]]+)\+\+$/,
+    function(msg) {
+      var username = msg.match[1];
+      iSawYou.increment(username);
+      reportCount(msg, username);
+    }
+  );
 
   // respond to i-saw-you leaderboard requests
   robot.respond(
