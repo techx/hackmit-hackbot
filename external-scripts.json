@@ -1,6 +1,7 @@
 [
   "hubot-conf",
   "hubot-diagnostics",
+  "hubot-good-karma",
   "hubot-group",
   "hubot-help",
   "hubot-offix",
