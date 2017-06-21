@@ -24,7 +24,8 @@
     "hubot-shortcut": "^1.0.0",
     "hubot-slack": "^3.4.0",
     "node-google-translate-skidz": "^1.1.0",
-    "timeago": "^0.2.0"
+    "timeago": "^0.2.0",
+    "hubot-raven": "^0.0.2"
   },
   "engines": {
     "node": "0.10.x"
