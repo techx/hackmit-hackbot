@@ -1,0 +1,9 @@
+node_modules
+.DS_Store*
+.hubot_history
+.env
+*.rdb
+*.pid
+*.log
+hackmit-money-2015-credentials.json
+*.*~
