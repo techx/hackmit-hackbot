@@ -6,5 +6,6 @@
   "hubot-offix",
   "hubot-redis-brain",
   "hubot-redisred",
-  "hubot-shortcut"
+  "hubot-shortcut",
+  "hubot-slack-reaction"
 ]

@@ -22,6 +22,7 @@
     "hubot-redisred": "^1.1.1",
     "hubot-shortcut": "^1.0.0",
     "hubot-slack": "^3.4.0",
+    "hubot-slack-reaction": "0.0.4",
     "node-google-translate-skidz": "^1.1.0",
     "timeago": "^0.2.0"
   },

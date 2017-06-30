@@ -60,6 +60,13 @@ module.exports = (robot) ->
     if Math.random() < 0.2
       res.send "but he's not course 6"
 
+  robot.hear /michael/i, (res) ->
+    # make this less spammy
+    if Math.random() < 0.4
+      robot.emit 'slack.reaction'
+        message: res.message
+        name: 'silverman'
+
   dootDoot = """```
 thank mr skeltal
 
