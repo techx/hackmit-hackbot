@@ -63,7 +63,7 @@ module.exports = (robot) ->
   robot.hear /michael/i, (res) ->
     # make this less spammy
     if Math.random() < 0.4
-      robot.emit 'slack.reaction'
+      robot.emit 'slack.reaction',
         message: res.message
         name: 'silverman'
 
