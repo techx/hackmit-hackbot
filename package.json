@@ -12,21 +12,21 @@
   "dependencies": {
     "github": "^0.2.4",
     "google-spreadsheet": "^1.0.1",
-    "hubot": "^2.12.0",
+    "hubot": "^2.19.0",
     "hubot-conf": "^1.0.0",
     "hubot-diagnostics": "0.0.1",
     "hubot-good-karma": "^1.0.0",
     "hubot-group": "^1.0.0",
     "hubot-help": "^0.1.1",
     "hubot-offix": ">=0.0.7",
+    "hubot-raven": "^0.0.2",
     "hubot-redis-brain": "0.0.2",
     "hubot-redisred": "^1.1.1",
     "hubot-shortcut": "^1.0.0",
-    "hubot-slack": "^3.4.0",
+    "hubot-slack": "^3.4.2",
     "hubot-slack-reaction": "0.0.4",
     "node-google-translate-skidz": "^1.1.0",
-    "timeago": "^0.2.0",
-    "hubot-raven": "^0.0.2"
+    "timeago": "^0.2.0"
   },
   "engines": {
     "node": "0.10.x"

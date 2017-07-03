@@ -67,7 +67,8 @@ module.exports = (robot) ->
         message: res.message
         name: 'silverman'
 
-  robot.hear /*/i, (res) ->
+  # match basically any 70-char-long english sentence
+  robot.hear /e/i, (res) ->
     # make this less spammy
     if res.message.text.length > 70 && Math.random() < 0.03
       res.send "whoa whoa guys are we sure that's a good idea?"
