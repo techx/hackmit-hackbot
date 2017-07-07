@@ -62,15 +62,15 @@ module.exports = (robot) ->
 
   robot.hear /michael/i, (res) ->
     # make this less spammy
-    if Math.random() < 0.4
+    if Math.random() < 0.05
       robot.emit 'slack.reaction',
         message: res.message
         name: 'silverman'
 
-  # match basically any 70-char-long english sentence
+  # match basically any 100-char-long english sentence
   robot.hear /e/i, (res) ->
     # make this less spammy
-    if res.message.text.length > 70 && Math.random() < 0.03
+    if res.message.text.length > 100 && Math.random() < 0.001
       res.send "whoa whoa guys are we sure that's a good idea?"
 
   dootDoot = """```
