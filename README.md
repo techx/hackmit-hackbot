@@ -4,7 +4,7 @@ See `.env.sample` for a list of environment variables that should be set.
 
 # Running hackbot locally
 
-Test hackbot by running `./bin/hubot -a shell`. However, some plugins
+Test hackbot by running `npm run dev`. However, some plugins
 will not behave as expected unless you set the 
 [environment variables](#configuration).
 
