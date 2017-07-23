@@ -27,6 +27,7 @@
     "hubot-slack": "^3.4.2",
     "hubot-slack-reaction": "0.0.4",
     "node-google-translate-skidz": "^1.1.0",
+    "streakapi": "^1.2.0",
     "timeago": "^0.2.0"
   },
   "engines": {

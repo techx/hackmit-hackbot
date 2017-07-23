@@ -11,12 +11,14 @@
 #   hubot sponsor date <company> <date> - update company date of last contact
 #   hubot sponsor <level> - get list of companies sponsoring at the given level
 #   hubot sponsor <status> - get a list of companies sponsoring with the given status
+#   hubot sponsor spreadsheet - get a link to the master sponsor spreadsheet
 #
 # Author:
 #   katexyu
 
 util = require('util')
 Spreadsheet = require("google-spreadsheet")
+streakapi = require('streakapi')
 
 findMatchingRow = (rows, companyName) ->
   for row in rows
@@ -31,7 +33,7 @@ LEVEL_COL = "level"
 POINT_COL = "pointperson"
 CONTACT_COL = "companycontact"
 
-STATUSES = ["Talking", "Pinged", "Emailed", "Invoiced", "Paid", "Rejected"]
+
 LEVELS = ["Custom", "Platinum", "Gold", "Silver", "Bronze", "Startup", "NotSponsoring"]
 
 creds = require('../hackmit-money-2015-credentials.json')
@@ -58,8 +60,36 @@ getCompanyRow = (sheet, res, callback) ->
       row = findMatchingRow(rows, companyName)
       callback(null, row, companyName, update)
 
+getPipeline = (streak, callback) ->
+  streak.Pipelines.getAll()
+  .then((pipelines) ->
+    # Most recent pipeline is index 0
+    callback(null, pipelines[0])
+  ).catch((err) ->
+    callback err
+  )
+
+getStatuses = (streak, callback) ->
+  getPipeline streak, (err, pipeline) ->
+    if err
+      callback err
+    else
+      statuses = (pipeline.stages[s].name for s of pipeline.stages)
+      callback(null, statuses)
+
 module.exports = (robot) ->
   config = require('hubot-conf')('money', robot)
+
+  streak = new streakapi.Streak(config 'streak.key')
+  STATUSES = ["To Email", "To Respond", "Initial email",
+    "Talking", "Invoiced", "Paid", "Rejected", "Pinged"]
+  getStatuses streak, (err, stats) ->
+    if err
+      console.log "Error while getting statuses: #{err}"
+      # TODO: throw error?
+    else
+      STATUSES = stats
+
   spreadsheetUrl = config 'spreadsheet.url'
   sheet = new Spreadsheet(spreadsheetUrl)
 
@@ -68,7 +98,7 @@ module.exports = (robot) ->
     res.send "https://go.hackmit.org/sponsor"
 
   # Returns a list of companies with the given status
-  robot.respond /sponsor (talking|pinged|emailed|invoiced|paid|rejected)$/i, (res) ->
+  robot.respond new RegExp('sponsor (' + STATUSES.join('|') + ')$', 'i'), (res) ->
     getCompanyRows sheet, (err, rows) ->
       if err
         res.send "Error while getting company rows: #{err}"
@@ -81,7 +111,7 @@ module.exports = (robot) ->
         res.send "*Total:* #{companies.length}\n#{companies.join('\n')}"
 
   # Returns a list of companies with the given tier
-  robot.respond /sponsor (platinum|gold|silver|bronze|startup|notsponsoring|other)$/i, (res) ->
+  robot.respond new RegExp('sponsor (' + LEVELS.join('|') + ')$', 'i'), (res) ->
     getCompanyRows sheet, (err, rows) ->
       if err
         res.send "Error while getting company rows: #{err}"
@@ -102,7 +132,7 @@ module.exports = (robot) ->
         res.send "Didn't find matching company"
       else
         if update not in LEVELS
-          res.send "Please provide a valid level: #{LEVELS.join("\n")}"
+          res.send "Please provide a valid level:\n#{LEVELS.join("\n")}"
         else
           row[LEVEL_COL] = update
           row.save (err) ->
