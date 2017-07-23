@@ -32,7 +32,7 @@ POINT_COL = "pointperson"
 CONTACT_COL = "companycontact"
 
 STATUSES = ["Talking", "Pinged", "Emailed", "Invoiced", "Paid", "Rejected"]
-LEVELS = ["0Other", "1Platinum", "2Gold", "3Silver", "4Bronze", "5Startup", "9NotSponsoring"]
+LEVELS = ["Custom", "Platinum", "Gold", "Silver", "Bronze", "Startup", "NotSponsoring"]
 
 creds = require('../hackmit-money-2015-credentials.json')
 
