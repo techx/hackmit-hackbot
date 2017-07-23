@@ -21,12 +21,16 @@ filter = (arr, func) ->
   filtered
 
 formatSummary = (data) ->
+  femAndOther = data.demo.gender.F + data.demo.gender.O
+  # If every N applicant was male
+  minMale = Math.round(100 * femAndOther / data.submitted)
+  # Not considering N applicants
+  maxMale = Math.round(100 * femAndOther / (data.demo.gender.F + data.demo.gender.O + data.demo.gender.M))
+  nonMale = if minMale isnt maxMale then minMale + '-' + maxMale else minMale
   """*=== Registration Stats ===*
   *Verified:* #{data.verified}
   *Submitted:* #{data.submitted} (_M: #{data.demo.gender.M} F: #{data.demo.gender.F} O: #{data.demo.gender.O} N: #{data.submitted - (data.demo.gender.M + data.demo.gender.F + data.demo.gender.O)}_)
-  _#{Math.round(100 * (data.demo.gender.F + data.demo.gender.O) / data.submitted)}-#{Math.round(100 * (data.demo.gender.F + data.demo.gender.O) / (data.demo.gender.F + data.demo.gender.O + data.demo.gender.M))}%  non-male_
-  *Confirmed:* #{data.confirmed} (_M: #{data.confirmedMale} F: #{data.confirmedFemale} O: #{data.confirmedOther} N: #{data.confirmedNone}_) (_MIT: #{data.confirmedMit} non-MIT: #{data.confirmed - data.confirmedMit} declined: #{data.declined}_)
-  _F / (M + F) = #{Math.round(100 * data.confirmedFemale / (data.confirmedFemale + data.confirmedMale))}%_"""
+  _#{nonMale}% non-male_"""
 
 module.exports = (robot) ->
 
