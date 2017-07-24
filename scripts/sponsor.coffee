@@ -105,7 +105,8 @@ module.exports = (robot) ->
     '5005': 'Invoiced',
     '5006': 'Paid',
     '5007': 'Rejected',
-    '5008': 'Pinged'
+    '5008': 'Pinged',
+    '5009': 'AuthFailed'
   }
   getStatuses streak, (err, stats) ->
     if err
@@ -121,12 +122,12 @@ module.exports = (robot) ->
   robot.respond /sponsor spreadsheet/i, (res) ->
     res.send "https://go.hackmit.org/sponsor"
 
-  robot.respond /box/i, (res) ->
-    getBoxes streak, (err, boxes) ->
+  robot.respond /test/i, (res) ->
+    getPipeline streak, (err, pipeline) ->
       if err
-        res.send "Error while getting boxes: #{err}"
+        res.send "Error while getting pipeline: #{err}"
       else
-        res.send (b.name for b in boxes).join '\n'
+        res.send JSON.stringify pipeline
 
   # Returns a list of companies with the given status
   robot.respond new RegExp('sponsor (' + (v for own k, v of STATUSES).join('|') + ')$', 'i'), (res) ->
