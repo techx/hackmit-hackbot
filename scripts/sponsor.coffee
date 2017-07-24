@@ -94,7 +94,8 @@ getBoxes = (streak, callback) ->
 module.exports = (robot) ->
   config = require('hubot-conf')('money', robot)
 
-  streak = new streakapi.Streak(config 'streak.key')
+  streakKey = config 'streak.key'
+  streak = new streakapi.Streak(streakKey)
   # 2017 keys and statuses from Streak
   STATUSES = {
     '5001': 'To Email',
