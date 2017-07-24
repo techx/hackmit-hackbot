@@ -74,15 +74,38 @@ getStatuses = (streak, callback) ->
     if err
       callback err
     else
-      statuses = (pipeline.stages[s].name for s of pipeline.stages)
+      statuses = {}
+      statuses[s] = pipeline.stages[s].name for s of pipeline.stages
       callback(null, statuses)
+
+getBoxes = (streak, callback) ->
+  getPipeline streak, (err, pipeline) ->
+    if err
+      callback err
+    else
+      streak.Boxes.getForPipeline(pipeline.pipelineKey)
+      .then((boxes) ->
+        callback(null, boxes)
+      ).catch((err) ->
+        callback err
+      )
+
 
 module.exports = (robot) ->
   config = require('hubot-conf')('money', robot)
 
   streak = new streakapi.Streak(config 'streak.key')
-  STATUSES = ["To Email", "To Respond", "Initial email",
-    "Talking", "Invoiced", "Paid", "Rejected", "Pinged"]
+  # 2017 keys and statuses from Streak
+  STATUSES = {
+    '5001': 'To Email',
+    '5002': 'To Respond',
+    '5003': 'Initial email',
+    '5004': 'Talking',
+    '5005': 'Invoiced',
+    '5006': 'Paid',
+    '5007': 'Rejected',
+    '5008': 'Pinged'
+  }
   getStatuses streak, (err, stats) ->
     if err
       console.log "Error while getting statuses: #{err}"
@@ -97,18 +120,26 @@ module.exports = (robot) ->
   robot.respond /sponsor spreadsheet/i, (res) ->
     res.send "https://go.hackmit.org/sponsor"
 
-  # Returns a list of companies with the given status
-  robot.respond new RegExp('sponsor (' + STATUSES.join('|') + ')$', 'i'), (res) ->
-    getCompanyRows sheet, (err, rows) ->
+  robot.respond /box/i, (res) ->
+    getBoxes streak, (err, boxes) ->
       if err
-        res.send "Error while getting company rows: #{err}"
+        res.send "Error while getting boxes: #{err}"
+      else
+        res.send (b.name for b in boxes).join '\n'
+
+  # Returns a list of companies with the given status
+  robot.respond new RegExp('sponsor (' + (v for own k, v of STATUSES).join('|') + ')$', 'i'), (res) ->
+    getBoxes streak, (err, boxes) ->
+      if err
+        res.send "Error while getting Streak boxes: #{err}"
       else
         status = res.match[1]
         companies = []
-        for row in rows
-          if status.toLowerCase() == row[STATUS_COL].toLowerCase()
-            companies.push(row[SPONSOR_NAME_COL])
-        res.send "*Total:* #{companies.length}\n#{companies.join('\n')}"
+        for box in boxes
+          if status.toLowerCase() == STATUSES[box.stageKey].toLowerCase()
+            companies.push(box.name)
+        join = if companies.length < 15 then '\n' else ', '
+        res.send "#{companies.join(join)}\n_Total: #{companies.length}_"
 
   # Returns a list of companies with the given tier
   robot.respond new RegExp('sponsor (' + LEVELS.join('|') + ')$', 'i'), (res) ->
@@ -149,8 +180,8 @@ module.exports = (robot) ->
       else if !row
         res.send "Didn't find matching company"
       else
-        if update not in STATUSES
-          res.send "Please provide a valid status: #{STATUSES.join("\n")}"
+        if update not in (v for own k, v of STATUSES)
+          res.send "Please provide a valid status: #{(v for own k, v of STATUSES).join("\n")}"
         else
           row[STATUS_COL] = update
           today = new Date()
