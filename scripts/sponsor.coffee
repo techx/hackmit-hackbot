@@ -125,7 +125,7 @@ module.exports = (robot) ->
   robot.respond /test/i, (res) ->
     getPipeline streak, (err, pipeline) ->
       if err
-        res.send "Error while getting pipeline: #{err}"
+        res.send "Error while getting pipeline: #{config 'streak.key'}"
       else
         res.send JSON.stringify pipeline
 
