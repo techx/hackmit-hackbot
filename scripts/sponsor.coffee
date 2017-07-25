@@ -36,19 +36,19 @@ CONTACT_COL = "companycontact"
 
 LEVELS = ["Custom", "Platinum", "Gold", "Silver", "Bronze", "Startup", "NotSponsoring"]
 
-creds = require('../hackmit-money-2015-credentials.json')
+#creds = require('../hackmit-money-2015-credentials.json')
 
-getCompanyRows = (sheet, callback) ->
-  sheet.useServiceAccountAuth creds, (err) ->
-    if err
-      callback err
-    else
-      sheet.getInfo (err, info) ->
-        if err
-          callback err
-        else
-          companyStatusSheet = info.worksheets[0]
-          companyStatusSheet.getRows callback
+#getCompanyRows = (sheet, callback) ->
+#  sheet.useServiceAccountAuth creds, (err) ->
+#    if err
+#      callback err
+#    else
+#      sheet.getInfo (err, info) ->
+#        if err
+#          callback err
+#        else
+#          companyStatusSheet = info.worksheets[0]
+#          companyStatusSheet.getRows callback
 
 getCompanyRow = (sheet, res, callback) ->
   getCompanyRows sheet, (err, rows) ->
@@ -126,6 +126,7 @@ module.exports = (robot) ->
     getPipeline streak, (err, pipeline) ->
       if err
         res.send "Error while getting pipeline: #{config 'streak.key'}"
+        res.send JSON.stringify err
       else
         res.send JSON.stringify pipeline
 
