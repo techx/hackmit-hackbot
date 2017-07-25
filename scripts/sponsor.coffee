@@ -66,9 +66,6 @@ getPipeline = (streak, callback) ->
     # Most recent pipeline is index 0
     callback(null, pipelines[0])
   ).catch((err) ->
-    console.log "Error in getPipeline"
-    console.log streak._c
-    console.log JSON.stringify err
     callback err
   )
 
@@ -98,6 +95,7 @@ module.exports = (robot) ->
   config = require('hubot-conf')('money', robot)
 
   streakKey = config 'streak.key'
+  console.log "streakKey: #{streakKey}"
   streak = new streakapi.Streak(streakKey)
   # 2017 keys and statuses from Streak
   STATUSES = {
@@ -128,8 +126,8 @@ module.exports = (robot) ->
   robot.respond /test/i, (res) ->
     getPipeline streak, (err, pipeline) ->
       if err
-        res.send "Error while getting pipeline: #{config 'streak.key'}"
-        res.send streak._c
+        res.send "Error while getting pipeline:\n#{JSON.stringify err}"
+        res.send JSON.stringify streak._c
         res.send JSON.stringify err
       else
         res.send JSON.stringify pipeline
