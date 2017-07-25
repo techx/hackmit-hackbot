@@ -36,19 +36,19 @@ CONTACT_COL = "companycontact"
 
 LEVELS = ["Custom", "Platinum", "Gold", "Silver", "Bronze", "Startup", "NotSponsoring"]
 
-#creds = require('../hackmit-money-2015-credentials.json')
+creds = require('../hackmit-money-2015-credentials.json')
 
-#getCompanyRows = (sheet, callback) ->
-#  sheet.useServiceAccountAuth creds, (err) ->
-#    if err
-#      callback err
-#    else
-#      sheet.getInfo (err, info) ->
-#        if err
-#          callback err
-#        else
-#          companyStatusSheet = info.worksheets[0]
-#          companyStatusSheet.getRows callback
+getCompanyRows = (sheet, callback) ->
+  sheet.useServiceAccountAuth creds, (err) ->
+    if err
+      callback err
+    else
+      sheet.getInfo (err, info) ->
+        if err
+          callback err
+        else
+          companyStatusSheet = info.worksheets[0]
+          companyStatusSheet.getRows callback
 
 getCompanyRow = (sheet, res, callback) ->
   getCompanyRows sheet, (err, rows) ->
@@ -94,9 +94,11 @@ getBoxes = (streak, callback) ->
 module.exports = (robot) ->
   config = require('hubot-conf')('money', robot)
 
-  streakKey = config 'streak.key'
-  console.log "streakKey: #{streakKey}"
-  streak = new streakapi.Streak(streakKey)
+  streak = () ->
+    streakKey = config 'streak.key'
+    str = new streakapi.Streak(streakKey)
+    str
+
   # 2017 keys and statuses from Streak
   STATUSES = {
     '5001': 'To Email',
@@ -109,7 +111,7 @@ module.exports = (robot) ->
     '5008': 'Pinged',
     '5009': 'AuthFailed'
   }
-  getStatuses streak, (err, stats) ->
+  getStatuses streak(), (err, stats) ->
     if err
       console.log "Error while getting statuses: #{err}"
       # TODO: throw error?
@@ -123,18 +125,16 @@ module.exports = (robot) ->
   robot.respond /sponsor spreadsheet/i, (res) ->
     res.send "https://go.hackmit.org/sponsor"
 
-  robot.respond /test/i, (res) ->
-    getPipeline streak, (err, pipeline) ->
+  robot.respond /boxes/i, (res) ->
+    getBoxes streak(), (err, boxes) ->
       if err
-        res.send "Error while getting pipeline:\n#{JSON.stringify err}"
-        res.send JSON.stringify streak._c
-        res.send JSON.stringify err
+        res.send "Error while getting boxes:\n#{JSON.stringify err}"
       else
-        res.send JSON.stringify pipeline
+        res.send (b.name for b in boxes).join(', ')
 
   # Returns a list of companies with the given status
   robot.respond new RegExp('sponsor (' + (v for own k, v of STATUSES).join('|') + ')$', 'i'), (res) ->
-    getBoxes streak, (err, boxes) ->
+    getBoxes streak(), (err, boxes) ->
       if err
         res.send "Error while getting Streak boxes: #{err}"
       else
