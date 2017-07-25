@@ -8,13 +8,13 @@
 #   hubot sponsor info <company> - get current sponsor status
 #   hubot sponsor status <company> <status> - update status of company
 #   hubot sponsor level <company> <level> - update sponsorship level of company
-#   hubot sponsor date <company> <date> - update company date of last contact
+#   hubot sponsor date <company> - get company date of last contact
 #   hubot sponsor <level> - get list of companies sponsoring at the given level
 #   hubot sponsor <status> - get a list of companies sponsoring with the given status
 #   hubot sponsor spreadsheet - get a link to the master sponsor spreadsheet
 #
 # Author:
-#   katexyu
+#   katexyu, cnord
 
 util = require('util')
 Spreadsheet = require("google-spreadsheet")
@@ -125,13 +125,6 @@ module.exports = (robot) ->
   robot.respond /sponsor spreadsheet/i, (res) ->
     res.send "https://go.hackmit.org/sponsor"
 
-  robot.respond /boxes/i, (res) ->
-    getBoxes streak(), (err, boxes) ->
-      if err
-        res.send "Error while getting boxes:\n#{JSON.stringify err}"
-      else
-        res.send (b.name for b in boxes).join(', ')
-
   # Returns a list of companies with the given status
   robot.respond new RegExp('sponsor (' + (v for own k, v of STATUSES).join('|') + ')$', 'i'), (res) ->
     getBoxes streak(), (err, boxes) ->
@@ -178,6 +171,7 @@ module.exports = (robot) ->
               res.send "Successfully updated #{company}\n*#{row[SPONSOR_NAME_COL]}*\n*Status:* #{row[STATUS_COL]}\n*Level:* #{row[LEVEL_COL]}\n*Point Person:* #{row[POINT_COL]}\n*Company Contact:* #{row[CONTACT_COL]}\n*Last Contacted:* #{row[DATE_COL]}"
 
   # Update sponsor status
+  # TODO: use Streak
   robot.respond /sponsor status (.*) ([A-Za-z0-9]+)/i, (res) ->
     getCompanyRow sheet, res, (err, row, company, update) ->
       if err
@@ -197,19 +191,20 @@ module.exports = (robot) ->
             else
               res.send "Successfully updated #{company}\n*#{row[SPONSOR_NAME_COL]}*\n*Status:* #{row[STATUS_COL]}\n*Level:* #{row[LEVEL_COL]}\n*Point Person:* #{row[POINT_COL]}\n*Company Contact:* #{row[CONTACT_COL]}\n*Last Contacted:* #{row[DATE_COL]}"
 
-  robot.respond /sponsor date (.*) ([A-Za-z0-9\/]+)/i, (res) ->
-    getCompanyRow sheet, res, (err, row, company, update) ->
+  robot.respond /sponsor date (.*)/i, (res) ->
+    res.send "Getting boxes..."
+    getBoxes streak(), (err, boxes) ->
       if err
-        res.send "Error while getting company row: #{err}"
-      else if !row
-        res.send "Didn't find matching company"
+        res.send "Error while getting Streak boxes: #{err}"
       else
-        row[DATE_COL] = update
-        row.save (err) ->
-          if err
-            res.send "Error while updating cell value: #{err}"
-          else
-            res.send "Successfully updated #{company}\n*#{row[SPONSOR_NAME_COL]}*\n*Status:* #{row[STATUS_COL]}\n*Level:* #{row[LEVEL_COL]}\n*Point Person:* #{row[POINT_COL]}\n*Company Contact:* #{row[CONTACT_COL]}\n*Last Contacted:* #{row[DATE_COL]}"
+        search = res.match[1]
+        companies = {}
+        for box in boxes
+          # search for prefix
+          if new RegExp('^' + search.toLowerCase(), 'i').test box.name.toLowerCase()
+            companies[box.name] = new Date(box.lastUpdatedTimestamp).toISOString().slice(0, 10);
+        res.send "#{(c + ': ' + companies[c] for c of companies).join('\n')}\n
+          _Total: #{Object.keys(companies).length}_"
 
   # Get sponsor info
   robot.respond /sponsor info (.*)/i, (res) ->
