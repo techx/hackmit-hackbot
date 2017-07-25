@@ -66,6 +66,9 @@ getPipeline = (streak, callback) ->
     # Most recent pipeline is index 0
     callback(null, pipelines[0])
   ).catch((err) ->
+    console.log "Error in getPipeline"
+    console.log streak._c
+    console.log JSON.stringify err
     callback err
   )
 
@@ -126,6 +129,7 @@ module.exports = (robot) ->
     getPipeline streak, (err, pipeline) ->
       if err
         res.send "Error while getting pipeline: #{config 'streak.key'}"
+        res.send streak._c
         res.send JSON.stringify err
       else
         res.send JSON.stringify pipeline
