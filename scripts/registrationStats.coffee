@@ -27,10 +27,16 @@ formatSummary = (data) ->
   # Not considering N applicants
   maxMale = Math.round(100 * femAndOther / (data.demo.gender.F + data.demo.gender.O + data.demo.gender.M))
   nonMale = if minMale isnt maxMale then minMale + '-' + maxMale else minMale
+
+  total = (data.demo.year[key] for key of data.demo.year).reduce (t, s) -> t + s
+  grades = (Math.round(100 * data.demo.year[key] / total) for key of data.demo.year)
+  console.log grades
+
   """*=== Registration Stats ===*
   *Verified:* #{data.verified}
   *Submitted:* #{data.submitted} (_M: #{data.demo.gender.M} F: #{data.demo.gender.F} O: #{data.demo.gender.O} N: #{data.submitted - (data.demo.gender.M + data.demo.gender.F + data.demo.gender.O)}_)
-  _#{nonMale}% non-male_"""
+  _#{nonMale}% non-male_
+  _#{grades[3]}% Fr, #{grades[2]}% So, #{grades[1]}% Jr, #{grades[0]}% Sr_"""
 
 module.exports = (robot) ->
 
