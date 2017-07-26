@@ -30,7 +30,6 @@ formatSummary = (data) ->
 
   total = (data.demo.year[key] for key of data.demo.year).reduce (t, s) -> t + s
   grades = (Math.round(100 * data.demo.year[key] / total) for key of data.demo.year)
-  console.log grades
 
   """*=== Registration Stats ===*
   *Verified:* #{data.verified}
