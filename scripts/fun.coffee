@@ -58,7 +58,9 @@ module.exports = (robot) ->
   robot.hear /jason/i, (res) ->
     # make this less spammy
     if Math.random() < 0.2
-      res.send "but he's not course 6"
+      robot.emit 'slack.reaction',
+        message: res.message
+        name: 'upvote'
 
   robot.hear /michael/i, (res) ->
     # make this less spammy
