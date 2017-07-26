@@ -14,10 +14,10 @@
 # Author:
 #   katexyu, cnord
 
-util = require 'util'
+util = require "util"
 Spreadsheet = require "google-spreadsheet"
-timeago = require 'timeago'
-streakapi = require 'streakapi'
+timeago = require "timeago"
+streakapi = require "streakapi"
 
 findMatchingRow = (rows, companyName) ->
   for row in rows
@@ -33,17 +33,17 @@ LEVELS = ["Custom", "Platinum", "Gold", "Silver", "Bronze", "Startup", "NotSpons
 
 # 2017 keys and statuses from Streak
 STATUSES = {
-  '5001': 'To Email',
-  '5002': 'To Respond',
-  '5003': 'Initial email',
-  '5004': 'Talking',
-  '5005': 'Invoiced',
-  '5006': 'Paid',
-  '5007': 'Rejected',
-  '5008': 'Pinged',
+  "5001": "To Email",
+  "5002": "To Respond",
+  "5003": "Initial email",
+  "5004": "Talking",
+  "5005": "Invoiced",
+  "5006": "Paid",
+  "5007": "Rejected",
+  "5008": "Pinged",
 }
 
-creds = require '../hackmit-money-2015-credentials.json'
+creds = require "../hackmit-money-2015-credentials.json"
 
 # Emails from these addresses are not company contacts.
 EMAIL_FILTER = /^(?!.*(@mit\.edu|@hackmit\.org|@gmail\.com)).*/i
@@ -94,15 +94,15 @@ formatBox = (box) ->
   """*#{box.name}*
   Status: #{STATUSES[box.stageKey]}
   Point Person: #{box.assignedToSharingEntries[0].fullName}
-  Company Contact(s): #{filterContacts(box.emailAddresses).join(', ')}
+  Company Contact(s): #{filterContacts(box.emailAddresses).join(", ")}
   Last Contacted: #{date}
   Notes: #{if box.notes then box.notes else ""}"""
 
 module.exports = (robot) ->
-  config = require('hubot-conf')('money', robot)
+  config = require("hubot-conf")("money", robot)
 
   streak = () ->
-    streakKey = config 'streak.key'
+    streakKey = config "streak.key"
     str = new streakapi.Streak(streakKey)
     str
 
@@ -150,7 +150,7 @@ module.exports = (robot) ->
     res.send message
 
   printBoxes = (res, boxsubset) ->
-    print(res, (formatBox boxsubset[box] for box of boxsubset).join('\n') + "\n_Total: #{if boxsubset then Object.keys(boxsubset).length else 0}_")
+    print(res, (formatBox boxsubset[box] for box of boxsubset).join("\n") + "\n_Total: #{if boxsubset then Object.keys(boxsubset).length else 0}_")
 
   robot.respond /sponsor fetch$/i, (res) ->
     getBoxes (err, res) ->
@@ -166,7 +166,7 @@ module.exports = (robot) ->
     else
       STATUSES = stats
 
-  spreadsheetUrl = config 'spreadsheet.url'
+  spreadsheetUrl = config "spreadsheet.url"
   sheet = new Spreadsheet(spreadsheetUrl)
 
   # Get a link to the spreadsheet
@@ -174,7 +174,7 @@ module.exports = (robot) ->
     res.send "https://go.hackmit.org/sponsor"
 
   # Returns a list of companies with the given status
-  robot.respond new RegExp('sponsor (' + (v for own k, v of STATUSES).join('|') + ')$', 'i'), (res) ->
+  robot.respond new RegExp("sponsor (" + (v for own k, v of STATUSES).join("|") + ")$", "i"), (res) ->
     getBoxesOrCache res, (err, boxes) ->
       if err
         res.send "Error getting boxes: #{err}"
@@ -184,11 +184,11 @@ module.exports = (robot) ->
         for box in boxes.data
           if status.toLowerCase() == STATUSES[box.stageKey].toLowerCase()
             companies.push box.name
-        join = if companies.length < 15 then '\n' else ', '
+        join = if companies.length < 15 then "\n" else ", "
         print res, "#{companies.join(join)}\n_Total: #{companies.length}_"
 
   # Returns a list of companies with the given tier
-  robot.respond new RegExp('sponsor (' + LEVELS.join('|') + ')$', 'i'), (res) ->
+  robot.respond new RegExp("sponsor (" + LEVELS.join("|") + ")$", "i"), (res) ->
     getCompanyRows sheet, (err, rows) ->
       if err
         res.send "Error while getting company rows: #{err}"
@@ -198,7 +198,7 @@ module.exports = (robot) ->
         for row in rows
           if level.toLowerCase() == row[LEVEL_COL].toLowerCase().substring(1)
             companies.push(row[SPONSOR_NAME_COL])
-        res.send "*Total:* #{companies.length}\n#{companies.join('\n')}"
+        res.send "*Total:* #{companies.length}\n#{companies.join("\n")}"
 
   # Update sponsor tier
   robot.respond /sponsor level (.*) ([A-Za-z0-9]+)/i, (res) ->
