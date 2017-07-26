@@ -12,7 +12,7 @@
 #   hubot sponsor spreadsheet - get a link to the master sponsor spreadsheet
 #
 # Author:
-#   katexyu, cnord
+#   katexyu, cmnord
 
 util = require "util"
 Spreadsheet = require "google-spreadsheet"
