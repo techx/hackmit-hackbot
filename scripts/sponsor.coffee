@@ -92,11 +92,11 @@ formatBox = (box) ->
   catch err
     date = "Never :cry:"
   """*#{box.name}*
-  :question:: #{STATUSES[box.stageKey]}
-  :point_right:: #{box.assignedToSharingEntries[0].fullName}
-  :e-mail:: #{filterContacts(box.emailAddresses).join(", ")}
+  :question: #{STATUSES[box.stageKey]}
+  :point_right: #{box.assignedToSharingEntries[0].fullName}
+  :e-mail: #{filterContacts(box.emailAddresses).join(", ")}
   :alarm_clock: #{date}
-  :pencil:: #{if box.notes then box.notes else ""}"""
+  :pencil: #{if box.notes then box.notes else ""}"""
 
 module.exports = (robot) ->
   config = require("hubot-conf")("money", robot)
