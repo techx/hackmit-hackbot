@@ -36,7 +36,7 @@ formatSummary = (data) ->
   *Admitted:* #{data.admitted}
   *Confirmed:* #{data.confirmed}
   _#{nonMale}% non-male_, _#{mit}% MIT_
-  _#{blue}% blue, #{red}% red_"""
+  _#{blue}%_ :blue_heart: :heart: _#{red}%_"""
 
 module.exports = (robot) ->
 
