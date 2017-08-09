@@ -21,21 +21,22 @@ filter = (arr, func) ->
   filtered
 
 formatSummary = (data) ->
-  femAndOther = data.demo.gender.F + data.demo.gender.O
+  femAndOther = data.confirmedFemale + data.confirmedOther
   # If every N applicant was male
-  minMale = Math.round(100 * femAndOther / data.submitted)
+  minMale = Math.round(100 * femAndOther / data.confirmed)
   # Not considering N applicants
-  maxMale = Math.round(100 * femAndOther / (data.demo.gender.F + data.demo.gender.O + data.demo.gender.M))
+  maxMale = Math.round(100 * femAndOther / (femAndOther + data.confirmedMale))
   nonMale = if minMale isnt maxMale then minMale + '-' + maxMale else minMale
 
-  total = (data.demo.year[key] for key of data.demo.year).reduce (t, s) -> t + s
-  grades = (Math.round(100 * data.demo.year[key] / total) for key of data.demo.year)
+  mit = Math.round(100 * data.confirmedMit / data.confirmed)
+  red = Math.round(100 * data.teamRed / data.confirmed)
+  blue = Math.round(100 * data.teamBlue / data.confirmed)
 
   """*=== Registration Stats ===*
-  *Verified:* #{data.verified}
-  *Submitted:* #{data.submitted} (_M: #{data.demo.gender.M} F: #{data.demo.gender.F} O: #{data.demo.gender.O} N: #{data.submitted - (data.demo.gender.M + data.demo.gender.F + data.demo.gender.O)}_)
-  _#{nonMale}% non-male_
-  _#{grades[3]}% Fr, #{grades[2]}% So, #{grades[1]}% Jr, #{grades[0]}% Sr_"""
+  *Admitted:* #{data.admitted}
+  *Confirmed:* #{data.confirmed}
+  _#{nonMale}% non-male_, _#{mit}% MIT_
+  _#{blue}% blue, #{red}% red_"""
 
 module.exports = (robot) ->
 
