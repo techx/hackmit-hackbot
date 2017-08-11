@@ -33,7 +33,7 @@ formatSummary = (data) ->
   blue = Math.round(100 * data.teamBlue / data.confirmed)
 
   """*=== Registration Stats ===*
-  *Confirmed:* #{data.confirmed} _#{Math.round(100 * data.confirmed / data.admitted)}%_
+  *Confirmed:* #{data.confirmed} (_#{Math.round(100 * data.confirmed / data.admitted)}%_)
   _#{nonMale}% non-male_, _#{mit}% MIT_
   _#{blue}%_ :blue_heart: :heart: _#{red}%_"""
 
