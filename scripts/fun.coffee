@@ -75,6 +75,10 @@ module.exports = (robot) ->
     if res.message.text.length > 100 && Math.random() < 0.001
       res.send "whoa whoa guys are we sure that's a good idea?"
 
+  robot.hear /work/i, (res) ->
+    if res.message.text.length > 50 && Math.random() < 0.1
+      res.send "It's not work it's Datto"
+
   dootDoot = """```
 thank mr skeltal
 
