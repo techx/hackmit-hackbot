@@ -61,6 +61,9 @@ module.exports = (robot) ->
       robot.emit 'slack.reaction',
         message: res.message
         name: 'upvote'
+      robot.emit 'slack.reaction',
+        message: res.message
+        name: 'no_wifi'
 
   robot.hear /michael/i, (res) ->
     # make this less spammy
