@@ -57,11 +57,13 @@ module.exports = (robot) ->
 
   robot.hear /jason/i, (res) ->
     # make this less spammy
-    if Math.random() < 0.2
-      robot.emit 'slack.reaction',
-        message: res.message
-        name: 'upvote'
-      robot.emit 'slack.reaction',
+    if Math.random() < 0.4
+      if Math.random() < 0.5
+        robot.emit 'slack.reaction',
+          message: res.message
+          name: 'upvote'
+      else
+        robot.emit 'slack.reaction',
         message: res.message
         name: 'no_wifi'
 
