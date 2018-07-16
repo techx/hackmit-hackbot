@@ -28,16 +28,11 @@ formatSummary = (data) ->
   maxMale = Math.round(100 * femAndOther / (femAndOther + data.confirmedMale))
   nonMale = if minMale isnt maxMale then minMale + '-' + maxMale else minMale
 
-  mit = Math.round(100 * data.confirmedMit / data.confirmed)
-  red = Math.round(100 * data.teamRed / data.confirmed)
-  blue = Math.round(100 * data.teamBlue / data.confirmed)
-
   """*=== Registration Stats ===*
   *Verified*: #{data.verified}
   *Submitted:* #{data.submitted} (_M: #{data.demo.gender.M} F: #{data.demo.gender.F} O: #{data.demo.gender.O} N: #{data.submitted - (data.demo.gender.M + data.demo.gender.F + data.demo.gender.O)}_)
   *Confirmed:* #{data.confirmed} (_#{Math.round(100 * data.confirmed / data.admitted)}%_)
   _#{nonMale}% non-male_, _#{mit}% MIT_
-  _#{blue}%_ :blue_heart: :heart: _#{red}%_"""
 
 module.exports = (robot) ->
 
