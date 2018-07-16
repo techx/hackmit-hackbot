@@ -27,6 +27,8 @@ formatSummary = (data) ->
   # Not considering N applicants
   maxMale = Math.round(100 * femAndOther / (femAndOther + data.confirmedMale))
   nonMale = if minMale isnt maxMale then minMale + '-' + maxMale else minMale
+    
+  mit = Math.round(100 * data.confirmedMit / data.confirmed)
 
   """*=== Registration Stats ===*
   *Verified*: #{data.verified}
