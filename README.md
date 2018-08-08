@@ -4,6 +4,8 @@ See `.env.sample` for a list of environment variables that should be set.
 
 # Running hackbot locally
 
+First, run `npm install` to install all the required dependencies.
+
 Test hackbot by running `npm run dev`. However, some plugins
 will not behave as expected unless you set the 
 [environment variables](#configuration).
@@ -43,5 +45,8 @@ As an example, if I want the property `example.hello = "hello"`, I
 To minimize work, you can move the scripts you don't need to use
 into `disabled_scripts/`, so you only need to copy configuration
 values for the scripts you're changing.
+
+Remember to `source .env` and restart hackbot with `npm run dev`
+after you make a change!
 
 [hubot-conf]: https://github.com/anishathalye/hubot-conf
