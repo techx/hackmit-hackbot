@@ -5,7 +5,7 @@
 #   hubot money / hubot $ - get how much money we have collected
 #
 # Author:
-#   katexyu
+#   katexyu, cmnord
 
 util = require('util')
 Spreadsheet = require("google-spreadsheet")
@@ -51,7 +51,8 @@ module.exports = (robot) ->
           if err
             callback makeError("Error occurred while getting sheet info", err)
           else
-            paymentStatusSheet = info.worksheets[1]
+            paymentSheetName = config 'spreadsheet.tabname'
+            paymentStatusSheet = (sheet for sheet in info.worksheets when sheet.title == paymentSheetName)[0]
             options =
               range: "R#{moneyRow}C#{receivedCol}:R#{moneyRow}C#{outstandingCol+1}"
             paymentStatusSheet.getCells options, (err, cells) ->
