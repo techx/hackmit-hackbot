@@ -49,4 +49,9 @@ values for the scripts you're changing.
 Remember to `source .env` and restart hackbot with `npm run dev`
 after you make a change!
 
+# Examples
+
+You can see some more example scripts [here][examples].
+
 [hubot-conf]: https://github.com/anishathalye/hubot-conf
+[examples]: https://github.com/hubotio/hubot/blob/master/docs/scripting.md
