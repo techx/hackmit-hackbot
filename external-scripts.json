@@ -8,6 +8,5 @@
   "hubot-redis-brain",
   "hubot-redisred",
   "hubot-shortcut",
-  "hubot-raven",
   "hubot-slack-reaction"
 ]
