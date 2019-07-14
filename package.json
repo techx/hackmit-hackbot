@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "author": "Anish Athalye <me@anishathalye.com>",
-  "description": "HackMIT's robot slave",
+  "description": "HackMIT's personal assistant",
   "scripts": {
     "start-redis": "redis-server > /dev/null & echo $! > redis.pid",
     "stop-redis": "kill -TERM $(cat redis.pid) && rm redis.pid",
