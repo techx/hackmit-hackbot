@@ -21,7 +21,6 @@ filter = (arr, func) ->
   filtered
 
 formatSummary = (data) ->
-  console.log(data)
 
   femAndOther = data.confirmedFemale + data.confirmedOther
   # If every N applicant was male
@@ -32,10 +31,10 @@ formatSummary = (data) ->
 
   numSaved = data.demo.gender.M + data.demo.gender.F + data.demo.gender.O + data.demo.gender.N
     
-  percentM_min = Math.round(100 * (data.demo.gender.M ) / numSaved)
-  percentM_max = Math.round(100 * (data.demo.gender.M + data.demo.gender.N) / numSaved)
-  percentF_min = Math.round(100 * data.demo.gender.F / numSaved)
-  percentF_max = Math.round(100 * (data.demo.gender.F + data.demo.gender.N) / numSaved)
+  minPercentM = Math.round(100 * (data.demo.gender.M ) / numSaved)
+  maxPercentM = Math.round(100 * (data.demo.gender.M + data.demo.gender.N) / numSaved)
+  minPercentF = Math.round(100 * data.demo.gender.F / numSaved)
+  maxPercentF = Math.round(100 * (data.demo.gender.F + data.demo.gender.N) / numSaved)
   percentO = Math.round(100 * data.demo.gender.O / numSaved)
   percentN = Math.round(100 * data.demo.gender.N / numSaved)
 
@@ -44,9 +43,10 @@ formatSummary = (data) ->
 
   """*=== Registration Stats ===*
   *Verified*: #{data.verified}
-  *Saved:* #{numSaved} (_M: #{percentM_min}-#{percentM_max}% F: #{percentF_min}-#{percentF_max}% O: #{percentO}% N: #{percentN}%_)
-  *Submitted:* #{data.submitted}
+  *Saved:* #{numSaved} (_M: #{minPercentM}-#{maxPercentM}% F: #{minPercentF}-#{maxPercentF}% O: #{percentO}% N: #{percentN}%_)
+  *Submitted:* #{data.submitted} (_#{Math.round(100*data.submitted / numSaved)}%_)
   *Confirmed:* #{data.confirmed} 
+  """
 
 #percentage breakdown for confirm, add back later
 #(_#{Math.round(100 * data.confirmed / data.admitted)}%_) #{nonMale}% non-male_ 
