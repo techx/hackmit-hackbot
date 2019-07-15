@@ -21,20 +21,35 @@ filter = (arr, func) ->
   filtered
 
 formatSummary = (data) ->
+
   femAndOther = data.confirmedFemale + data.confirmedOther
   # If every N applicant was male
   minMale = Math.round(100 * femAndOther / data.confirmed)
   # Not considering N applicants
   maxMale = Math.round(100 * femAndOther / (femAndOther + data.confirmedMale))
   nonMale = if minMale isnt maxMale then minMale + '-' + maxMale else minMale
+
+  numSaved = data.demo.gender.M + data.demo.gender.F + data.demo.gender.O + data.demo.gender.N
     
-  mit = Math.round(100 * data.confirmedMit / data.confirmed)
+  minPercentM = Math.round(100 * (data.demo.gender.M ) / numSaved)
+  maxPercentM = Math.round(100 * (data.demo.gender.M + data.demo.gender.N) / numSaved)
+  minPercentF = Math.round(100 * data.demo.gender.F / numSaved)
+  maxPercentF = Math.round(100 * (data.demo.gender.F + data.demo.gender.N) / numSaved)
+  percentO = Math.round(100 * data.demo.gender.O / numSaved)
+  percentN = Math.round(100 * data.demo.gender.N / numSaved)
+
 
   """*=== Registration Stats ===*
   *Verified*: #{data.verified}
-  *Submitted:* #{data.submitted} (_M: #{data.demo.gender.M} F: #{data.demo.gender.F} O: #{data.demo.gender.O} N: #{data.submitted - (data.demo.gender.M + data.demo.gender.F + data.demo.gender.O)}_)
-  *Confirmed:* #{data.confirmed} (_#{Math.round(100 * data.confirmed / data.admitted)}%_)
-  _#{nonMale}% non-male_, _#{mit}% MIT_"""
+  *Saved:* #{numSaved} (_M: #{minPercentM}-#{maxPercentM}% F: #{minPercentF}-#{maxPercentF}% O: #{percentO}% N: #{percentN}%_)
+  *Submitted:* #{data.submitted} (_#{Math.round(100*data.submitted / numSaved)}%_)
+  *Confirmed:* #{data.confirmed} 
+  """
+
+#percentage breakdown for confirm, add back later
+#(_#{Math.round(100 * data.confirmed / data.admitted)}%_) #{nonMale}% non-male_ 
+#  mit = Math.round(100 * data.confirmedMit / data.confirmed)
+
 
 module.exports = (robot) ->
 
