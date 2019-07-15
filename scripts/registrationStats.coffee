@@ -39,8 +39,6 @@ formatSummary = (data) ->
   percentN = Math.round(100 * data.demo.gender.N / numSaved)
 
 
-  mit = Math.round(100 * data.confirmedMit / data.confirmed)
-
   """*=== Registration Stats ===*
   *Verified*: #{data.verified}
   *Saved:* #{numSaved} (_M: #{minPercentM}-#{maxPercentM}% F: #{minPercentF}-#{maxPercentF}% O: #{percentO}% N: #{percentN}%_)
@@ -50,6 +48,7 @@ formatSummary = (data) ->
 
 #percentage breakdown for confirm, add back later
 #(_#{Math.round(100 * data.confirmed / data.admitted)}%_) #{nonMale}% non-male_ 
+#  mit = Math.round(100 * data.confirmedMit / data.confirmed)
 
 
 module.exports = (robot) ->
