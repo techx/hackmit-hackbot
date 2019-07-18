@@ -30,7 +30,7 @@ formatSummary = (data) ->
   nonMale = if minMale isnt maxMale then minMale + '-' + maxMale else minMale
 
   numSaved = data.demo.gender.M + data.demo.gender.F + data.demo.gender.O + data.demo.gender.N
-    
+
   minPercentM = Math.round(100 * (data.demo.gender.M ) / numSaved)
   maxPercentM = Math.round(100 * (data.demo.gender.M + data.demo.gender.N) / numSaved)
   minPercentF = Math.round(100 * data.demo.gender.F / numSaved)
@@ -43,11 +43,11 @@ formatSummary = (data) ->
   *Verified*: #{data.verified}
   *Saved:* #{numSaved} (_M: #{minPercentM}-#{maxPercentM}% F: #{minPercentF}-#{maxPercentF}% O: #{percentO}% N: #{percentN}%_)
   *Submitted:* #{data.submitted} (_#{Math.round(100*data.submitted / numSaved)}%_)
-  *Confirmed:* #{data.confirmed} 
+  *Confirmed:* #{data.confirmed} (_#{Math.round(100 * data.confirmed / data.admitted)}%_)
   """
 
 #percentage breakdown for confirm, add back later
-#(_#{Math.round(100 * data.confirmed / data.admitted)}%_) #{nonMale}% non-male_ 
+#(_#{Math.round(100 * data.confirmed / data.admitted)}%_) #{nonMale}% non-male_
 #  mit = Math.round(100 * data.confirmedMit / data.confirmed)
 
 
