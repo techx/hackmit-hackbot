@@ -116,7 +116,8 @@ class ISawYou {
           return a.username > b.username ? 1 : -1;
         }
         return b.points - a.points;
-      }).slice(0, k);
+      })
+      .slice(0, k);
   }
 
   // returns true iff the message is a picture message
@@ -141,12 +142,8 @@ module.exports = (robot) => {
     // only listen to messages in the #i-saw-you channel
     if (robotConfig('room') === msg.message.room) {
       const username = msg.message.user.name;
-      const matchesInc = msg.message.text.match(
-        /^@([-\w.\\^|{}`[\]]+)\+\+$/,
-      );
-      const matchesDec = msg.message.text.match(
-        /^@([-\w.\\^|{}`[\]]+)--$/,
-      );
+      const matchesInc = msg.message.text.match(/^@([-\w.\\^|{}`[\]]+)\+\+$/);
+      const matchesDec = msg.message.text.match(/^@([-\w.\\^|{}`[\]]+)--$/);
       if (matchesInc && matchesInc.length === 2) {
         iSawYou.increment(matchesInc[1]);
         reportCount(msg, matchesInc[1]);
@@ -163,49 +160,37 @@ module.exports = (robot) => {
   });
 
   // respond to i-saw-you increments
-  robot.respond(
-    /isawyou @?([-\w.\\^|{}`[\]]+)\+\+$/,
-    (msg) => {
-      const username = msg.match[1];
-      iSawYou.increment(username);
-      reportCount(msg, username);
-    },
-  );
+  robot.respond(/isawyou @?([-\w.\\^|{}`[\]]+)\+\+$/, (msg) => {
+    const username = msg.match[1];
+    iSawYou.increment(username);
+    reportCount(msg, username);
+  });
 
   // respond to i-saw-you leaderboard requests
-  robot.respond(
-    /isawyou leaderboard/,
-    (msg) => {
-      const k = parseInt(robotConfig('k'), 10);
-      const users = iSawYou.getTopK(k);
-      const prefix = '~ i-saw-you leaderboard ~\n';
-      const message = prefix + users
-        .reduce((a, user) => `${a}*${user.username}*: ${user.points} points\n`, '');
-      msg.send(message);
-    },
-  );
+  robot.respond(/isawyou leaderboard/, (msg) => {
+    const k = parseInt(robotConfig('k'), 10);
+    const users = iSawYou.getTopK(k);
+    const prefix = '~ i-saw-you leaderboard ~\n';
+    const message = prefix
+      + users.reduce((a, user) => `${a}*${user.username}*: ${user.points} points\n`, '');
+    msg.send(message);
+  });
 
   // respond to i-saw-you get requests
-  robot.respond(
-    /isawyou get @?([-\w.\\^|{}`[\]]+)$/,
-    (msg) => {
-      const username = msg.match[1];
-      reportCount(msg, username);
-    },
-  );
+  robot.respond(/isawyou get @?([-\w.\\^|{}`[\]]+)$/, (msg) => {
+    const username = msg.match[1];
+    reportCount(msg, username);
+  });
 
   // respond to point set requests
-  robot.respond(
-    /isawyou set @?([-\w.\\^|{}`[\]]+) (\d+)/,
-    (msg) => {
-      if (msg.match.length < 3) {
-        msg.send('Usage: hackbot isawyou set <user> <number>');
-      } else {
-        const username = msg.match[1];
-        const newPoints = parseInt(msg.match[2], 10);
-        iSawYou.set(username, newPoints);
-        msg.send(`*${username}* now has ${newPoints} i-saw-you points.`);
-      }
-    },
-  );
+  robot.respond(/isawyou set @?([-\w.\\^|{}`[\]]+) (\d+)/, (msg) => {
+    if (msg.match.length < 3) {
+      msg.send('Usage: hackbot isawyou set <user> <number>');
+    } else {
+      const username = msg.match[1];
+      const newPoints = parseInt(msg.match[2], 10);
+      iSawYou.set(username, newPoints);
+      msg.send(`*${username}* now has ${newPoints} i-saw-you points.`);
+    }
+  });
 };
