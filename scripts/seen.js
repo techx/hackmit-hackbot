@@ -20,23 +20,23 @@
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
 const config = { use_timeago: process.env.HUBOT_SEEN_TIMEAGO };
+const timeago = require('timeago');
 
-const clean = thing => (thing || "").toLowerCase().trim();
+const clean = (thing) => (thing || '').toLowerCase().trim();
 
-const is_pm = function(msg) {
+const isPM = (msg) => {
   try {
     const { pm } = msg.message.user;
     if (msg.message.user.room === msg.message.user.name) {
       return true;
-    } else {
-      return pm;
     }
+    return pm;
   } catch (error) {
     return false;
   }
 };
 
-const ircname = function(msg) {
+const ircname = (msg) => {
   try {
     return msg.message.user.name;
   } catch (error) {
@@ -44,7 +44,7 @@ const ircname = function(msg) {
   }
 };
 
-const ircchan = function(msg) {
+const ircchan = (msg) => {
   try {
     return msg.message.user.room;
   } catch (error) {
@@ -58,7 +58,7 @@ class Seen {
     this.robot = robot;
     this.cache = {};
 
-    this.robot.brain.on("loaded", this.load);
+    this.robot.brain.on('loaded', this.load);
     if (this.robot.brain.data.users.length) {
       this.load();
     }
@@ -66,74 +66,62 @@ class Seen {
 
   load() {
     if (this.robot.brain.data.seen) {
-      return (this.cache = this.robot.brain.data.seen);
-    } else {
-      return (this.robot.brain.data.seen = this.cache);
+      this.cache = this.robot.brain.data.seen;
     }
+    this.robot.brain.data.seen = this.cache;
   }
 
   add(user, channel) {
     this.robot.logger.debug(`seen.add ${clean(user)} on ${channel}`);
-    return (this.cache[clean(user)] = {
+    this.cache[clean(user)] = {
       chan: channel,
-      date: new Date() - 0
-    });
+      date: new Date() - 0,
+    };
   }
 
   last(user) {
-    let left;
-    return (left = this.cache[clean(user)]) != null ? left : {};
+    const left = this.cache[clean(user)];
+    return left != null ? left : {};
   }
 
   usersSince(hoursAgo) {
     const HOUR_MILLISECONDS = 60 * 60 * 1000;
     const seenSinceTime = new Date(Date.now() - hoursAgo * HOUR_MILLISECONDS);
-    const users = (() => {
-      const result = [];
-      for (let nick in this.cache) {
-        const data = this.cache[nick];
-        if (data.date > seenSinceTime) {
-          result.push(nick);
-        }
-      }
-      return result;
-    })();
-    return users;
+    return Object.keys(this.cache).filter((nick) => {
+      const data = this.cache[nick];
+      return data.date > seenSinceTime;
+    });
   }
 }
 
-module.exports = function(robot) {
+module.exports = (robot) => {
   const seen = new Seen(robot);
 
   // Keep track of last msg heard
-  robot.hear(/.*/, function(msg) {
-    if (!is_pm(msg)) {
-      return seen.add(ircname(msg), ircchan(msg));
+  robot.hear(/.*/, (msg) => {
+    if (!isPM(msg)) {
+      seen.add(ircname(msg), ircchan(msg));
     }
   });
 
-  return robot.respond(/seen @?([-\w.\\^|{}`\[\]]+):? ?(.*)/, function(msg) {
-    if (msg.match[1] === "in" && msg.match[2] === "last 24h") {
+  return robot.respond(/seen @?([-\w.\\^|{}`[\]]+):? ?(.*)/, (msg) => {
+    if (msg.match[1] === 'in' && msg.match[2] === 'last 24h') {
       const users = seen.usersSince(24);
-      return msg.send(`Active in ${msg.match[2]}: ${users.join(", ")}`);
-    } else {
-      robot.logger.debug(`seen check ${clean(msg.match[1])}`);
-      const nick = msg.match[1];
-      const last = seen.last(nick);
-      if (last.date) {
-        const date_string = (() => {
-          if (config.use_timeago != null) {
-            const timeago = require("timeago");
-            return timeago(new Date(last.date));
-          } else {
-            return `at ${new Date(last.date)}`;
-          }
-        })();
-
-        return msg.send(`${nick} was last seen in ${last.chan} ${date_string}`);
-      } else {
-        return msg.send(`I haven't seen ${nick} around lately`);
-      }
+      return msg.send(`Active in ${msg.match[2]}: ${users.join(', ')}`);
     }
+    robot.logger.debug(`seen check ${clean(msg.match[1])}`);
+    const nick = msg.match[1];
+    const last = seen.last(nick);
+    if (last.date) {
+      const dateString = (() => {
+        if (config.use_timeago != null) {
+          return timeago(new Date(last.date));
+        }
+        return `at ${new Date(last.date)}`;
+      })();
+
+      return msg.send(`${nick} was last seen in ${last.chan} ${dateString}`);
+    }
+    return msg.send(`I haven't seen ${nick} around lately`);
   });
 };
