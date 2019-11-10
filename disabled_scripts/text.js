@@ -19,87 +19,80 @@
  * DS207: Consider shorter variations of null checks
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
-const BRAIN_LOCATION = "text.numbers";
+const config = require('hubot-conf');
 
-module.exports = function(robot) {
-  const config = require("hubot-conf")("text", robot);
+const BRAIN_LOCATION = 'text.numbers';
 
-  const addNumber = function(number, name) {
+module.exports = (robot) => {
+  const conf = config('text', robot);
+
+  const addNumber = (number, name) => {
     const mapping = robot.brain.get(BRAIN_LOCATION) || {};
     mapping[number] = name;
     return robot.brain.set(BRAIN_LOCATION, mapping);
   };
 
-  const removeNumber = function(number) {
+  const removeNumber = (number) => {
     const mapping = robot.brain.get(BRAIN_LOCATION) || {};
-    delete mapping["number"];
+    delete mapping[number];
     return robot.brain.set(BRAIN_LOCATION, mapping);
   };
 
-  const getName = function(number) {
+  const getName = (number) => {
     const mapping = robot.brain.get(BRAIN_LOCATION) || {};
     return mapping[number];
   };
 
-  const getNumber = function(name) {
+  const getNumber = (name) => {
     const mapping = robot.brain.get(BRAIN_LOCATION) || {};
-    for (let number in mapping) {
-      const value = mapping[number];
-      if (value === name) {
-        return number;
-      }
-    }
-    return undefined;
+    return Object.values(mapping).find((value) => value === name);
   };
 
-  robot.router.post("/text/receive", function(req, res) {
-    res.header("Content-Type", "text/xml").send("<Response></Response>");
+  robot.router.post('/text/receive', (req, res) => {
+    res.header('Content-Type', 'text/xml').send('<Response></Response>');
     let number = req.body.From;
     let message = req.body.Body;
-    let decorator = "Twilio";
-    if (req.body.AccountSid === config("account")) {
+    let decorator = 'Twilio';
+    if (req.body.AccountSid === conf('account')) {
       const matches = message.match(/(\+?[0-9]+) - (.+)$/);
       if (matches != null) {
-        number = matches[1];
-        message = matches[2];
-        decorator = "Google Voice";
+        [, number, message] = matches;
+        decorator = 'Google Voice';
       }
       const name = getName(number) ? getName(number) : number;
       return robot.messageRoom(
-        config("channel"),
-        `[${decorator}] Text from ${name}: ${message}`
+        conf('channel'),
+        `[${decorator}] Text from ${name}: ${message}`,
       );
     }
   });
 
-  robot.respond(/text add (\+?[0-9]+) (.+)$/i, function(res) {
+  robot.respond(/text add (\+?[0-9]+) (.+)$/i, (res) => {
     const number = res.match[1];
     const name = res.match[2];
     addNumber(number, name);
     return res.send(`Added: \`${number}\` for \`${name}\``);
   });
 
-  robot.respond(/text numberof (.+)$/i, function(res) {
+  robot.respond(/text numberof (.+)$/i, (res) => {
     const name = res.match[1];
     const number = getNumber(name);
     if (number) {
       return res.send(`\`${name}\` is \`${number}\``);
-    } else {
-      return res.send(`Could not find number for \`${name}\``);
     }
+    return res.send(`Could not find number for \`${name}\``);
   });
 
-  robot.respond(/text whois (\+?[0-9]+)$/i, function(res) {
+  robot.respond(/text whois (\+?[0-9]+)$/i, (res) => {
     const number = res.match[1];
     const name = getName(number);
     if (name) {
       return res.send(`\`${number}\` is \`${name}\``);
-    } else {
-      return res.send(`Could not find name for \`${number}\``);
     }
+    return res.send(`Could not find name for \`${number}\``);
   });
 
-  return robot.respond(/text remove (\+?[0-9]+)$/i, function(res) {
+  return robot.respond(/text remove (\+?[0-9]+)$/i, (res) => {
     const number = res.match[1];
     removeNumber(number);
     return res.send(`Removed: \`${number}\``);
