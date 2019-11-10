@@ -10,13 +10,7 @@
 //
 // Author:
 //   Detry322
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
+
 const config = require('hubot-conf');
 const timeago = require('timeago');
 
@@ -61,7 +55,7 @@ module.exports = (robot) => {
       if (!err && httpResponse.statusCode === 200) {
         try {
           const data = JSON.parse(body);
-          if (stats.data === null) {
+          if (!stats.data) {
             try {
               robot.adapter.topic(
                 { room: conf('stats.room', '#botspam') },
@@ -74,7 +68,7 @@ module.exports = (robot) => {
           }
           stats.data = data;
           stats.time = new Date(data.lastUpdated);
-          if (callback != null && res != null) {
+          if (callback && res) {
             callback(res);
           }
         } catch (error) {
@@ -87,7 +81,7 @@ module.exports = (robot) => {
   setInterval(getStats, 3 * 60 * 1000);
 
   const getStatsOrCache = (res, callback) => {
-    if (stats.data != null) {
+    if (stats.data) {
       return callback(res);
     }
     return getStats(res, callback);
@@ -97,7 +91,7 @@ module.exports = (robot) => {
     const delta = timeago(stats.time);
     let message = `_Up to date as of ${delta}._\n`;
     message += text;
-    return res.send(message);
+    res.send(message);
   };
 
   const printSummary = (res) => print(res, formatSummary(stats.data));
@@ -106,5 +100,5 @@ module.exports = (robot) => {
 
   robot.respond(/reg stats$/i, (res) => getStatsOrCache(res, printSummary));
 
-  return robot.respond(/reg sum(mary)?$/i, (res) => getStatsOrCache(res, printSummary));
+  robot.respond(/reg sum(mary)?$/i, (res) => getStatsOrCache(res, printSummary));
 };
