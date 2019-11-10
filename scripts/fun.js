@@ -5,23 +5,6 @@
 //   anishathalye
 
 module.exports = (robot) => {
-  robot.hear(/\s?#dev\b/, (res) => res.send('Did you mean #anish-talks-into-void?'));
-
-  const fireballResponses = [
-    'Under your couch',
-    'In the middle of the Pacific ocean',
-    'In Italy',
-    'On the BART',
-    "In Kimberli's supervisor's office",
-    'Only Google knows...',
-    'In Tel Aviv',
-    'Ishaan has it',
-    'I think Kimberli spilled it on her laptop',
-    'Here: go/fireball',
-  ];
-
-  robot.hear(/where.*fireball/i, (res) => res.send(res.random(fireballResponses)));
-
   const react = (emoji, res) => {
     if (robot.adapterName === 'slack') {
       return robot.emit('slack.reaction', {
@@ -129,38 +112,6 @@ thank mr skeltal
 
   robot.hear(/(^|\b)a+y+ l[mfao]+($|\b)/i, (res) => res.send(':alien: ayy lmao :alien:'));
 
-  const troll = [
-    '*Stef*: im in that class too',
-    '*Stef*: omg me too',
-    '*Stef*: ????? :chicken: :chicken: :chicken:',
-    '*Stef*: I failed',
-    '*Stef*: :pineapple: :pineapple: :pineapple:',
-    '*Stef*: o rite jk I have to do 7.012 pset',
-    '*Stef*: totally agree!!',
-    "*Stef*: it's cuz I just add dropped",
-    '*Stef*: I can prove it rigorously',
-    "*Stef*: wtf I'm in this group",
-    '*Stef*: I luv genetics',
-    "*Stef*: wtf that's what I was gonna say",
-  ];
-
-  robot.hear(/stef.*troll/i, (res) => res.send(res.random(troll)));
-
-  const moreTroll = [
-    '*Logan*: allllllllll right',
-    '*Logan*: look who decided to show up',
-    '*Logan*: big bois',
-    "*Logan*: that's bananas",
-    "*Logan*: it's lit",
-    '*Logan*: not like this',
-    "*Logan*: that's fucked",
-    '*Logan*: eecs eecs eecs eecs',
-    '*Logan*: you dog',
-    "*Logan*: that's pretty soft",
-  ];
-
-  robot.hear(/logan.*troll/i, (res) => res.send(res.random(moreTroll)));
-
   const pusheens = [
     'http://i.imgur.com/ozA8GSu.png',
     'http://i.imgur.com/ZKQc2Zr.png',
@@ -186,20 +137,6 @@ thank mr skeltal
 
   robot.hear(/pusheen/i, (res) => res.send(res.random(pusheens)));
 
-  robot.hear(/kim.*mom/i, (res) => res.send('https://answers.yahoo.com/question/index?qid=20100404125550AARFOJe'));
-
-  robot.hear(/stef/i, (res) => {
-    if (Math.random() < 0.01) {
-      res.send(res.random(troll));
-    }
-  });
-
-  robot.hear(/logan/i, (res) => {
-    if (Math.random() < 0.01) {
-      res.send(res.random(moreTroll));
-    }
-  });
-
   robot.hear(/\btfti\b/, (res) => {
     if (Math.random() < 0.2) {
       res.send('tfti');
@@ -212,11 +149,6 @@ thank mr skeltal
     }
   });
 
-  robot.respond(/correct (.*)/, (res) => {
-    const msg = res.match[1];
-    res.send(msg.replace(/[aeiou]/gi, ''));
-  });
-
   const selfDestructSequence = [
     'Initiating HackMIT self-destruct sequence...',
     '10: Leaking sponsorship info...',
@@ -225,7 +157,7 @@ thank mr skeltal
     '7',
     '6: Destroying all AWS instances...',
     '5: ',
-    '4: Petting Oscar...',
+    '4: Dropping reg DB...',
     '3',
     '2',
     "1: You've met with a terrible fate, haven't you?",
