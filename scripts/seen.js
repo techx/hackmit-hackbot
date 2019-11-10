@@ -11,14 +11,6 @@
 // Author:
 //   wiredfool, patcon@gittip
 
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * DS104: Avoid inline assignments
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
 const config = { use_timeago: process.env.HUBOT_SEEN_TIMEAGO };
 const timeago = require('timeago');
 
@@ -81,7 +73,7 @@ class Seen {
 
   last(user) {
     const left = this.cache[clean(user)];
-    return left != null ? left : {};
+    return left || {};
   }
 
   usersSince(hoursAgo) {
@@ -104,7 +96,7 @@ module.exports = (robot) => {
     }
   });
 
-  return robot.respond(/seen @?([-\w.\\^|{}`[\]]+):? ?(.*)/, (msg) => {
+  robot.respond(/seen @?([-\w.\\^|{}`[\]]+):? ?(.*)/, (msg) => {
     if (msg.match[1] === 'in' && msg.match[2] === 'last 24h') {
       const users = seen.usersSince(24);
       return msg.send(`Active in ${msg.match[2]}: ${users.join(', ')}`);
@@ -113,12 +105,8 @@ module.exports = (robot) => {
     const nick = msg.match[1];
     const last = seen.last(nick);
     if (last.date) {
-      const dateString = (() => {
-        if (config.use_timeago != null) {
-          return timeago(new Date(last.date));
-        }
-        return `at ${new Date(last.date)}`;
-      })();
+      const lastDate = new Date(last.date);
+      const dateString = config.use_timeago ? timeago(lastDate) : `at ${lastDate}`;
 
       return msg.send(`${nick} was last seen in ${last.chan} ${dateString}`);
     }
