@@ -3,12 +3,6 @@
 //
 // Author:
 //   anishathalye
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
-
 
 module.exports = (robot) => {
   robot.hear(/\s?#dev\b/, (res) => res.send('Did you mean #anish-talks-into-void?'));
@@ -68,7 +62,7 @@ module.exports = (robot) => {
         setTimeout(sendFrom, lennySnakeTick, i + 1);
       }
     };
-    return sendFrom(0);
+    sendFrom(0);
   });
 
   robot.hear(/jason/i, (res) => {
@@ -220,7 +214,7 @@ thank mr skeltal
 
   robot.respond(/correct (.*)/, (res) => {
     const msg = res.match[1];
-    return res.send(msg.replace(/[aeiou]/gi, ''));
+    res.send(msg.replace(/[aeiou]/gi, ''));
   });
 
   const selfDestructSequence = [
@@ -240,13 +234,13 @@ thank mr skeltal
 
   const selfDestructTick = 1000; // milliseconds
 
-  return robot.respond(/selfdestruct/i, (res) => {
+  robot.respond(/selfdestruct/i, (res) => {
     const sendFrom = (i) => {
       if (i < selfDestructSequence.length) {
         res.send(selfDestructSequence[i]);
         setTimeout(sendFrom, selfDestructTick, i + 1);
       }
     };
-    return sendFrom(0);
+    sendFrom(0);
   });
 };
