@@ -3,12 +3,7 @@
 //
 // Author:
 //   anishathalye
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * DS203: Remove `|| {}` from converted for-own loops
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
+
 let rangeFn;
 
 module.exports = (robot) => {
@@ -25,7 +20,7 @@ module.exports = (robot) => {
     robot.logger.info('Adapter is not slack, will not terminate on client close');
   }
 
-  return robot.respond(/echo2 ((.*\s*)+)/i, (res) => res.send(res.match[1]));
+  robot.respond(/echo2 ((.*\s*)+)/i, (res) => res.send(res.match[1]));
 };
 
 rangeFn = (left, right, inclusive) => {
