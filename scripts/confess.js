@@ -5,189 +5,186 @@
 //   HUBOT_CONFESS_ROOM
 //
 // Commands:
-//   hubot confess <confession> - submit anonymous confession (can be sent in a private message)
-//   hubot c0nf3ss <confession> - submit super anonymous confession (can be sent in a private message)
-//   hubot anonymous <confession> - submit confession that will be automatically anonymized (can be sent in a private message)
+//   hubot confess <confession> - submit anonymous confession (can be sent in private msg)
+//   hubot c0nf3ss <confession> - submit super anonymous confession (can be sent in private msg)
+//   hubot anonymous <confession> - submit auto-anonymized confession (can be sent in private msg)
 //
 // Author:
 //   anishathalye
 
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
-const gtranslate = require("node-google-translate-skidz");
+const config = require('hubot-conf');
+const gtranslate = require('node-google-translate-skidz');
 
-module.exports = function(robot) {
-  const config = require("hubot-conf")("confess", robot);
+let translate;
 
-  robot.respond(/confess (.+)$/i, function(res) {
+module.exports = (robot) => {
+  const conf = config('confess', robot);
+
+  robot.respond(/confess (.+)$/i, (res) => {
     const text = `[Confession] ${res.match[1]}`;
-    const room = config("room");
-    return robot.send({ room }, text);
+    const room = conf('room');
+    robot.send({ room }, text);
   });
 
-  robot.respond(/c0nf3ss (.+)$/i, function(res) {
+  robot.respond(/c0nf3ss (.+)$/i, (res) => {
     const text = `[Confession] ${res.match[1]}`;
-    const room = config("room");
-    return robot.send({ room }, translate(text));
+    const room = conf('room');
+    robot.send({ room }, translate(text));
   });
 
-  return robot.respond(/anonymous (.+)$/i, function(res) {
-    const text = res.match[1];
-    const language = "en";
-    const intermediates = ["es", "de", "hi", "fr", "af", "en"];
-    var chain = (lang, int) =>
-      function(text) {
-        // we get a Translation object in the callback from gtranslate, and we
-        // need to extract .translation
-        if (typeof text !== "string") {
-          text = text.translation;
-        }
-        if (int.length > 0) {
-          const next = int.shift();
-          return gtranslate({ text, source: lang, target: next }, chain(next, int));
-        } else {
-          const message = `[Anonymous] ${text}`;
-          const room = config("room");
-          return robot.send({ room }, message);
-        }
-      };
-    return chain(language, intermediates)(text);
+  robot.respond(/anonymous (.+)$/i, (res) => {
+    const txt = res.match[1];
+    const language = 'en';
+    const intermediates = ['es', 'de', 'hi', 'fr', 'af', 'en'];
+    const chain = (lang, int) => (chainText) => {
+      // we get a Translation object in the callback from gtranslate, and we
+      // need to extract .translation
+      let text = chainText;
+      if (typeof chainText !== 'string') {
+        text = text.translation;
+      }
+      if (int.length > 0) {
+        const next = int.shift();
+        return gtranslate({ text, source: lang, target: next }, chain(next, int));
+      }
+      const message = `[Anonymous] ${text}`;
+      const room = conf('room');
+      return robot.send({ room }, message);
+    };
+    chain(language, intermediates)(txt);
   });
 };
 
-var translate = function(text) {
-  var firstCharacter;
-  var firstCharacter;
+translate = (txt) => {
+  let firstCharacter;
   let k;
   // stolen from http://www.punkwalrus.com/cybertusk/text2aol.html
   // change it all to uppercase
-  text = text.toUpperCase();
+  const text = txt.toUpperCase();
   // split the string into an array
-  const textArray = text.split(" ");
+  const textArray = text.split(' ');
   // create output and length variables
-  let output = "";
+  let output = '';
   const arrayLength = textArray.length;
-  let wordLength = undefined;
+  let wordLength;
   // start loop which translates what's written
   let i = 0;
   while (i < arrayLength) {
     // create variable for how long the current word is
     wordLength = textArray[i].length;
-    // test if the word is any special words; if so, change it to associated misspelling/abbreviation
-    if (textArray[i].indexOf("YOUR") !== -1 || textArray[i].indexOf("YOU'RE") !== -1) {
-      output += "UR";
-    } else if (textArray[i].indexOf("YOU") !== -1) {
-      output += "U";
-    } else if ((textArray[i] + " " + textArray[i + 1]).indexOf("WHAT THE") !== -1) {
-      output += "WT";
+    // test if the word is any special words; if so, change it to associated
+    // misspelling/abbreviation
+    if (textArray[i].indexOf('YOUR') !== -1 || textArray[i].indexOf("YOU'RE") !== -1) {
+      output += 'UR';
+    } else if (textArray[i].indexOf('YOU') !== -1) {
+      output += 'U';
+    } else if ((`${textArray[i]} ${textArray[i + 1]}`).indexOf('WHAT THE') !== -1) {
+      output += 'WT';
       if (
-        textArray[i + 2].indexOf("FUCK") !== -1 &&
-        textArray[i + 2].charAt(textArray[i + 2].indexOf("FUCK") + 4) !== "I"
+        textArray[i + 2].indexOf('FUCK') !== -1
+        && textArray[i + 2].charAt(textArray[i + 2].indexOf('FUCK') + 4) !== 'I'
       ) {
         // if phrase is "what the fuck", write "F"
-        output += "F";
-        i++;
+        output += 'F';
+        i += 1;
       } else if (
-        textArray[i + 2].indexOf("HELL") !== -1 ||
-        textArray[i + 2].indexOf("HECK") !== -1
+        textArray[i + 2].indexOf('HELL') !== -1
+        || textArray[i + 2].indexOf('HECK') !== -1
       ) {
         // if phrase is "what the hell", write "H"
-        output += "H";
-        i++;
+        output += 'H';
+        i += 1;
       }
       // end if
-      i++;
-    } else if (textArray[i].indexOf("WHAT") !== -1) {
-      output += "WUT";
+      i += 1;
+    } else if (textArray[i].indexOf('WHAT') !== -1) {
+      output += 'WUT';
     } else if (
-      textArray[i].indexOf("ARE") !== -1 &&
-      textArray[i].indexOf("ARE") + 3 === wordLength
+      textArray[i].indexOf('ARE') !== -1
+      && textArray[i].indexOf('ARE') + 3 === wordLength
     ) {
-      output += "R";
-    } else if (textArray[i].indexOf("WHY") !== -1) {
-      output += "Y";
+      output += 'R';
+    } else if (textArray[i].indexOf('WHY') !== -1) {
+      output += 'Y';
     } else if (
-      (textArray[i] + " " + textArray[i + 1] + " " + textArray[i + 2]).indexOf(
-        "BE RIGHT BACK"
+      (`${textArray[i]} ${textArray[i + 1]} ${textArray[i + 2]}`).indexOf(
+        'BE RIGHT BACK',
       ) !== -1
     ) {
-      output += "BRB";
+      output += 'BRB';
       i += 2;
-    } else if (textArray[i].indexOf("BECAUSE") !== -1) {
-      output += "B/C";
+    } else if (textArray[i].indexOf('BECAUSE') !== -1) {
+      output += 'B/C';
     } else if (
-      (textArray[i] + " " + textArray[i + 1] + " " + textArray[i + 2]).indexOf(
-        "OH MY GOD"
+      (`${textArray[i]} ${textArray[i + 1]} ${textArray[i + 2]}`).indexOf(
+        'OH MY GOD',
       ) !== -1
     ) {
-      output += "OMG";
+      output += 'OMG';
       i += 2;
-    } else if (textArray[i].indexOf("OH") !== -1) {
-      output += "O";
+    } else if (textArray[i].indexOf('OH') !== -1) {
+      output += 'O';
     } else if (
-      textArray[i].indexOf("THE") !== -1 &&
-      textArray[i].indexOf("THE") + 3 === wordLength
+      textArray[i].indexOf('THE') !== -1
+      && textArray[i].indexOf('THE') + 3 === wordLength
     ) {
       if (Math.floor(Math.random() * 100) % 2) {
-        output += "TEH";
+        output += 'TEH';
       } else {
-        output += "DA";
+        output += 'DA';
       }
     } else if (
-      textArray[i].indexOf("MY") !== -1 &&
-      textArray[i].indexOf("MY") + 2 === wordLength
+      textArray[i].indexOf('MY') !== -1
+      && textArray[i].indexOf('MY') + 2 === wordLength
     ) {
-      output += "MAH";
+      output += 'MAH';
     } else if (
-      textArray[i].indexOf("NEW") !== -1 &&
-      textArray[i].indexOf("NEW") + 3 === wordLength
+      textArray[i].indexOf('NEW') !== -1
+      && textArray[i].indexOf('NEW') + 3 === wordLength
     ) {
-      output += "NU";
+      output += 'NU';
     } else if (
-      textArray[i].indexOf("WITH") !== -1 &&
-      textArray[i].indexOf("WITH") + 4 === wordLength
+      textArray[i].indexOf('WITH') !== -1
+      && textArray[i].indexOf('WITH') + 4 === wordLength
     ) {
-      output += "WIT";
-    } else if (textArray[i].indexOf("REALLY") !== -1) {
-      output += "RILLY";
-    } else if (textArray[i].indexOf("PLEASE") !== -1) {
-      output += "PLZ";
-    } else if (textArray[i].indexOf("THANKS") !== -1) {
-      output += "THX";
-    } else if (textArray[i].indexOf("THERE") !== -1) {
+      output += 'WIT';
+    } else if (textArray[i].indexOf('REALLY') !== -1) {
+      output += 'RILLY';
+    } else if (textArray[i].indexOf('PLEASE') !== -1) {
+      output += 'PLZ';
+    } else if (textArray[i].indexOf('THANKS') !== -1) {
+      output += 'THX';
+    } else if (textArray[i].indexOf('THERE') !== -1) {
       if (Math.floor(Math.random() * 100) % 2) {
-        output += "THEIR";
+        output += 'THEIR';
       } else {
-        output += "THEYRE";
+        output += 'THEYRE';
       }
-    } else if (textArray[i].indexOf("THEIR") !== -1) {
+    } else if (textArray[i].indexOf('THEIR') !== -1) {
       if (Math.floor(Math.random() * 100) % 2) {
-        output += "THERE";
+        output += 'THERE';
       } else {
-        output += "THEYRE";
+        output += 'THEYRE';
       }
     } else if (textArray[i].indexOf("THEY'RE") !== -1) {
       if (Math.floor(Math.random() * 100) % 2) {
-        output += "THERE";
+        output += 'THERE';
       } else {
-        output += "THEIR";
+        output += 'THEIR';
       }
     } else if (
-      textArray[i].indexOf("OK") !== -1 &&
-      textArray[i].indexOf("OK") + 2 === wordLength &&
-      textArray[i].indexOf("OK") === 0
+      textArray[i].indexOf('OK') !== -1
+      && textArray[i].indexOf('OK') + 2 === wordLength
+      && textArray[i].indexOf('OK') === 0
     ) {
-      output += "K";
+      output += 'K';
     } else if (
-      textArray[i].indexOf("OKAY") !== -1 &&
-      textArray[i].indexOf("OKAY") + 4 === wordLength
+      textArray[i].indexOf('OKAY') !== -1
+      && textArray[i].indexOf('OKAY') + 4 === wordLength
     ) {
-      output += "K";
-    } else if (textArray[i].indexOf("LIBRARY") !== -1) {
-      output += "LIBERRY";
+      output += 'K';
+    } else if (textArray[i].indexOf('LIBRARY') !== -1) {
+      output += 'LIBERRY';
     } else {
       // if the word is none of those things, check to see if individual letters are special letters
       let j = 0;
@@ -195,260 +192,258 @@ var translate = function(text) {
         // delete double-letters; AOLers aren't that capable of spelling
         if (textArray[i].charAt(j) === textArray[i].charAt(j + 1)) {
           output += textArray[i].charAt(j);
-          j++;
-        } else if (textArray[i].charAt(j) === "B") {
-          output += "B";
-          if (textArray[i].charAt(j + 1) === "E") {
-            j++;
+          j += 1;
+        } else if (textArray[i].charAt(j) === 'B') {
+          output += 'B';
+          if (textArray[i].charAt(j + 1) === 'E') {
+            j += 1;
           }
-        } else if (textArray[i].charAt(j) === "C") {
-          if (textArray[i].charAt(j + 1) === "K") {
-            output += "K";
-            j++;
+        } else if (textArray[i].charAt(j) === 'C') {
+          if (textArray[i].charAt(j + 1) === 'K') {
+            output += 'K';
+            j += 1;
           } else {
-            output += "C";
+            output += 'C';
           }
-        } else if (textArray[i].charAt(j) === "E") {
+        } else if (textArray[i].charAt(j) === 'E') {
           if (Math.floor(Math.random() * 100) % 3 === 2) {
-            output += "3";
+            output += '3';
           } else if (Math.floor(Math.random() * 100) % 3 === 1) {
-            output += "A";
+            output += 'A';
           } else {
-            output += "E";
+            output += 'E';
           }
-        } else if (textArray[i].charAt(j) === "I") {
+        } else if (textArray[i].charAt(j) === 'I') {
           // if there's an -ing word, change it to -ng
-          if (textArray[i].charAt(j + 1) + textArray[i].charAt(j + 2) === "NG") {
-            output += "NG";
+          if (textArray[i].charAt(j + 1) + textArray[i].charAt(j + 2) === 'NG') {
+            output += 'NG';
             j += 2;
-          } else if (textArray[i].charAt(j + 2) === "E") {
-            output += "IE" + textArray[i].charAt(j + 1);
+          } else if (textArray[i].charAt(j + 2) === 'E') {
+            output += `IE${textArray[i].charAt(j + 1)}`;
             j += 2;
-          } else if (textArray[i].charAt(j + 1) === "E") {
-            output += "EI";
-            j++;
+          } else if (textArray[i].charAt(j + 1) === 'E') {
+            output += 'EI';
+            j += 1;
           } else if (
-            textArray[i].charAt(j + 1) + textArray[i].charAt(j + 2) === "'M" &&
-            j + 3 === wordLength
+            textArray[i].charAt(j + 1) + textArray[i].charAt(j + 2) === "'M"
+            && j + 3 === wordLength
           ) {
-            if (textArray[i + 1] + " " + textArray[i + 2] === "GOING TO") {
-              output += "IMA";
+            if (`${textArray[i + 1]} ${textArray[i + 2]}` === 'GOING TO') {
+              output += 'IMA';
               i += 2;
               j += 2;
             } else {
-              output += "IM";
+              output += 'IM';
             }
-          } else if (textArray[i + 1] === "AM") {
-            if (textArray[i + 2] + " " + textArray[i + 3] === "GOING TO") {
-              output += "IMA";
+          } else if (textArray[i + 1] === 'AM') {
+            if (`${textArray[i + 2]} ${textArray[i + 3]}` === 'GOING TO') {
+              output += 'IMA';
               i += 3;
             } else {
-              output += "IM";
-              i++;
+              output += 'IM';
+              i += 1;
             }
           } else {
-            output += "I";
+            output += 'I';
           }
-        } else if (textArray[i].charAt(j) === "A") {
-          if (textArray[i].charAt(j + 1) === "M") {
-            output += "M";
-            j++;
-          } else if (textArray[i].charAt(j + 1) + textArray[i].charAt(j + 2) === "LK") {
-            output += "OK";
+        } else if (textArray[i].charAt(j) === 'A') {
+          if (textArray[i].charAt(j + 1) === 'M') {
+            output += 'M';
+            j += 1;
+          } else if (textArray[i].charAt(j + 1) + textArray[i].charAt(j + 2) === 'LK') {
+            output += 'OK';
             j += 2;
-          } else if (textArray[i].charAt(j + 1) === "I") {
-            output += "A" + textArray[i].charAt(j + 2) + "E";
+          } else if (textArray[i].charAt(j + 1) === 'I') {
+            output += `A${textArray[i].charAt(j + 2)}E`;
             j += 2;
           } else if (
-            textArray[i].charAt(j + 1) +
-              textArray[i].charAt(j + 2) +
-              textArray[i].charAt(j + 3) ===
-            "TER"
+            textArray[i].charAt(j + 1)
+            + textArray[i].charAt(j + 2)
+            + textArray[i].charAt(j + 3)
+            === 'TER'
           ) {
-            output += "8R";
+            output += '8R';
             j += 3;
-          } else if (textArray[i].charAt(j + 2) === "E") {
-            output += "AE" + textArray[i].charAt(j + 1);
+          } else if (textArray[i].charAt(j + 2) === 'E') {
+            output += `AE${textArray[i].charAt(j + 1)}`;
             j += 2;
           } else {
-            output += "A";
+            output += 'A';
           }
-        } else if (textArray[i].charAt(j) === "S") {
+        } else if (textArray[i].charAt(j) === 'S') {
           if (
-            textArray[i].charAt(j + 1) +
-              textArray[i].charAt(j + 2) +
-              textArray[i].charAt(j + 3) +
-              textArray[i].charAt(j + 4) +
-              textArray[i].charAt(j + 5) ===
-            "CHOOL"
+            textArray[i].charAt(j + 1)
+            + textArray[i].charAt(j + 2)
+            + textArray[i].charAt(j + 3)
+            + textArray[i].charAt(j + 4)
+            + textArray[i].charAt(j + 5)
+            === 'CHOOL'
           ) {
-            output += "SKOOL";
+            output += 'SKOOL';
             j += 5;
           } else if (
-            textArray[i].charAt(j + 1) +
-              textArray[i].charAt(j + 2) +
-              " " +
-              textArray[i].charAt(0) +
-              textArray[i].charAt(1) +
-              textArray[i].charAt(2) ===
-            "SEE YOU"
+            `${textArray[i].charAt(j + 1)
+            + textArray[i].charAt(j + 2)
+            } ${textArray[i].charAt(0)}${textArray[i].charAt(1)
+            }${textArray[i].charAt(2)}`
+            === 'SEE YOU'
           ) {
-            output += "CYA";
+            output += 'CYA';
             j += 5;
           } else if (
-            textArray[i].charAt(j + 1) +
-              textArray[i].charAt(j + 2) +
-              " " +
-              textArray[i].charAt(0) +
-              textArray[i].charAt(1) ===
-            "SEE YA"
+            `${textArray[i].charAt(j + 1)
+            + textArray[i].charAt(j + 2)
+            } ${textArray[i].charAt(0)
+            }${textArray[i].charAt(1)}`
+            === 'SEE YA'
           ) {
-            output += "CYA";
+            output += 'CYA';
             j += 5;
           } else {
-            output += "S";
+            output += 'S';
           }
-        } else if (textArray[i].charAt(j) === "O") {
+        } else if (textArray[i].charAt(j) === 'O') {
           // test to see if it's a double-O word or an OUL word; if so, replace letters with a U
-          if (textArray[i].charAt(j + 1) === "O") {
-            output += "U";
-            j++;
+          if (textArray[i].charAt(j + 1) === 'O') {
+            output += 'U';
+            j += 1;
           } else if (
-            textArray[i].charAt(j + 1) === "U" &&
-            textArray[i].charAt(j + 2) === "L"
+            textArray[i].charAt(j + 1) === 'U'
+            && textArray[i].charAt(j + 2) === 'L'
           ) {
-            output += "U";
+            output += 'U';
             j += 2;
           } else {
-            output += "O";
+            output += 'O';
           }
-        } else if (textArray[i].charAt(j) === "T") {
-          if (textArray[i].charAt(j + 1) === "O") {
-            output += "2";
-            if (textArray[i].charAt(j + 2) === "O") {
+        } else if (textArray[i].charAt(j) === 'T') {
+          if (textArray[i].charAt(j + 1) === 'O') {
+            output += '2';
+            if (textArray[i].charAt(j + 2) === 'O') {
               j += 2;
             } else {
-              j++;
+              j += 1;
             }
             // end else
           } else if (
-            textArray[i].charAt(j + 1) +
-              textArray[i].charAt(j + 2) +
-              textArray[i].charAt(j + 3) ===
-            "HAT"
+            textArray[i].charAt(j + 1)
+            + textArray[i].charAt(j + 2)
+            + textArray[i].charAt(j + 3)
+            === 'HAT'
           ) {
-            output += "TAHT";
+            output += 'TAHT';
             j += 3;
           } else {
-            output += "T";
+            output += 'T';
           }
         } else if (
-          textArray[i].charAt(j) !== "." &&
-          textArray[i].charAt(j) !== "!" &&
-          textArray[i].charAt(j) !== "?" &&
-          textArray[i].charAt(j) !== "'" &&
-          textArray[i].charAt(j) !== ";" &&
-          textArray[i].charAt(j) !== "," &&
-          textArray[i].charAt(j) !== ":" &&
-          textArray[i].charAt(j) !== '"' &&
-          textArray[i].charAt(j) !== "`" &&
-          textArray[i].charAt(j) !== "~"
+          textArray[i].charAt(j) !== '.'
+          && textArray[i].charAt(j) !== '!'
+          && textArray[i].charAt(j) !== '?'
+          && textArray[i].charAt(j) !== "'"
+          && textArray[i].charAt(j) !== ';'
+          && textArray[i].charAt(j) !== ','
+          && textArray[i].charAt(j) !== ':'
+          && textArray[i].charAt(j) !== '"'
+          && textArray[i].charAt(j) !== '`'
+          && textArray[i].charAt(j) !== '~'
         ) {
           output += textArray[i].charAt(j);
         }
-        j++;
+        j += 1;
       }
     }
     // end for
     // end else
     // replace end punctuation with more AOLer style punctuation
     if (
-      textArray[i].indexOf(".") !== -1 ||
-      textArray[i].indexOf("!") !== -1 ||
-      textArray[i].indexOf("?") !== -1
+      textArray[i].indexOf('.') !== -1
+      || textArray[i].indexOf('!') !== -1
+      || textArray[i].indexOf('?') !== -1
     ) {
       // create a loop variable
-      let placeInWord = undefined;
+      let placeInWord;
       // find out which character comes first
-      if (textArray[i].indexOf("!") !== -1) {
-        firstCharacter = "!";
-      } else if (textArray[i].indexOf(".") !== -1) {
-        firstCharacter = ".";
-      } else if (textArray[i].indexOf("?") !== -1) {
-        firstCharacter = "?";
+      if (textArray[i].indexOf('!') !== -1) {
+        firstCharacter = '!';
+      } else if (textArray[i].indexOf('.') !== -1) {
+        firstCharacter = '.';
+      } else if (textArray[i].indexOf('?') !== -1) {
+        firstCharacter = '?';
       }
       if (
-        textArray[i].indexOf(".") < textArray[i].indexOf(firstCharacter) &&
-        textArray[i].indexOf(".") !== -1
+        textArray[i].indexOf('.') < textArray[i].indexOf(firstCharacter)
+        && textArray[i].indexOf('.') !== -1
       ) {
-        firstCharacter = ".";
+        firstCharacter = '.';
       }
       if (
-        textArray[i].indexOf("?") < textArray[i].indexOf(firstCharacter) &&
-        textArray[i].indexOf("?") !== -1
+        textArray[i].indexOf('?') < textArray[i].indexOf(firstCharacter)
+        && textArray[i].indexOf('?') !== -1
       ) {
-        firstCharacter = "?";
+        firstCharacter = '?';
       }
       // set where to start in the word
       placeInWord = textArray[i].indexOf(firstCharacter);
       // if there is a question mark...
-      if (textArray[i].indexOf("?") !== -1) {
+      if (textArray[i].indexOf('?') !== -1) {
         // ...ensure there is at least one question mark in the output
-        output += "?";
+        output += '?';
       }
       // end if
       while (
-        textArray[i].charAt(placeInWord) === "." ||
-        textArray[i].charAt(placeInWord) === "!" ||
-        textArray[i].charAt(placeInWord) === "?"
+        textArray[i].charAt(placeInWord) === '.'
+        || textArray[i].charAt(placeInWord) === '!'
+        || textArray[i].charAt(placeInWord) === '?'
       ) {
         if (
-          textArray[i].charAt(placeInWord) === "!" ||
-          textArray[i].charAt(placeInWord) === "."
+          textArray[i].charAt(placeInWord) === '!'
+          || textArray[i].charAt(placeInWord) === '.'
         ) {
           // output a random amount of exclamation marks and 1's
           k = (Math.floor(Math.random() * 100) % 5) + 4;
           while (k > 0) {
             if (Math.floor(Math.random() * 100) % 2) {
-              output += "!";
+              output += '!';
             } else {
-              output += "1";
+              output += '1';
             }
-            k--;
+            k -= 1;
           }
-        } else if (textArray[i].charAt(placeInWord) === "?") {
+        } else if (textArray[i].charAt(placeInWord) === '?') {
           // output a random amount of question marks and exclamation marks
           k = (Math.floor(Math.random() * 100) % 5) + 4;
           while (k > 0) {
             if (Math.floor(Math.random() * 100) % 2) {
-              output += "?";
+              output += '?';
             } else {
-              output += "!";
+              output += '!';
             }
-            k--;
+            k -= 1;
           }
         }
         // end else
-        placeInWord++;
+        placeInWord += 1;
       }
       // end for
-      // randomly print any combination of the abbreviations "OMG", "WTF", and "LOL" at the end of sentences
+      // randomly print any combination of the abbreviations "OMG", "WTF", and "LOL" at
+      // the end of sentences
       if (Math.floor(Math.random() * 100) % 2) {
-        output += " OMG";
+        output += ' OMG';
       }
       if (Math.floor(Math.random() * 100) % 2) {
-        output += " WTF";
+        output += ' WTF';
       }
       if (Math.floor(Math.random() * 100) % 2) {
-        output += " LOL";
+        output += ' LOL';
       }
     }
     // end if
     // put a space between each word if it's not the end of a sentence
-    if (i !== arrayLength - 1 && textArray[i + 1] !== "") {
-      output += " ";
+    if (i !== arrayLength - 1 && textArray[i + 1] !== '') {
+      output += ' ';
     }
-    i++;
+    i += 1;
   }
   // end for
   // output the result to the bottom box
