@@ -9,104 +9,103 @@
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
 
-module.exports = function(robot) {
-  robot.hear(/\s?#dev\b/, res => res.send("Did you mean #anish-talks-into-void?"));
+
+module.exports = (robot) => {
+  robot.hear(/\s?#dev\b/, (res) => res.send('Did you mean #anish-talks-into-void?'));
 
   const fireballResponses = [
-    "Under your couch",
-    "In the middle of the Pacific ocean",
-    "In Italy",
-    "On the BART",
+    'Under your couch',
+    'In the middle of the Pacific ocean',
+    'In Italy',
+    'On the BART',
     "In Kimberli's supervisor's office",
-    "Only Google knows...",
-    "In Tel Aviv",
-    "Ishaan has it",
-    "I think Kimberli spilled it on her laptop",
-    "Here: go/fireball"
+    'Only Google knows...',
+    'In Tel Aviv',
+    'Ishaan has it',
+    'I think Kimberli spilled it on her laptop',
+    'Here: go/fireball',
   ];
 
-  robot.hear(/where.*fireball/i, res => res.send(res.random(fireballResponses)));
+  robot.hear(/where.*fireball/i, (res) => res.send(res.random(fireballResponses)));
+
+  const react = (emoji, res) => {
+    if (robot.adapterName === 'slack') {
+      return robot.emit('slack.reaction', {
+        message: res.message,
+        name: emoji,
+      });
+    }
+    return res.send(`(react :${emoji}:)`);
+  };
 
   const lennySnakeParts = [
-    "╚═( ͡° ͜ʖ ͡°)═╝",
-    "╚═(███)═╝",
-    "╚═(███)═╝",
-    ".╚═(███)═╝",
-    "..╚═(███)═╝",
-    "…╚═(███)═╝",
-    "…╚═(███)═╝",
-    "..╚═(███)═╝",
-    ".╚═(███)═╝",
-    "╚═(███)═╝",
-    ".╚═(███)═╝",
-    "..╚═(███)═╝",
-    "…╚═(███)═╝",
-    "…╚═(███)═╝",
-    "…..╚(███)╝",
-    "……╚(██)╝",
-    "………(█)",
-    "……….*"
+    '╚═( ͡° ͜ʖ ͡°)═╝',
+    '╚═(███)═╝',
+    '╚═(███)═╝',
+    '.╚═(███)═╝',
+    '..╚═(███)═╝',
+    '…╚═(███)═╝',
+    '…╚═(███)═╝',
+    '..╚═(███)═╝',
+    '.╚═(███)═╝',
+    '╚═(███)═╝',
+    '.╚═(███)═╝',
+    '..╚═(███)═╝',
+    '…╚═(███)═╝',
+    '…╚═(███)═╝',
+    '…..╚(███)╝',
+    '……╚(██)╝',
+    '………(█)',
+    '……….*',
   ];
 
   const lennySnakeTick = 300; // milliseconds
 
-  robot.hear(/lenny(snake|pede)/i, function(res) {
-    var sendFrom = function(i) {
+  robot.hear(/lenny(snake|pede)/i, (res) => {
+    const sendFrom = (i) => {
       if (i < lennySnakeParts.length) {
         res.send(lennySnakeParts[i]);
-        return setTimeout(sendFrom, lennySnakeTick, i + 1);
+        setTimeout(sendFrom, lennySnakeTick, i + 1);
       }
     };
     return sendFrom(0);
   });
 
-  robot.hear(/jason/i, function(res) {
+  robot.hear(/jason/i, (res) => {
     // make this less spammy
     if (Math.random() < 0.4) {
       if (Math.random() < 0.5) {
-        return robot.emit("slack.reaction", {
-          message: res.message,
-          name: "upvote"
-        });
+        react('upvote', res);
       } else {
-        return robot.emit("slack.reaction", {
-          message: res.message,
-          name: "no_wifi"
-        });
+        react('no_wifi', res);
       }
     }
   });
 
-  robot.hear(/fun/i, function(res) {
+  robot.hear(/fun/i, (res) => {
     if (Math.random() < 0.3) {
-      return robot.emit("slack.reaction", {
-        message: res.message,
-        name: "puzzled"
-      });
+      react('puzzled', res);
     }
   });
 
-  robot.hear(/michael/i, function(res) {
+  robot.hear(/michael/i, (res) => {
     // make this less spammy
     if (Math.random() < 0.05) {
-      return robot.emit("slack.reaction", {
-        message: res.message,
-        name: "silverman"
-      });
+      react('silverman', res);
     }
   });
 
   // match basically any 100-char-long english sentence
-  robot.hear(/e/i, function(res) {
+  robot.hear(/e/i, (res) => {
     // make this less spammy
     if (res.message.text.length > 100 && Math.random() < 0.001) {
-      return res.send("whoa whoa guys are we sure that's a good idea?");
+      res.send("whoa whoa guys are we sure that's a good idea?");
     }
   });
 
-  robot.hear(/work/i, function(res) {
+  robot.hear(/work/i, (res) => {
     if (res.message.text.length > 50 && Math.random() < 0.1) {
-      return res.send("It's not work it's Datto");
+      res.send("It's not work it's Datto");
     }
   });
 
@@ -132,127 +131,122 @@ thank mr skeltal
 ░░░░░█░░░░░░░░░░▐▌
 \`\`\``;
 
-  robot.hear(/(dootdootdoot|[0-9]spooky)/i, res => res.send(dootDoot));
+  robot.hear(/(dootdootdoot|[0-9]spooky)/i, (res) => res.send(dootDoot));
 
-  robot.hear(/(^|\b)a+y+ l[mfao]+($|\b)/i, res => res.send(":alien: ayy lmao :alien:"));
+  robot.hear(/(^|\b)a+y+ l[mfao]+($|\b)/i, (res) => res.send(':alien: ayy lmao :alien:'));
 
   const troll = [
-    "*Stef*: im in that class too",
-    "*Stef*: omg me too",
-    "*Stef*: ????? :chicken: :chicken: :chicken:",
-    "*Stef*: I failed",
-    "*Stef*: :pineapple: :pineapple: :pineapple:",
-    "*Stef*: o rite jk I have to do 7.012 pset",
-    "*Stef*: totally agree!!",
+    '*Stef*: im in that class too',
+    '*Stef*: omg me too',
+    '*Stef*: ????? :chicken: :chicken: :chicken:',
+    '*Stef*: I failed',
+    '*Stef*: :pineapple: :pineapple: :pineapple:',
+    '*Stef*: o rite jk I have to do 7.012 pset',
+    '*Stef*: totally agree!!',
     "*Stef*: it's cuz I just add dropped",
-    "*Stef*: I can prove it rigorously",
+    '*Stef*: I can prove it rigorously',
     "*Stef*: wtf I'm in this group",
-    "*Stef*: I luv genetics",
-    "*Stef*: wtf that's what I was gonna say"
+    '*Stef*: I luv genetics',
+    "*Stef*: wtf that's what I was gonna say",
   ];
 
-  robot.hear(/stef.*troll/i, res => res.send(res.random(troll)));
+  robot.hear(/stef.*troll/i, (res) => res.send(res.random(troll)));
 
-  const more_troll = [
-    "*Logan*: allllllllll right",
-    "*Logan*: look who decided to show up",
-    "*Logan*: big bois",
+  const moreTroll = [
+    '*Logan*: allllllllll right',
+    '*Logan*: look who decided to show up',
+    '*Logan*: big bois',
     "*Logan*: that's bananas",
     "*Logan*: it's lit",
-    "*Logan*: not like this",
+    '*Logan*: not like this',
     "*Logan*: that's fucked",
-    "*Logan*: eecs eecs eecs eecs",
-    "*Logan*: you dog",
-    "*Logan*: that's pretty soft"
+    '*Logan*: eecs eecs eecs eecs',
+    '*Logan*: you dog',
+    "*Logan*: that's pretty soft",
   ];
 
-  robot.hear(/logan.*troll/i, res => res.send(res.random(more_troll)));
+  robot.hear(/logan.*troll/i, (res) => res.send(res.random(moreTroll)));
 
   const pusheens = [
-    "http://i.imgur.com/ozA8GSu.png",
-    "http://i.imgur.com/ZKQc2Zr.png",
-    "http://i.imgur.com/4kYoLqW.png",
-    "http://i.imgur.com/RrLH94y.png",
-    "http://i.imgur.com/frlzb8j.png",
-    "http://i.imgur.com/CrlTN9g.png",
-    "http://i.imgur.com/T3aU0jE.png",
-    "http://i.imgur.com/WVNB0AI.png",
-    "http://i.imgur.com/MgURast.png",
-    "http://i.imgur.com/h0WeeGt.png",
-    "http://i.imgur.com/5Gaquu2.png",
-    "http://i.imgur.com/KBRkat2.png",
-    "http://i.imgur.com/2DA3pUj.png",
-    "http://i.imgur.com/zbkwKyo.png",
-    "http://i.imgur.com/ZjxGDGu.png",
-    "http://i.imgur.com/2fM3Llu.png",
-    "http://i.imgur.com/vmBTVZT.png",
-    "http://i.imgur.com/LM4RhiD.png",
-    "http://i.imgur.com/GsA3vF8.png",
-    "http://i.imgur.com/SRlVsQl.png"
+    'http://i.imgur.com/ozA8GSu.png',
+    'http://i.imgur.com/ZKQc2Zr.png',
+    'http://i.imgur.com/4kYoLqW.png',
+    'http://i.imgur.com/RrLH94y.png',
+    'http://i.imgur.com/frlzb8j.png',
+    'http://i.imgur.com/CrlTN9g.png',
+    'http://i.imgur.com/T3aU0jE.png',
+    'http://i.imgur.com/WVNB0AI.png',
+    'http://i.imgur.com/MgURast.png',
+    'http://i.imgur.com/h0WeeGt.png',
+    'http://i.imgur.com/5Gaquu2.png',
+    'http://i.imgur.com/KBRkat2.png',
+    'http://i.imgur.com/2DA3pUj.png',
+    'http://i.imgur.com/zbkwKyo.png',
+    'http://i.imgur.com/ZjxGDGu.png',
+    'http://i.imgur.com/2fM3Llu.png',
+    'http://i.imgur.com/vmBTVZT.png',
+    'http://i.imgur.com/LM4RhiD.png',
+    'http://i.imgur.com/GsA3vF8.png',
+    'http://i.imgur.com/SRlVsQl.png',
   ];
 
-  robot.hear(/pusheen/i, res => res.send(res.random(pusheens)));
+  robot.hear(/pusheen/i, (res) => res.send(res.random(pusheens)));
 
-  robot.hear(/kim.*mom/i, res =>
-    res.send("https://answers.yahoo.com/question/index?qid=20100404125550AARFOJe")
-  );
+  robot.hear(/kim.*mom/i, (res) => res.send('https://answers.yahoo.com/question/index?qid=20100404125550AARFOJe'));
 
-  robot.hear(/stef/i, function(res) {
+  robot.hear(/stef/i, (res) => {
     if (Math.random() < 0.01) {
-      return res.send(res.random(troll));
+      res.send(res.random(troll));
     }
   });
 
-  robot.hear(/logan/i, function(res) {
+  robot.hear(/logan/i, (res) => {
     if (Math.random() < 0.01) {
-      return res.send(res.random(more_troll));
+      res.send(res.random(moreTroll));
     }
   });
 
-  robot.hear(/\btfti\b/, function(res) {
+  robot.hear(/\btfti\b/, (res) => {
     if (Math.random() < 0.2) {
-      return res.send("tfti");
+      res.send('tfti');
     }
   });
 
-  robot.hear(/^same$/, function(res) {
+  robot.hear(/^same$/, (res) => {
     if (Math.random() < 0.4) {
-      return res.send("same");
+      res.send('same');
     }
   });
 
-  robot.respond(/correct (.*)/, function(res) {
+  robot.respond(/correct (.*)/, (res) => {
     const msg = res.match[1];
-    return res.send(msg.replace(/[aeiou]/gi, ""));
+    return res.send(msg.replace(/[aeiou]/gi, ''));
   });
 
   const selfDestructSequence = [
-    "Initiating HackMIT self-destruct sequence...",
-    "10: Leaking sponsorship info...",
-    "9: Insulting all previous company contacts...",
-    "8: Transferring funds to FCF...",
-    "7",
-    "6: Destroying all AWS instances...",
-    "5: ",
-    "4: Petting Oscar...",
-    "3",
-    "2",
+    'Initiating HackMIT self-destruct sequence...',
+    '10: Leaking sponsorship info...',
+    '9: Insulting all previous company contacts...',
+    '8: Transferring funds to FCF...',
+    '7',
+    '6: Destroying all AWS instances...',
+    '5: ',
+    '4: Petting Oscar...',
+    '3',
+    '2',
     "1: You've met with a terrible fate, haven't you?",
-    "http://rs651.pbsrc.com/albums/uu236/416o/explosion.gif~c200"
+    'http://rs651.pbsrc.com/albums/uu236/416o/explosion.gif~c200',
   ];
 
-  const selfDestructTick = 1000; //milliseconds
+  const selfDestructTick = 1000; // milliseconds
 
-  return robot.respond(/selfdestruct/i, function(res) {
-    var sendFrom = function(i) {
+  return robot.respond(/selfdestruct/i, (res) => {
+    const sendFrom = (i) => {
       if (i < selfDestructSequence.length) {
         res.send(selfDestructSequence[i]);
-        return setTimeout(sendFrom, selfDestructTick, i + 1);
+        setTimeout(sendFrom, selfDestructTick, i + 1);
       }
     };
     return sendFrom(0);
   });
 };
-
-// robot.hear /retreat/i, (res) ->
-//   res.send 'Did you mean: *kickoff*?'
