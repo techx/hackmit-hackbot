@@ -13,15 +13,7 @@
 //
 // Author:
 //   katexyu, cmnord
-/*
- * decaffeinate suggestions:
- * DS101: Remove unnecessary use of Array.from
- * DS102: Remove unnecessary code created because of implicit returns
- * DS203: Remove `|| {}` from converted for-own loops
- * DS205: Consider reworking code to avoid use of IIFEs
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
+
 const config = require('hubot-conf');
 const Spreadsheet = require('google-spreadsheet');
 const timeago = require('timeago');
@@ -114,8 +106,7 @@ module.exports = (robot) => {
 
   const streak = () => {
     const streakKey = conf('streak.key');
-    const str = new streakapi.Streak(streakKey);
-    return str;
+    return new streakapi.Streak(streakKey);
   };
 
   const boxes = { data: null, time: null };
@@ -146,7 +137,7 @@ module.exports = (robot) => {
           boxes.data = data;
           // TODO: get last updated time
           boxes.time = new Date();
-          if (callback != null) {
+          if (callback) {
             callback(null, boxes);
           }
         })
@@ -157,7 +148,7 @@ module.exports = (robot) => {
   setInterval(getBoxes, 3 * 60 * 1000);
 
   const getBoxesOrCache = (res, callback) => {
-    if (boxes.data != null) {
+    if (boxes.data) {
       return callback(null, boxes);
     }
     return getBoxes(callback);
@@ -167,7 +158,7 @@ module.exports = (robot) => {
     const delta = timeago(boxes.time);
     let message = `_Up to date as of ${delta}._\n`;
     message += text;
-    return res.send(message);
+    res.send(message);
   };
 
   const printBoxes = (res, boxsubset) => {
@@ -179,15 +170,15 @@ module.exports = (robot) => {
 
   robot.respond(/sponsor fetch$/i, (res) => getBoxes((err) => {
     if (err) {
-      return res.send(`Error while getting boxes: ${err}`);
+      res.send(`Error while getting boxes: ${err}`);
     }
-    return res.send('Fetched new data!');
+    res.send('Fetched new data!');
   }));
 
   getStatuses((err, stats) => {
     if (err) {
       // fails silently
-      return console.log(`Error while getting statuses: ${err}`);
+      console.log(`Error while getting statuses: ${err}`);
     }
     STATUSES = stats;
     return STATUSES;
@@ -207,52 +198,52 @@ module.exports = (robot) => {
     ),
     (res) => getBoxesOrCache(res, (err, newBoxes) => {
       if (err) {
-        return res.send(`Error getting boxes: ${err}`);
+        res.send(`Error getting boxes: ${err}`);
       }
       const status = res.match[1];
       const companies = newBoxes.data.filter(
         (box) => status.toLowerCase() === STATUSES[box.stageKey].toLowerCase(),
       ).map((box) => box.name);
       const join = companies.length < 15 ? '\n' : ', ';
-      return print(res, `${companies.join(join)}\n_Total: ${companies.length}_`);
+      print(res, `${companies.join(join)}\n_Total: ${companies.length}_`);
     }),
   );
 
   // Returns a list of companies with the given tier
   robot.respond(new RegExp(`sponsor (${LEVELS.join('|')})$`, 'i'), (res) => getCompanyRows(sheet, (err, rows) => {
     if (err) {
-      return res.send(`Error while getting company rows: ${err}`);
+      res.send(`Error while getting company rows: ${err}`);
     }
     const level = res.match[1].toLowerCase();
     const companies = rows.filter(
       (row) => row[LEVEL_COL] !== undefined && row[LEVEL_COL].toLowerCase() === level,
     ).map((row) => row[SPONSOR_NAME_COL]);
-    return res.send(`*Total:* ${companies.length}\n${companies.join('\n')}`);
+    res.send(`*Total:* ${companies.length}\n${companies.join('\n')}`);
   }));
 
   // Update sponsor tier
   robot.respond(/sponsor level (.*) ([A-Za-z0-9]+)/i, (res) => getCompanyRow(sheet, res, (err, row, company, update) => {
     if (err) {
-      return res.send(`Error while getting company row: ${err}`);
+      res.send(`Error while getting company row: ${err}`);
     } if (!row) {
-      return res.send("Didn't find matching company");
+      res.send("Didn't find matching company");
     }
-    if (!Array.from(LEVELS).includes(update)) {
-      return res.send(`Please provide a valid level:\n${LEVELS.join('\n')}`);
+    if (!(update in LEVELS)) {
+      res.send(`Please provide a valid level:\n${LEVELS.join('\n')}`);
     }
     const newRow = row;
     newRow[LEVEL_COL] = update;
-    return newRow.save((err2) => {
+    newRow.save((err2) => {
       if (err2) {
-        return res.send(`Error while updating cell value: ${err2}`);
+        res.send(`Error while updating cell value: ${err2}`);
       }
-      return res.send(`Successfully updated ${company}`);
+      res.send(`Successfully updated ${company}`);
     });
   }));
 
-  return robot.respond(/sponsor info (.*)/i, (res) => getBoxesOrCache(res, (err, newBoxes) => {
+  robot.respond(/sponsor info (.*)/i, (res) => getBoxesOrCache(res, (err, newBoxes) => {
     if (err) {
-      return res.send(`Error getting boxes: ${err}`);
+      res.send(`Error getting boxes: ${err}`);
     }
     const search = res.match[1];
     const re = new RegExp(`^${search.toLowerCase()}`, 'i');
@@ -261,6 +252,6 @@ module.exports = (robot) => {
       companies[box.name] = box;
       return box;
     });
-    return printBoxes(res, companies);
+    printBoxes(res, companies);
   }));
 };
