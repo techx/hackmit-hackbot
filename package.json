@@ -11,8 +11,8 @@
     "dev": "./bin/hubot -a shell"
   },
   "dependencies": {
-    "github": "^0.2.4",
-    "google-spreadsheet": "^2.0.7",
+    "@octokit/rest": "^16.34.1",
+    "google-spreadsheet": "^2.0.8",
     "hubot": "^3.3.2",
     "hubot-conf": "^1.0.0",
     "hubot-diagnostics": "0.0.1",
