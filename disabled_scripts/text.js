@@ -13,12 +13,7 @@
 //
 // Author:
 //   Detry322
-/*
- * decaffeinate suggestions:
- * DS102: Remove unnecessary code created because of implicit returns
- * DS207: Consider shorter variations of null checks
- * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
- */
+
 const config = require('hubot-conf');
 
 const BRAIN_LOCATION = 'text.numbers';
@@ -29,13 +24,13 @@ module.exports = (robot) => {
   const addNumber = (number, name) => {
     const mapping = robot.brain.get(BRAIN_LOCATION) || {};
     mapping[number] = name;
-    return robot.brain.set(BRAIN_LOCATION, mapping);
+    robot.brain.set(BRAIN_LOCATION, mapping);
   };
 
   const removeNumber = (number) => {
     const mapping = robot.brain.get(BRAIN_LOCATION) || {};
     delete mapping[number];
-    return robot.brain.set(BRAIN_LOCATION, mapping);
+    robot.brain.set(BRAIN_LOCATION, mapping);
   };
 
   const getName = (number) => {
@@ -45,7 +40,7 @@ module.exports = (robot) => {
 
   const getNumber = (name) => {
     const mapping = robot.brain.get(BRAIN_LOCATION) || {};
-    return Object.values(mapping).find((value) => value === name);
+    return Object.keys(mapping).find((key) => mapping[key] === name);
   };
 
   robot.router.post('/text/receive', (req, res) => {
@@ -55,12 +50,12 @@ module.exports = (robot) => {
     let decorator = 'Twilio';
     if (req.body.AccountSid === conf('account')) {
       const matches = message.match(/(\+?[0-9]+) - (.+)$/);
-      if (matches != null) {
+      if (matches) {
         [, number, message] = matches;
         decorator = 'Google Voice';
       }
       const name = getName(number) ? getName(number) : number;
-      return robot.messageRoom(
+      robot.messageRoom(
         conf('channel'),
         `[${decorator}] Text from ${name}: ${message}`,
       );
@@ -71,7 +66,7 @@ module.exports = (robot) => {
     const number = res.match[1];
     const name = res.match[2];
     addNumber(number, name);
-    return res.send(`Added: \`${number}\` for \`${name}\``);
+    res.send(`Added: \`${number}\` for \`${name}\``);
   });
 
   robot.respond(/text numberof (.+)$/i, (res) => {
@@ -92,9 +87,9 @@ module.exports = (robot) => {
     return res.send(`Could not find name for \`${number}\``);
   });
 
-  return robot.respond(/text remove (\+?[0-9]+)$/i, (res) => {
+  robot.respond(/text remove (\+?[0-9]+)$/i, (res) => {
     const number = res.match[1];
     removeNumber(number);
-    return res.send(`Removed: \`${number}\``);
+    res.send(`Removed: \`${number}\``);
   });
 };
