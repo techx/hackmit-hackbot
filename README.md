@@ -16,7 +16,7 @@ cp .env.sample .env
 ```
 
 By default, hackbot will run with all the plugins in the `scripts/`
-directory. If you only want to test one plugin, move all but your script to
+directory. If you only want to test one plugin, move all other plugins to
 `disabled_scripts/`.
 
 ```bash
@@ -25,6 +25,7 @@ mv disabled_scripts/my_plugin.js scripts/
 ```
 
 If your plugin requires environment variables, be sure to put them in `.env`.
+See [Configuration](#configuration) for more details.
 
 ```bash
 vi .env
@@ -52,27 +53,22 @@ hackbot> PONG
 
 ## Configuration
 
-Most of the scripts in `scripts/` use [hubot-conf][hubot-conf]
-to access configuration values from the HackMIT Slack. That means
-that in order to run them locally, you need to copy them from
-Slack into your enviroment variables.
+Most of the plugins in `scripts/` use [hubot-conf][hubot-conf] to access
+configuration values from the HackMIT Slack. That means that in order to run
+them locally, you need to copy some configuration values from Slack into your
+`.env`.
 
-To do this, in Slack #botspam type `hackbot conf dump`. Find the
-variables you need, and copy them into a `.env` file. 
+To do this, in Slack #botspam type `hackbot conf dump`. Find the variables
+you need, and copy them into `.env`.
 
 Be sure to follow [hubot-conf][hubot-conf] convention, mapping
-`package.name.property.name` from Slack to 
-`HUBOT_PACKAGE_NAME_PROPERTY_NAME` in `.env`.
+`package.name.property.name` from Slack to `HUBOT_PACKAGE_NAME_PROPERTY_NAME`
+in `.env`.
 
-As an example, if I want the property `example.hello = "hello"`, I
- would write the line `export HUBOT_EXAMPLE_HELLO="hello"` in `.env`.
-
-To minimize work, you can move the scripts you don't need to use
-into `disabled_scripts/`, so you only need to copy configuration
-values for the scripts you're changing.
-
-Remember to `source .env` and restart hackbot with `npm run dev`
-after you make a change!
+| Source               | Key name              | Example usage                        |
+| -------------------- | --------------------- | ------------------------------------ |
+| Slack                | `example.hello`       | `example.hello = "hello"`            |
+| Environment variable | `HUBOT_EXAMPLE_HELLO` | `export HUBOT_EXAMPLE_HELLO="hello"` |
 
 ## Examples
 
