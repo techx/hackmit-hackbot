@@ -1,33 +1,122 @@
-hackbot money
-------------
+# hackbot money
+
 A hackbot script to help us check how much money we need.
 
-# How to update money for a new year
+## Setting up the spreadsheet
 
-1. Make a Google spreadsheet with the $ amounts.
+First, make a new Google spreadsheet tracking money in whatever way you'd
+like.
 
-1. In #botspam, set `money.spreadsheet.url` to the hash in the Google spreadsheet URL -- it's the thing that goes in  `https://docs.google.com/spreadsheets/d/${money.spreadsheet.url}/`.
+Next, make two cells in the same row, one with the **total $ committed** and
+one with the **total $ received**. Hackbot money requires that they be in the
+same row in two different columns, one after the other.
 
-1. Put the *total $ received* and *total $ committed* in two colums in the spreadsheet. See [hackbot config variables](#hackbot-config-variables) for rules about placement so you can set `money.row`, `money.received.col`, and `money.outstanding.col`. You can also see what the previous settings were in #botspam for reference. Make sure that Google sheets doesn't append "$" to the column value ([fix here](http://www.solveyourtech.com/remove-dollar-sign-google-sheets/) if that happens).
+Make sure that these cells display the amounts _without_ a dollar sign (e.g.
+`1000`, not `$1000`). See [here][no-dollar] if you're not sure how to do this.
 
-1. In #botspam, set `money.spreadsheet.tabname` to the name of the tab in the Google spreadsheet where the cells are.
+For hackbot to view the sheet, you need to invite our Google Service Account
+email to be able to view the sheet. Run `!serviceaccount` in the HackMIT
+Slack to see the email.
 
-1. Invite our Google Service Account email to be able to view the sheet -- run `!serviceaccount` in #botspam to see the email.
+```bash
+!serviceaccount
+```
 
-1. Now, you should be able to run `hackbot money` or `hackbot $` and see the the numbers!
+Finally, copy the Google Sheets URL hash -- the thing at
+`https://docs.google.com/spreadsheets/d/${URL_HASH}/`.
 
+## Connecting hackbot to the spreadsheet
+
+Hackbot needs five configuration variables for the spreadsheet.
+
+1. `money.spreadsheet.url`: the hash from the spreadsheet URL.
+
+```bash
+hackbot conf set money.spreadsheet.url "paste in the hash here"
+```
+
+5. `money.spreadsheet.tabname`: the name of the Google Sheets tab that
+  contains the two cells.
+
+```bash
+hackbot conf set money.spreadsheet.tabname "Money"
+```
+
+2. `money.row`: the row you put the "total $ committed" and "total $
+  received" cells in. The rows are 1-indexed.
+
+```bash
+hackbot conf set money.row "1"
+```
+
+3. `money.received.col`: the column you put the "total $ received" cell
+  in. The columns are 1-indexed.
+
+```bash
+hackbot conf set money.received.col "1"
+```
+
+4. `money.outstanding.col`: the column you put the "total $ committed" cell
+  in, directly to the right of the "total $ received" cell. The columns are
+  1-indexed.
+
+```bash
+hackbot conf set money.outstanding.col "2"
+```
+
+You can also check what the previous settings were for reference.
+
+```bash
+> hackbot conf get money.spreadsheet.url
+money.spreadsheet.url = "abc123"
+> hackbot conf get money.spreadsheet.tabname
+money.spreadsheet.tabname = "Companies"
+> hackbot conf get money.row
+money.row = "1"
+> hackbot conf get money.received.col
+money.received.col = "4"
+> hackbot conf get money.outstanding.col
+money.outstanding.col = "5"
+```
+
+This script is clearly very restrictive. You're welcome to refactor it to be
+more permissive.
+
+Once you've set these variables, run `hackbot money` or `hackbot $` to see
+the the numbers!
+
+```bash
+> hackbot money
+Received: $1K
+Outstanding: $99K
+Total: $100K
+```
+
+Hackbot money checks the money spreadsheet every 10 minutes and updates the
+channel topic with new amounts if they've changed. It uses the
+`money.channel` config variable to know which channel's topic to update.
+
+```bash
+> hackbot conf get money.channel
+money.channel = "cr"
+```
 
 ## Credentials
-If the json file on the EC2 instance becomes out of date, follow these steps to get a new one.
-* Go to console.developers.google.com and create a project if you do not have one already for hackbot.
+
+Hackbot money requires a Google service account to view the spreadsheet. The
+credentials for this service account are in a file called
+`hackmit-money-2015-credentials.json`.
+
+If the json file on the EC2 instance becomes out of date, follow these steps
+to get a new one.
+
+* Go to console.developers.google.com and create a project if you do not have
+  one already for hackbot.
 * Create a service account
 * Enable the Google Drive API
 * Download credentials as json.
-* Get it onto the EC2 instance using scp or something.
-* Invite the service account to the spreadsheet using the @developers.gserviceaccounts.com email
+* Get it onto the EC2 instance using `scp` or something.
+* Invite the service account to the spreadsheet using the
+  @developers.gserviceaccounts.com email as mentioned above
 
-## hackbot config variables
-There are some restrictions that this script assumes on where the values will be placed, you can try and refactor this if you want to be more permissive. It assumes also that the values are on the second sheet in the shared Google sheet.
-* `money.row` - row that the values are expected to be in, 1-indexed. Both outstanding & received must be in the same row.
-* `money.received.col` - column that the amount received is in, 1-indexed. Must be `money.outstanding.col` - 1.
-* `money.outstanding.col` - column that the amount outstanding is in, 1-indexed. Must be `money.received.col` + 1.
+[no-dollar]: http://www.solveyourtech.com/remove-dollar-sign-google-sheets/
