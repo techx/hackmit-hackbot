@@ -51,6 +51,8 @@ hackbot> hackbot ping
 hackbot> PONG
 ```
 
+If you make changes, quit with `Ctrl+C` and restart hackbot with `npm run dev`.
+
 ## Configuration
 
 Most of the plugins in `scripts/` use [hubot-conf][hubot-conf] to access
