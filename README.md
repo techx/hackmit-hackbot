@@ -1,31 +1,56 @@
-# hackbot
+# Hackbot :robot:
 
-See `.env.sample` for a list of environment variables that should be set.
+## Development
 
-# Running hackbot locally
+First, install all the required dependencies with `npm install`.
 
-First, run `npm install` to install all the required dependencies.
-
-Test hackbot by running `npm run dev`. However, some plugins
-will not behave as expected unless you set the 
-[environment variables](#configuration).
-
-You'll see some start up output and a prompt:
-
+```bash
+npm install
 ```
+
+Then, see `.env.sample` for a list of environment variables that should be
+set.
+
+```bash
+cp .env.sample .env
+```
+
+By default, hackbot will run with all the plugins in the `scripts/`
+directory. If you only want to test one plugin, move all but your script to
+`disabled_scripts/`.
+
+```bash
+mv scripts/* disabled_scripts/
+mv disabled_scripts/my_plugin.js scripts/
+```
+
+If your plugin requires environment variables, be sure to put them in `.env`.
+
+```bash
+vi .env
+source .env
+```
+
+Finally, run hackbot locally with `npm run dev`. You will see some logging
+info and a message prompt.
+
+```bash
+$ npm run dev
 [Set Jul 22 2017 23:16:06 GMT-0400 (EDT)] INFO Using default redis on localhost:6379
 hackbot>
 ```
 
-Then you can interact with hackbot by typing `hackbot help` or any
-other supported command.
+Now you can interact with hackbot by typing `hackbot help` or any other
+supported command.
 
-```
+```bash
+$ npm run dev
+[Set Jul 22 2017 23:16:06 GMT-0400 (EDT)] INFO Using default redis on localhost:6379
 hackbot> hackbot ping
 hackbot> PONG
 ```
 
-# Configuration
+## Configuration
 
 Most of the scripts in `scripts/` use [hubot-conf][hubot-conf]
 to access configuration values from the HackMIT Slack. That means
@@ -49,7 +74,7 @@ values for the scripts you're changing.
 Remember to `source .env` and restart hackbot with `npm run dev`
 after you make a change!
 
-# Examples
+## Examples
 
 You can see some more example scripts [here][examples].
 
