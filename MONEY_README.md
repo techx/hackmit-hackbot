@@ -7,9 +7,14 @@ A hackbot script to help us check how much money we need.
 First, make a new Google spreadsheet tracking money in whatever way you'd
 like.
 
-Next, make two cells in the same row, one with the **total $ committed** and
-one with the **total $ received**. Hackbot money requires that they be in the
+Next, make two cells in the same row, one with the **total $ received** and
+one with the **total $ outstanding**. Hackbot money requires that they be in the
 same row in two different columns, one after the other.
+
+| ... | Total $ received | Total $ outstanding | ... |
+| --- | --- | --- | --- |
+| ... | 1000 | 99000 | ... |
+| ... | ... | ... | ... |
 
 Make sure that these cells display the amounts _without_ a dollar sign (e.g.
 `1000`, not `$1000`). See [here][no-dollar] if you're not sure how to do this.
@@ -42,7 +47,7 @@ hackbot conf set money.spreadsheet.url "paste in the hash here"
 hackbot conf set money.spreadsheet.tabname "Money"
 ```
 
-2. `money.row`: the row you put the "total $ committed" and "total $
+2. `money.row`: the row you put the "total $ outstanding" and "total $
   received" cells in. The rows are 1-indexed.
 
 ```bash
@@ -56,7 +61,7 @@ hackbot conf set money.row "1"
 hackbot conf set money.received.col "1"
 ```
 
-4. `money.outstanding.col`: the column you put the "total $ committed" cell
+4. `money.outstanding.col`: the column you put the "total $ outstanding" cell
   in, directly to the right of the "total $ received" cell. The columns are
   1-indexed.
 
