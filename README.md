@@ -15,13 +15,15 @@ set.
 cp .env.sample .env
 ```
 
-By default, hackbot will run with all the plugins in the `scripts/`
-directory. If you only want to test one plugin, move all other plugins to
-`disabled_scripts/`.
+By default, hackbot will run with all the plugins in the `scripts/` directory
+**and** all the plugins referenced by `external-scripts.json`. If you only
+want to test one plugin, move all other plugins to `disabled_scripts/` and
+only include the minimal required external scripts.
 
 ```bash
 mv scripts/* disabled_scripts/
 mv disabled_scripts/my_plugin.js scripts/
+echo '["hubot-conf","hubot-help"]' > external-scripts.json
 ```
 
 If your plugin requires environment variables, be sure to put them in `.env`.
