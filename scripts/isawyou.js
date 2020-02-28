@@ -10,6 +10,7 @@
 //
 // Configuration:
 //   hubot config isawyou.room is the '#i-saw-you' channel name
+//   hubot config isawyou.k is the number of people in the leaderboard
 //
 // Author:
 //   Anthony Liu, wiredfool, patcon@gittip
