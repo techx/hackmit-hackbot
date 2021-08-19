@@ -13,9 +13,9 @@
  * DS205: Consider reworking code to avoid use of IIFEs
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
-const Spreadsheet = require('google-spreadsheet');
+const { GoogleSpreadsheet } = require('google-spreadsheet');
 const config = require('hubot-conf');
-const creds = require('../hackmit-money-2015-credentials.json');
+const creds = require('../hackmit-money-2021-credentials.json');
 
 const formatMessage = (money) => {
   const { received } = money;
@@ -32,47 +32,31 @@ const makeMoney = (received, outstanding) => ({
   total: received + outstanding,
 });
 
-const makeError = (message, err) => ({
-  message,
-  err,
-});
-
-module.exports = (robot) => {
+async function updateMoney(robot) {
   const conf = config('money', robot);
-  const getMoney = (callback) => {
+  const getMoney = async function (callback) {
     const moneyRow = parseInt(conf('row'), 10);
     const receivedCol = parseInt(conf('received.col'), 10);
     const outstandingCol = parseInt(conf('outstanding.col'), 10);
+    const paymentSheetName = conf('spreadsheet.tabname');
     const spreadsheetUrl = conf('spreadsheet.url');
-    const sheet = new Spreadsheet(spreadsheetUrl);
-    return sheet.useServiceAccountAuth(creds, (err) => {
-      if (err) {
-        return callback(makeError('Error occurred while authenticating', err));
-      }
-      return sheet.getInfo((err2, info) => {
-        if (err2) {
-          return callback(makeError('Error occurred while getting sheet info', err2));
-        }
-        const paymentSheetName = conf('spreadsheet.tabname');
-        const paymentStatusSheet = info.worksheets.find((ws) => ws.title === paymentSheetName);
-        const options = {
-          range: `R${moneyRow}C${receivedCol}:R${moneyRow}C${outstandingCol + 1}`,
-        };
-        return paymentStatusSheet.getCells(options, (err3, cells) => {
-          if (err3) {
-            return callback(
-              makeError(
-                `Error occurred while getting cells with range: ${options.range}`,
-                err3,
-              ),
-            );
-          }
-          const received = parseInt(cells[0].value, 10);
-          const outstanding = parseInt(cells[1].value, 10);
-          return callback(null, makeMoney(received, outstanding));
-        });
-      });
+
+    const doc = new GoogleSpreadsheet(spreadsheetUrl);
+    await doc.useServiceAccountAuth(creds);
+    await doc.loadInfo();
+
+    const sheet = doc.sheetsByTitle[paymentSheetName];
+
+    await sheet.loadCells({
+      startRowIndex: moneyRow,
+      endRowIndex: moneyRow + 1,
+      startColumnIndex: receivedCol,
+      endColumnIndex: outstandingCol + 1
     });
+
+    const received = sheet.getCell(moneyRow, receivedCol).value;
+    const outstanding = sheet.getCell(moneyRow, outstandingCol).value;
+    callback(null, makeMoney(received, outstanding));
   };
 
   const getCurrentMoney = () => robot.brain.get('money.currentMoney') || makeMoney(0, 0);
@@ -104,3 +88,5 @@ module.exports = (robot) => {
     return res.send(formatMessage(money));
   }));
 };
+
+module.exports = updateMoney;

@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@octokit/rest": "^16.34.1",
-    "google-spreadsheet": "^2.0.8",
+    "google-spreadsheet": "^3.1.15",
     "hubot": "^3.3.2",
     "hubot-conf": "^1.0.0",
     "hubot-diagnostics": "0.0.1",
