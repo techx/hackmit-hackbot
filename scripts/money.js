@@ -35,11 +35,11 @@ const makeMoney = (received, outstanding) => ({
 async function updateMoney(robot) {
   const conf = config('money', robot);
   const getMoney = async function (callback) {
-    const moneyRow = 0;//parseInt(conf('row'), 10);
-    const receivedCol = 3;//parseInt(conf('received.col'), 10);
-    const outstandingCol = 4;//parseInt(conf('outstanding.col'), 10);
-    const paymentSheetName = 'sponsors';//conf('spreadsheet.tabname');
-    const spreadsheetUrl = '1WNkqyZr7bsxX0g_7lzkM5l_cNq_GIUrbENYB0-QuBj0'//conf('spreadsheet.url');
+    const moneyRow = parseInt(conf('row'), 10);
+    const receivedCol = parseInt(conf('received.col'), 10);
+    const outstandingCol = parseInt(conf('outstanding.col'), 10);
+    const paymentSheetName = conf('spreadsheet.tabname');
+    const spreadsheetUrl = conf('spreadsheet.url');
 
     const doc = new GoogleSpreadsheet(spreadsheetUrl);
     await doc.useServiceAccountAuth(creds);
